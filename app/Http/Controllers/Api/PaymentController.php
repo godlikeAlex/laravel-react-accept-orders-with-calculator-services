@@ -7,9 +7,6 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRequest;
 use App\Http\Requests\RePaymentRequest;
-use App\Notifications\OrderStatusUpdated;
-use GuzzleHttp\Psr7\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class PaymentController extends Controller
@@ -35,7 +32,7 @@ class PaymentController extends Controller
         }
 
         try {
-            $calculatedOrder = calculateServicePrice($request->cart);
+            $calculatedOrder = calculateServicePrice($request->input('cart'));
             $payment = $user->createPayment($calculatedOrder->total * 100, $request->input('payment_method_id'));
             $order = $user->orders()->create([
                 'amount' => $calculatedOrder->total,

@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +21,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+Route::get('/page/order', function () {
+    $orders = Order::latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(1);
+    return $orders;
 });
 
 Route::post('/login', [AuthController::class, 'login']);

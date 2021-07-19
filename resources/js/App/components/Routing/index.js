@@ -14,6 +14,7 @@ import LoadingSpinner from '../Auth/LoadingSpinner';
 import Thanks from '../ShopingCart/Thanks';
 import Header from '../Header/Header';
 import { Dashboard, ShowOrder } from '../Dashboard';
+import NotFound from '../NotFound';
 
 function Routing() {
     const { loading } = useSelector(state => state.auth);
@@ -44,6 +45,7 @@ function Routing() {
                     </Route>
                     <ProtectedRoute exact path="/cabinet/dashboard" component={Dashboard} />
                     <ProtectedRoute exact path="/cabinet/dashboard/show/:id" component={ShowOrder} />
+                    <Route component={NotFound} />
                 </Switch>
             </ScrollToTop>
         </Router>

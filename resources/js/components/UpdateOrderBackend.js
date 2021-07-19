@@ -10,9 +10,9 @@ const orderStatusList = [
     { value: 'pending', label: 'Pending' },
     { value: 'paid', label: 'Paid' },
     { value: 'cancled', label: 'Cancled' },
-    { value: 'finished', label: 'Finished' },
     { value: 'are going', label: 'Are going' },
-    { value: 'on process', label: 'On process' }
+    { value: 'on process', label: 'On process' },
+    { value: 'finished', label: 'Finished' },
 ];
 
 function UpdateOrderBackend({ order }) {
@@ -25,14 +25,18 @@ function UpdateOrderBackend({ order }) {
         initialValues: {
             calculatedData: JSON.parse(currentOrder.details),
             status: orderStatusList.find(status => currentOrder.status === status.value),
+            image: null
         },
         onSubmit: async values => {
             const formData = new FormData();
             formData.append('details', JSON.stringify(values.calculatedData));
             formData.append('status', values.status.value);
             formData.append('_method', 'put');
+            if (values.image) {
+                formData.append('image', values.image);
+            }
 
-            const { data } = await axios.post(`/admin/orders/${currentOrder.id}`, formData, { headers: { "Content-Type": "multipart/form-data" } });
+            const { data } = await axios.post(`/admin/orders/${currentOrder.id}`, formData);
 
             setSucess(data.ok);
         }
@@ -70,7 +74,20 @@ function UpdateOrderBackend({ order }) {
                                 />
                             </div>
                         </div>
-
+                        {values.status.value === 'finished' && (
+                            <div className="col-md-12">
+                                <div class="form-group">
+                                    <label >Result photo</label>
+                                    <input
+                                        type="file"
+                                        class="form-control-file"
+                                        onChange={e => {
+                                            setFieldValue('image', e.target.files[0])
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <hr />

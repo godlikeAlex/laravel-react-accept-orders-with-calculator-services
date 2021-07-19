@@ -31,6 +31,8 @@ function App() {
                 const cart = JSON.parse(shopingCartFromStorage);
                 if (typeof cart === 'object' && cart !== null) {
                     if (cart.hasOwnProperty('services') && cart.hasOwnProperty('total')) {
+                        console.log(cart);
+                        console.log(shopingCartFromStorage);
                         dispatch(initCart(cart));
                     }
                 }

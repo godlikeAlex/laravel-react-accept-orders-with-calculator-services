@@ -83,10 +83,9 @@ function Calculator({ onUpdate, data = {}, resetAllFields }) {
 
     React.useEffect(() => {
         const totalCalculated = values.services.reduce((total, service) => {
-            const currentPrice = calculatePrice(service);
+            const { total: currentPrice } = calculatePrice(service);
             return total + currentPrice;
         }, 0);
-
         const total = countTotal(totalCalculated);
 
 
@@ -98,13 +97,18 @@ function Calculator({ onUpdate, data = {}, resetAllFields }) {
         const services = [...values.services];
         services.push(TEMPLATE_CALCULATOR);
         setFieldValue('services', services);
+        setFieldValue('currentTab', values.currentTab + 1);
     };
 
     const updateServiceByIndex = (services, field, value, index) => {
         return services.map((service, idx) => {
             if (idx === index) {
                 const updatedService = { ...service };
+                const { total, totalPerSqFt, totalPerItem } = calculatePrice(updatedService);
                 updatedService[field] = value;
+                updatedService['price'] = total;
+                updatedService['totalPerSqFt'] = totalPerSqFt;
+                updatedService['totalPerItem'] = totalPerItem;
                 return updatedService;
             }
 
@@ -115,10 +119,11 @@ function Calculator({ onUpdate, data = {}, resetAllFields }) {
     const setFieldValueNested = (field, value, index) => {
         const copyServices = [...values.services];
         const updatedServiceByUserField = updateServiceByIndex(copyServices, field, value, index);
+        const price = countTotal(calculatePrice(updatedServiceByUserField[index]).total);
         const updatedServicePrice = updateServiceByIndex(
             updatedServiceByUserField,
             'price',
-            countTotal(calculatePrice(updatedServiceByUserField[index])),
+            price,
             index
         );
         setFieldValue('services', updatedServicePrice);
@@ -135,10 +140,9 @@ function Calculator({ onUpdate, data = {}, resetAllFields }) {
     return (
         <div className="row">
             <div className="d-flex p-0 col-md-12">
-                <h3 className="card-title p-3">Calculator</h3>
-                <ul className="nav nav-pills ml-auto p-2">
+                <ul className="nav nav-tabs color2" style={{ borderBottom: '5px solid #792F7E' }}>
                     {values.services.map((_, index) => (
-                        <li key={`tab` + index} className="nav-item" onClick={() => setFieldValue('currentTab', index)}><a className={values.currentTab === index ? 'nav-link active' : 'nav-link'} >Tab {index + 1}</a></li>
+                        <li key={`tab` + index} className={values.currentTab === index ? 'active' : ''} onClick={() => setFieldValue('currentTab', index)}><a>Tab {index + 1}</a></li>
                     ))}
                     <li className="nav-item" onClick={() => addNewService()}><a className='nav-link' >Add more</a></li>
                 </ul>

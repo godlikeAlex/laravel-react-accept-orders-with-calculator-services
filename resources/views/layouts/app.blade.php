@@ -49,6 +49,7 @@
         <!-- eof #box_wrapper -->
     </div>
     <!-- eof #canvas -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/frontend/js/compressed.js"></script>
     <script src="/frontend/js/selectize.min.js"></script>
     <script src="/frontend/js/main.js"></script>

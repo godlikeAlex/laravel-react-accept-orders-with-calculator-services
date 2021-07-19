@@ -25,17 +25,17 @@ export const cartSlice = createSlice({
                     const serviceToUpdate = { ...service };
                     switch (type) {
                         case 'plus':
-                            serviceToUpdate.quantity = serviceToUpdate.quantity + 1;
+                            serviceToUpdate.quantity = +serviceToUpdate.quantity + 1;
                             break;
                         case 'minus':
-                            serviceToUpdate.quantity = serviceToUpdate.quantity === 1 ? 1 : serviceToUpdate.quantity - 1;
+                            serviceToUpdate.quantity = serviceToUpdate.quantity === 1 ? 1 : +serviceToUpdate.quantity - 1;
                             break;
                     }
 
                     // wtf?
                     const calculatedPrice = calculatePrice(serviceToUpdate);
-                    serviceToUpdate.price = calculatedPrice <= MIN_PRICE ? MIN_PRICE : calculatedPrice;
-
+                    serviceToUpdate.price = calculatedPrice.total <= MIN_PRICE ? MIN_PRICE : calculatedPrice.total;
+                    console.log(calculatedPrice);
                     return serviceToUpdate;
                 }
 

@@ -51,11 +51,10 @@
                     </tr>
                 </tfoot>
             </table>
+
+            {{$orders->links('admin.orders.pagenation')}}
         </div>
     </div>
 </div>
 
-<script>
-
-</script>
 @endsection

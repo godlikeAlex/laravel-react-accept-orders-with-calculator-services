@@ -18,3 +18,4 @@ require('./components/UpdateOrderBackend');
 // Frontend
 // require('./App/components/ShopingCart');
 require('./App/index');
+require('./components/FrontendCalculator');

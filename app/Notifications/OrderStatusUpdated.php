@@ -7,6 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+use function PHPUnit\Framework\isNull;
+
 class OrderStatusUpdated extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -41,10 +43,18 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        $mail = (new MailMessage)
             ->line('Your order status updated!')
             ->line('Order id: ' . $this->order->id . ', new status ' . $this->order->status)
             ->line('Thank you for using services!');
+
+        if ($this->order->status == 'finished') {
+            $mail->attach(public_path('uploads/' . $this->order->image), [
+                'as' => $this->order->image,
+            ]);
+        }
+
+        return $mail;
     }
 
     /**

@@ -24,7 +24,8 @@ class AdminOrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->get();
+        $orders = Order::latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
+        // dd($orders);
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -82,6 +83,11 @@ class AdminOrderController extends Controller
         return view('admin.orders.show', compact('order'));
     }
 
+    public function invoicePrint(Order $order)
+    {
+        return view('admin.orders.invoice', compact('order'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -105,6 +111,7 @@ class AdminOrderController extends Controller
         $request->validate([
             'status' => 'required',
             'details' => 'required',
+            'photo' => 'nullable'
         ]);
 
         $calculatedServices = calculateServicePrice($request->details);
@@ -114,6 +121,12 @@ class AdminOrderController extends Controller
             'details' => json_encode($calculatedServices),
             'amount' => $calculatedServices->total
         ];
+
+        if ($request->has('image')) {
+            $fileName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('uploads'), $fileName);
+            $data['image'] = $fileName;
+        }
 
         $order->update($data);
 

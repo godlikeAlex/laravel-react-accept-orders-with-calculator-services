@@ -1,34 +1,30 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useTable } from 'react-table';
+import React, { useState } from 'react';
 import HeadSection from '../HeadSection';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns'
 import { useMediaQuery } from 'react-responsive'
 import ReactLoading from 'react-loading';
+import TableOrders from './TableOrders';
+import useOrders from './useOrders';
+import MobileOrders from './MobileOrders';
 
 const Dashboard = () => {
-    const [data, setOrders] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [orders, lastPage, isLoading] = useOrders(page);
+    const tableOrders = orders?.map((order) => {
+        return {
+            id: order.id,
+            uuid: order.uuid,
+            status: order.status,
+            amount: order.amount,
+            date: format(Date.parse(order.created_at), 'd MMM Y'),
+            actions: order.id
+        }
+    });
+
+    const data = React.useMemo(() => tableOrders, [orders]);
+
     const isMobile = useMediaQuery({ maxWidth: 767 })
-    const token = localStorage.getItem('token');
-    // const data = React.useMemo(
-    //     () => [
-    //         {
-    //             col1: 'Hello',
-    //             col2: 'World',
-    //         },
-    //         {
-    //             col1: 'react-table',
-    //             col2: 'rocks',
-    //         },
-    //         {
-    //             col1: 'whatever',
-    //             col2: 'you want',
-    //         },
-    //     ],
-    //     []
-    // )
 
     const columns = React.useMemo(
         () => [
@@ -68,95 +64,14 @@ const Dashboard = () => {
         []
     )
 
-    useEffect(() => {
-        axios.get('/api/user/orders', { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data }) => {
-            const tableOrders = data.orders.data.map((order) => {
-                return {
-                    id: order.id,
-                    uuid: order.uuid,
-                    status: order.status,
-                    amount: order.amount,
-                    date: format(Date.parse(order.created_at), 'd MMM Y'),
-                    actions: order.id
-                }
-            });
-            setOrders(tableOrders);
-            setLoading(false);
-        })
-    }, []);
-
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-    } = useTable({ columns, data })
+    if (isLoading) return <div>loading...</div>;
 
     const content = () => (
         !isMobile ? (
             <div className="col-sm-12">
-                <table id="timetable" className="table_template" {...getTableProps()} >
-                    <thead>
-                        {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map(column => (
-                                    <th
-                                        {...column.getHeaderProps()}
-                                    >
-                                        {column.render('Header')}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {rows.map(row => {
-                            prepareRow(row)
-                            return (
-                                <tr {...row.getRowProps()}>
-                                    {row.cells.map(cell => {
-                                        return (
-                                            <td
-                                                {...cell.getCellProps()}
-                                                style={{
-                                                    textTransform: 'capitalize'
-                                                }}
-                                            >
-                                                {cell.render('Cell')}
-                                            </td>
-                                        )
-                                    })}
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
+                <TableOrders {...{ data, columns, setPage, page }} totalPage={lastPage} />
             </div>
-        ) : data.map(order => (
-            <div className="col-sm-12">
-                <div class="card order-card">
-                    <div class="card-body">
-                        <h5 class="card-title">Order id: {order.uuid}</h5>
-                        <div className="card-list-item-oreder">
-                            <span>Status</span>
-                            <div>{order.status}</div>
-                        </div>
-                        <div className="card-list-item-oreder">
-                            <span>Amount</span>
-                            <div>${order.amount}</div>
-                        </div>
-                        <div className="card-list-item-oreder">
-                            <span>Created At</span>
-                            <div>{order.date}</div>
-                        </div>
-                        <Link to={`/cabinet/dashboard/show/${order.id}`} className="theme_button color1">
-                            Show Details
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        ))
+        ) : <MobileOrders {...{ data, setPage, page }} totalPage={lastPage} />
     )
 
     const loadingContainer = () => (
@@ -170,7 +85,7 @@ const Dashboard = () => {
             <HeadSection title={'Dashboard'} image={4} />
             <div className="container">
                 <div className="row">
-                    {loading ? loadingContainer() : content()}
+                    {isLoading ? loadingContainer() : content()}
                 </div>
             </div>
         </>

@@ -25,15 +25,66 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
     //     }
     // }
 
+    const customStyles = {
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            return {
+                ...styles,
+                backgroundColor: isSelected && '#05d5c7',
+                ':active': {
+                    ...styles[':active'],
+                    color: 'white',
+                    backgroundColor: '#05d5c7',
+                },
+            };
+        },
+        container: (provided) => ({
+            ...provided,
+            fontSize: '18px',
+            // none of react-select's styles are passed to <Control />
+        }),
+        indicatorSeparator: (provided) => ({
+            ...provided,
+            display: 'none'
+        }),
+        indicatorsContainer: () => ({
+            position: 'absolute',
+            background: 'red',
+            right: 0,
+            height: '100%',
+            top: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '80px',
+            backgroundColor: '#792F7E'
+        }),
+        control: (provided) => ({
+            ...provided,
+            padding: '15px 40px 17px',
+            border: 'none'
+        }),
+        dropdownIndicator: () => ({
+            color: 'white'
+        }),
+        valueContainer: (provided) => ({
+            ...provided,
+        }),
+    }
+
     const onChangeMaterialType = (serviceType, index) => {
         const services = [...values.services];
+
         services[index] = {
             ...services[index],
             currentServiceType: serviceType,
             currentService: servicesForOptions[serviceType.value][0]
         }
-        services[index].price = calculatePrice(services[index]);
-        // console.log(services[index]);
+
+        const { total, totalPerSqFt, totalPerItem } = calculatePrice(services[index]);
+
+        services[index].price = total;
+        services[index].totalPerSqFt = totalPerSqFt;
+        services[index].totalPerItem = totalPerItem;
         setFieldValue('services', services);
     }
 
@@ -50,7 +101,7 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
                                 onChange={e => setFieldValueNested('ftHeight', { title, price }, index)}
                                 checked={service.ftHeight.title === title}
                             />
-                            <label className="form-check-label">{title}</label>
+                            <label className="form-check-label" style={{ marginLeft: 10 }}>{title}</label>
                         </div>
                     ))}
                 </div>
@@ -103,6 +154,8 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
                 <div className="form-group">
                     <label>Material Type</label>
                     <Select
+                        styles={customStyles}
+                        className={'reselect2-order'}
                         options={serviceTypeOptions}
                         onChange={service => {
                             onChangeMaterialType(service, index);
@@ -117,13 +170,17 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
                     <label>Material Type</label>
                     <Select
                         options={servicesForOptions[service.currentServiceType.value]}
+                        className={'reselect2-order'}
+                        styles={customStyles}
                         onChange={service => setFieldValueNested('currentService', service, index)}
                         value={service.currentService}
                     />
                 </div>
             </div>
 
-            <h4>Price current service ${service.price}</h4>
+            <h6 className="col-md-12">Price for current service - ${service.price}</h6>
+            <h6 className="col-md-12">Total Per Item - ${service.totalPerItem || 0}</h6>
+            <h6 className="col-md-12">Total Per SqFt - ${service.totalPerSqFt || 0}</h6>
         </React.Fragment>
     )
 };

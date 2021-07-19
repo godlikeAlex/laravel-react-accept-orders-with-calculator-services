@@ -8,13 +8,20 @@ function calculateServicePrice($data)
         $width = $service->width;
         $height = $service->height;
         $curentService = $service->currentService;
-
-        $squareFt = ($width * $height) / 144 * $service->ftHeight->price;
+        $squareFt = ($width * $height) / 144;
         $totalSqFt = $squareFt * $service->quantity;
-        $calculatedPrice = round($totalSqFt * $curentService->price, 2);
+        $calculatedPrice = round(($totalSqFt * $curentService->price) + $service->ftHeight->price, 2);
+        $totalPerSqFt = $squareFt * $service->quantity * (($curentService->price * $totalSqFt) / $totalSqFt);
+        $totalPerItem = $squareFt * (($curentService->price * $totalSqFt) / $totalSqFt);
+
+        $service->totalPerSqFt = $totalPerSqFt;
+        $service->totalPerItem = $totalPerItem;
 
         if ($curentService->disable === 'WIDTH:HEIGHT:HEIGHT-FOOT') {
-            $service->price = $calculatedPrice <= 200 ? 200 : round($service->quantity * $curentService->price, 2);
+            $cPrice = $curentService->price +  $service->ftHeight->price;
+            $service->totalPerSqFt = round(2, $curentService->price);
+            $service->totalPerItem = round(2, $curentService->price);
+            $service->price = $cPrice <= 200 ? 200 : round($cPrice, 2);
         } else {
             $service->price = $calculatedPrice <= 200 ? 200 : $calculatedPrice;
         }
@@ -22,6 +29,7 @@ function calculateServicePrice($data)
     }
 
     $encodedData->total_php = $total;
+    $encodedData->total = $total;
 
     return $encodedData;
 }

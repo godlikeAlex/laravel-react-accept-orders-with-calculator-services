@@ -11,9 +11,7 @@ class OrderController extends Controller
     {
         $user = $request->user();
 
-        return response([
-            'orders' =>  $user->orders()->latest()->paginate(20)
-        ]);
+        return response($user->orders()->latest()->paginate(5));
     }
 
     public function show(Request $request, $id)

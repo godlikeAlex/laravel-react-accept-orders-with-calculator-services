@@ -88,32 +88,18 @@
                         <img src="/backend/dist/img/credit/mastercard.png" alt="Mastercard">
                         <img src="/backend/dist/img/credit/american-express.png" alt="American Express">
                         <img src="/backend/dist/img/credit/paypal2.png" alt="Paypal">
-
-                        <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-                            Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
-                            plugg
-                            dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                        </p>
                     </div>
                     <!-- /.col -->
                     <div class="col-6">
                         <div class="table-responsive">
                             <table class="table">
                                 <tr>
-                                    <th style="width:50%">Subtotal:</th>
-                                    <td>$250.30</td>
-                                </tr>
-                                <tr>
-                                    <th>Tax (9.3%)</th>
-                                    <td>$10.34</td>
-                                </tr>
-                                <tr>
-                                    <th>Shipping:</th>
-                                    <td>$5.80</td>
-                                </tr>
-                                <tr>
-                                    <th>Total:</th>
-                                    <td>$265.24</td>
+                                    <th>
+                                        <h3>Total:</h3>
+                                    </th>
+                                    <td>
+                                        <h3>${{$order->amount}}</h3>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -125,7 +111,7 @@
                 <!-- this row will not appear when printing -->
                 <div class="row no-print">
                     <div class="col-12" style="text-align: right;">
-                        <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
+                        <a href="{{route('invoice.print', $order->id)}}" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
                     </div>
                 </div>
             </div>

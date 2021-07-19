@@ -10,12 +10,11 @@ const Cart = () => {
     const { services, total } = useSelector(state => state.cart);
     const { isAuth, user } = useSelector(state => state.auth);
     const dispatch = useDispatch();
-    console.log(isAuth, user);
 
     useEffect(() => {
         const total = services.reduce((acum, service) => {
             const servicePrice = calculatePrice(service);
-            return acum + servicePrice;
+            return acum + servicePrice.total;
         }, 0);
 
         dispatch(setTotalTo(total));

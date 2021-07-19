@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Contacts;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,12 @@ Route::get('/', function () {
     return view('welcome', compact('order'));
 });
 
+Route::get('/contact', function () {
+    return view('contact');
+});
+
+Route::post('/contact', [Contacts::class, 'send']);
+
 Route::get('/cart/{path?}', function () {
     return view('cart');
 })->where('path', '.*');
@@ -31,11 +38,6 @@ Route::get('/cart/{path?}', function () {
 Route::get('/cabinet/{path?}', function () {
     return view('app');
 })->where('path', '.*');
-
-Route::get('/cabinets', function () {
-    return 'dd';
-});
-
 Auth::routes();
 
 Route::prefix('admin')->group(function () {
@@ -44,6 +46,7 @@ Route::prefix('admin')->group(function () {
     Route::get('logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
     Route::get('dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('users', [AdminController::class, 'getUsers']);
+    Route::get('/invoce/print/{order}', [AdminOrderController::class, 'invoicePrint'])->name('invoice.print');
     Route::resource('orders', AdminOrderController::class);
 });
 

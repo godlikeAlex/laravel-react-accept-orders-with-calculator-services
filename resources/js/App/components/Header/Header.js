@@ -12,26 +12,26 @@ const Header = () => {
     }
 
     return (
-        <header class="page_header header_v2 header_white toggler_xxs_right affix-top">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-12 display-flex v-center">
-                        <div class="header_left_logo" style={{ minWidth: '142px' }}>
-                            <a href="index.html" class="logo">
+        <header className="page_header header_v2 header_white toggler_xxs_right affix-top">
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-sm-12 display-flex v-center">
+                        <div className="header_left_logo" style={{ minWidth: '142px' }}>
+                            <a href="/" className="logo">
                                 <img src="/frontend/images/logo.png" alt="" />
                             </a>
                         </div>
-                        <div class="header_mainmenu text-center">
-                            <nav class="mainmenu_wrapper" >
-                                <ul class="mainmenu nav sf-menu sf-js-enabled sf-arrows" >
-                                    <li class="active"> <a href="index-2.html" class="sf-with-ul"><span>Home</span></a><span class="sf-menu-item-mobile-toggler"></span>
+                        <div className="header_mainmenu text-center">
+                            <nav className="mainmenu_wrapper" >
+                                <ul className="mainmenu nav sf-menu sf-js-enabled sf-arrows" >
+                                    <li className="active"> <a href="/" className="sf-with-ul"><span>Home</span></a><span className="sf-menu-item-mobile-toggler"></span>
 
                                     </li>
-                                    <li> <a href="contact.html" class="sf-with-ul"><span>About us</span></a><span class="sf-menu-item-mobile-toggler"></span></li>
+                                    <li> <a href="/#about-us" className="sf-with-ul"><span>About us</span></a><span className="sf-menu-item-mobile-toggler"></span></li>
 
-                                    <li> <a href="services.html"><span>Calculate Services</span></a> </li>
-                                    <li class=""> <a href="contact.html" class="sf-with-ul"><span>Contact</span></a><span class="sf-menu-item-mobile-toggler"></span></li>
-                                    <li> <a href="contact.html" class="sf-with-ul"><span>Contact</span></a><span class="sf-menu-item-mobile-toggler"></span></li>
+                                    <li> <a href="/#calculator"><span>Calculate Services</span></a> </li>
+                                    <li className=""> <a href="contact.html" className="sf-with-ul"><span>Contact</span></a><span className="sf-menu-item-mobile-toggler"></span></li>
+                                    <li> <a href="contact.html" className="sf-with-ul"><span>Contact</span></a><span className="sf-menu-item-mobile-toggler"></span></li>
                                     <li>
                                         <Link to="/cart">
                                             <span style={{ display: 'flex' }}>
@@ -41,13 +41,13 @@ const Header = () => {
                                     </li>
                                     {auth.isAuth ? (
                                         <li>
-                                            <Link to="/cabinet/dashboard" class="sf-with-ul">
+                                            <Link to="/cabinet/dashboard" className="sf-with-ul">
                                                 <span style={{ display: 'flex', alignItems: 'center' }}>
                                                     <ion-icon name="person-circle-outline" style={{ fontSize: '35px', color: '#333' }}></ion-icon>
                                                     {auth.user.name}
                                                 </span>
                                             </Link>
-                                            <span class="sf-menu-item-mobile-toggler"></span>
+                                            <span className="sf-menu-item-mobile-toggler"></span>
                                             <ul>
                                                 <li> <Link to="/cabinet/dashboard"><span>My profile</span></Link> </li>
                                                 <li> <Link to="/cabinet/dashboard"><span>History</span></Link> </li>
@@ -55,11 +55,11 @@ const Header = () => {
                                             </ul>
                                         </li>
                                     ) : (
-                                        <li> <Link to="/cabinet/login" class="sf-with-ul"><span>Sign In</span></Link></li>
+                                        <li> <Link to="/cabinet/login" className="sf-with-ul"><span>Sign In</span></Link></li>
                                     )}
                                 </ul>
                             </nav>
-                            <span class="toggle_menu"><span></span></span>
+                            <span className="toggle_menu"><span></span></span>
                         </div>
                     </div>
                 </div>
