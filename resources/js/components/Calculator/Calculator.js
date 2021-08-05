@@ -36,19 +36,20 @@ export const servicesForOptions = Object.keys(calculatorValues.services).reduce(
     return accum;
 }, {});
 
-export const MIN_PRICE = 200;
+export const MIN_PRICE = 250;
 
 const TEMPLATE_CALCULATOR = {
     width: 5,
     height: 5,
-    ftHeight: calculatorValues.height[1],
+    ftHeight: { label: calculatorValues.height[1].title, value: calculatorValues.height[1].title, price: calculatorValues.height[1].price },
     price: MIN_PRICE,
     quantity: 1,
     currentServiceType: serviceTypeOptions[0],
     currentService: servicesForOptions['Vinyl'][0]
 };
 
-function Calculator({ onUpdate, data = {}, resetAllFields }) {
+function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, renderFooter, onAddCart }) {
+    const topBlockRef = React.useRef(null)
     const { values, errors, handleSubmit, setFieldValue, setValues } = useFormik({
         validationSchema: ServiceCalculatorSchema,
         initialValues: {
@@ -56,8 +57,6 @@ function Calculator({ onUpdate, data = {}, resetAllFields }) {
             total: data?.total || MIN_PRICE,
             services: data?.services || [TEMPLATE_CALCULATOR]
         },
-        onSubmit: values => {
-        }
     });
 
     React.useEffect(() => {
@@ -98,6 +97,9 @@ function Calculator({ onUpdate, data = {}, resetAllFields }) {
         services.push(TEMPLATE_CALCULATOR);
         setFieldValue('services', services);
         setFieldValue('currentTab', values.currentTab + 1);
+        if (bottomAddMore) {
+            topBlockRef.current.scrollIntoView();
+        }
     };
 
     const updateServiceByIndex = (services, field, value, index) => {
@@ -139,15 +141,37 @@ function Calculator({ onUpdate, data = {}, resetAllFields }) {
 
     return (
         <div className="row">
+            <div ref={topBlockRef} style={{ position: 'absolute', top: 20 }}></div>
             <div className="d-flex p-0 col-md-12">
-                <ul className="nav nav-tabs color2" style={{ borderBottom: '5px solid #792F7E' }}>
+                <ul className="nav nav-tabs color2" style={{ borderBottom: '5px solid #ED0598' }}>
                     {values.services.map((_, index) => (
                         <li key={`tab` + index} className={values.currentTab === index ? 'active' : ''} onClick={() => setFieldValue('currentTab', index)}><a>Tab {index + 1}</a></li>
                     ))}
-                    <li className="nav-item" onClick={() => addNewService()}><a className='nav-link' >Add more</a></li>
+                    {!bottomAddMore && (
+                        <li className="nav-item" onClick={() => addNewService()}><a className='nav-link' >Add more</a></li>
+                    )}
                 </ul>
             </div>
             {renderTabsContent()}
+            {renderFooter && (
+                <div className="col-md-12">
+                    <hr />
+                    <h4>Total price: ${values.total}</h4>
+                    {bottomAddMore && (
+                        <a
+                            className="theme_button bg_button color1 btn-calc"
+                            onClick={() => addNewService()}
+                            style={{ minWidth: '215px' }}
+                        >
+                            Add More
+                        </a>
+                    )}
+                    <a className="theme_button bg_button color1 btn-calc" style={{ minWidth: '215px' }} onClick={onAddCart}>Add to cart</a>
+
+
+                </div>
+            )}
+
         </div>
     );
 }

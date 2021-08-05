@@ -29,7 +29,12 @@ Route::get('/contact', function () {
     return view('contact');
 });
 
+Route::get('/consulting', function () {
+    return view('ConsultingOrder');
+});
+
 Route::post('/contact', [Contacts::class, 'send']);
+Route::post('/consulting', [Contacts::class, 'consulting']);
 
 Route::get('/cart/{path?}', function () {
     return view('cart');

@@ -7,7 +7,9 @@ function ProtectedRoute({ component: Component, ...params }) {
     const { isAuth, user, loading } = useSelector(state => state.auth);
 
     if (loading) {
-        return <LoadingSpinner />
+        return <div style={{ position: 'absolute', width: '100vw', height: '100vh', backgroundColor: 'white', zIndex: 9999999, top: 0 }}>
+            <div className="preloader_image"></div>
+        </div>
     }
 
     return (

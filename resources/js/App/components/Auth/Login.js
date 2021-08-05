@@ -23,7 +23,7 @@ function Login() {
                 const { data } = await login(values);
                 if (data.ok) {
                     localStorage.setItem('token', data.token);
-                    dispatch(initAuth({ user: data.user }));
+                    dispatch(initAuth({ user: data.user, token: data.token }));
                     setSubmitting(false);
                 }
             } catch (error) {

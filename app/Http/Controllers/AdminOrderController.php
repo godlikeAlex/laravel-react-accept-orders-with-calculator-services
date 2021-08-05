@@ -24,8 +24,11 @@ class AdminOrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
-        // dd($orders);
+        if (request()->query('status')) {
+            $orders = Order::where('status', request()->query('status'))->latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
+        } else {
+            $orders = Order::where('status', '!=', 'finished')->latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
+        }
         return view('admin.orders.index', compact('orders'));
     }
 

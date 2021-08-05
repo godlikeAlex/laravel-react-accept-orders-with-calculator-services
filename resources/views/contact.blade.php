@@ -3,7 +3,7 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 @include('components.header')
-<section class="page_breadcrumbs ds background_cover section_padding_25" style="background-image: url(&quot;img/parallax/breadcrumbs4.jpg&quot;);">
+<section class="page_breadcrumbs cover_breadcumbs ds section_padding_25" style='background-image: url("/frontend/img/parallax/breadcrumbs3.jpg");'>
     <div class="container">
         <div class="row">
             <div class="col-xs-12 text-center">
@@ -35,19 +35,22 @@
             <div class="col-sm-4 to_animate animated pullDown" data-animation="pullDown">
                 <div class="teaser text-center">
                     <div class="teaser_icon highlight size_normal"> <i class="rt-icon2-phone5"></i> </div>
-                    <p> <span class="grey">Phone:</span> +12 345 678 9123<br> <span class="grey">Fax:</span> +12 345 678 9123 </p>
+                    <p> <span class="grey">Phone:</span> +1 201 855 63 45<br> <span class="grey">Fax:</span> +1 201 855 63 45 </p>
                 </div>
             </div>
             <div class="col-sm-4 to_animate animated pullDown" data-animation="pullDown">
                 <div class="teaser text-center">
                     <div class="teaser_icon highlight size_normal"> <i class="rt-icon2-location2"></i> </div>
-                    <p> PO Box 54378<br> 4321 Your Address,<br> Your City, Your Country </p>
+                    <p> New York, NY
+                        <br>Boston, MA
+                        <br> Dalas, TX,
+                    </p>
                 </div>
             </div>
             <div class="col-sm-4 to_animate animated pullDown" data-animation="pullDown">
                 <div class="teaser text-center">
                     <div class="teaser_icon highlight size_normal"> <i class="rt-icon2-mail"></i> </div>
-                    <p>support@yourname.com<br> example@example.com</p>
+                    <p>assit.easywaynyc@gmail.com</p>
                 </div>
             </div>
         </div>

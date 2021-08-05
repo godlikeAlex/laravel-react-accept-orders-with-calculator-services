@@ -5,19 +5,22 @@ export const authSlice = createSlice({
     initialState: {
         isAuth: false,
         loading: true,
-        user: null
+        user: null,
+        token: null
     },
     reducers: {
         initAuth: (state, { payload }) => {
-            const { user } = payload;
+            const { user, token } = payload;
             state.user = user;
             state.isAuth = true;
             state.loading = false;
+            state.token = token
         },
         logout: state => {
             state.isAuth = false;
             state.user = null;
             state.loading = false;
+            state.token = null
         },
         setAuthLoading: (state, { payload }) => {
             state.loading = payload;

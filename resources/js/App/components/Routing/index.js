@@ -13,18 +13,15 @@ import { useSelector } from 'react-redux';
 import LoadingSpinner from '../Auth/LoadingSpinner';
 import Thanks from '../ShopingCart/Thanks';
 import Header from '../Header/Header';
-import { Dashboard, ShowOrder } from '../Dashboard';
+import { Dashboard, ShowOrder, Saved } from '../Dashboard';
 import NotFound from '../NotFound';
 
 function Routing() {
     const { loading } = useSelector(state => state.auth);
 
-    if (loading) {
-        return <LoadingSpinner />
-    }
-
     return (
         <Router>
+            {loading && <LoadingSpinner />}
             <Header />
             <ScrollToTop>
                 <Switch>
@@ -45,6 +42,8 @@ function Routing() {
                     </Route>
                     <ProtectedRoute exact path="/cabinet/dashboard" component={Dashboard} />
                     <ProtectedRoute exact path="/cabinet/dashboard/show/:id" component={ShowOrder} />
+                    <ProtectedRoute exact path="/cabinet/dashboard/saved" component={Saved} />
+                    <ProtectedRoute exact path="/cabinet/dashboard/update-profile" component={Saved} />
                     <Route component={NotFound} />
                 </Switch>
             </ScrollToTop>

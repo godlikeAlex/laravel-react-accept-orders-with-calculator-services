@@ -4,11 +4,25 @@ import Select from 'react-select';
 import { servicesForOptions, serviceTypeOptions } from './Calculator';
 import { calculatePrice } from './utils';
 
+const weightOptions = calculatorValues.height.map(({ title, price }) => {
+    return {
+        label: title,
+        value: title,
+        price,
+        title
+    }
+})
+
 function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, values }) {
     const setOnlyPassitiveValue = (e, field, index) => {
         e.preventDefault();
         const { value } = e.target;
         const regex = /^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/;
+
+        if (value.toString() === '') {
+            setFieldValueNested(field, value, index);
+        }
+
         if (regex.test(value.toString())) {
             setFieldValueNested(field, value, index);
         }
@@ -29,11 +43,11 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
         option: (styles, { data, isDisabled, isFocused, isSelected }) => {
             return {
                 ...styles,
-                backgroundColor: isSelected && '#05d5c7',
+                backgroundColor: isSelected && '#ED0598',
                 ':active': {
                     ...styles[':active'],
                     color: 'white',
-                    backgroundColor: '#05d5c7',
+                    backgroundColor: '#ED0598',
                 },
             };
         },
@@ -56,11 +70,11 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
             justifyContent: 'center',
             alignItems: 'center',
             width: '80px',
-            backgroundColor: '#792F7E'
+            backgroundColor: '#ED0598'
         }),
         control: (provided) => ({
             ...provided,
-            padding: '15px 40px 17px',
+            padding: '24px 40px 21px',
             border: 'none'
         }),
         dropdownIndicator: () => ({
@@ -90,20 +104,30 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
 
     return (
         <React.Fragment>
-            <div className="col-md-6">
+            <div className="col-md-6 col-sm-12">
                 <div className="form-group">
-                    {calculatorValues.height.map(({ title, price }) => (
-                        <div className="form-check" key={title}>
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                value={service.ftHeight.price}
-                                onChange={e => setFieldValueNested('ftHeight', { title, price }, index)}
-                                checked={service.ftHeight.title === title}
-                            />
-                            <label className="form-check-label" style={{ marginLeft: 10 }}>{title}</label>
-                        </div>
-                    ))}
+                    <label>Total Height</label>
+                    <Select
+                        isSearchable={false}
+                        styles={customStyles}
+                        className={'reselect2-order'}
+                        options={weightOptions}
+                        onChange={(ftHeight) => {
+                            setFieldValueNested('ftHeight', ftHeight, index)
+                        }}
+                        value={service.ftHeight}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Quantity</label>
+                    <input type="text"
+                        className="form-control"
+                        placeholder="Quantity"
+                        name="quantity"
+                        onChange={(e) => setOnlyPassitiveValue(e, 'quantity', index)}
+                        value={service.quantity}
+                    />
                 </div>
             </div>
 
@@ -137,24 +161,12 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
                 </div>
             </div>
 
-            <div className="col-md-12">
-                <div className="form-group">
-                    <label>Quantity</label>
-                    <input type="text"
-                        className="form-control"
-                        placeholder="Quantity"
-                        name="quantity"
-                        onChange={(e) => setOnlyPassitiveValue(e, 'quantity', index)}
-                        value={service.quantity}
-                    />
-                </div>
-            </div>
-
             <div className="col-md-6">
                 <div className="form-group">
                     <label>Material Type</label>
                     <Select
                         styles={customStyles}
+                        isSearchable={false}
                         className={'reselect2-order'}
                         options={serviceTypeOptions}
                         onChange={service => {
@@ -169,6 +181,7 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
                 <div className="form-group">
                     <label>Material Type</label>
                     <Select
+                        isSearchable={false}
                         options={servicesForOptions[service.currentServiceType.value]}
                         className={'reselect2-order'}
                         styles={customStyles}

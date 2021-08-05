@@ -5,304 +5,345 @@
 @include('components.header')
 
 <section class="intro_section page_mainslider cs all-scr-cover image-dependant">
-    <div class="flexslider" data-dots="false" data-nav="true">
-        <ul class="slides">
-            <li>
-                <div class="slide-image-wrap"> <img src="/frontend/images/slide01.jpg" alt="" /> </div>
+    <div class="container-fluid" style="width: 100%;    ">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <div class="">
+                    <div class="">
+                        <div class="intro-layer to_animate" data-animation="fadeInUp">
+                            <h1 class="black hero-text">IT'S WHAT <br /> WE DO</h1>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- eof .col-* -->
+        </div>
+        <!-- eof .row -->
+    </div>
+    <div class="banner-phone">
+        <img src="/frontend/images/banner.png" alt="">
+    </div>
+    <a href="#about-us" class="arrow">
+        <ion-icon name="chevron-down-outline"></ion-icon>
+    </a>
+</section>
+
+<section id="about-us" class="ls section_padding_top_75 section_padding_bottom_75">
+    <div class="container">
+        <div class="row flex-wrap">
+            <div class="col-xs-12 col-md-6"> <img style="width: 100%; max-height: 380px; object-fit: cover;" data-src="/frontend/images/about.webp" alt="" class="cover-image lazyload"> </div>
+            <div class="col-xs-12 col-md-6"> <span class="above_heading highlight">Welcome</span>
+                <h2 class="section_header">About us</h2>
+                <p>
+                    The Easy Way Install team handles your project with the highest level of skill and accountability. We understand that every project must be done to perfection. We've worked with some of the best-known companies in the country on a wide variety of projects. Our customers rely on our ability to create the highest quality installation. We can help you to get the best installation experience. We are a fully insured company and can offer a full guarantee on every installation that we do.
+                </p>
+                <div class="toppadding_10 visible-md visible-lg"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ls section_padding_top_75 section_padding_bottom_75 alt-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <div class="teaser text-center">
+                    <div class="teaser_icon grey size_big"> <i class="rt-icon2-checkmark2"></i> </div>
+                    <h3 class="counter-wrap" data-from="0" data-to="9999" data-speed="1000"> <span class="counter" data-from="0" data-to="9999" data-speed="1500">9999</span><span class="counter-add">+</span> </h3>
+                    <p>Project completed</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="teaser text-center">
+                    <div class="teaser_icon grey size_big"> <i class="fa fa-group"></i> </div>
+                    <h3 class="counter-wrap" data-from="0" data-to="10" data-speed="1300"> <span class="counter" data-from="0" data-to="10" data-speed="1500">10</span><span class="counter-add">+</span> </h3>
+                    <p>Partners</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="teaser text-center">
+                    <div class="teaser_icon grey size_big"> <i class="fa fa-rocket"></i> </div>
+                    <h3 class="counter-wrap" data-from="0" data-to="100000" data-speed="1200"> <span class="counter" data-from="0" data-to="100000" data-speed="1200">10</span><span class="counter-add">+</span> </h3>
+                    <p>Sq/ft of vinyl film installed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="process" class="ls section_padding_top_75 section_padding_bottom_75">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <h2 class="section_header">Process</h2>
+                <div class="toppadding_10 visible-lg"></div>
                 <div class="container">
                     <div class="row">
-                        <div class="col-xs-12 text-center">
-                            <div class="slide_description_wrapper">
-                                <div class="slide_description">
-                                    <div class="intro-layer to_animate" data-animation="fadeInUp">
-                                        <h1 class="black">Graphic Design <br>&amp; Printing Services</h1>
-                                    </div>
-                                    <div class="intro-layer to_animate" data-animation="fadeInUp">
-                                        <div class="slide_buttons"> <a href="#" class="theme_button bg_button color2 min_width_button"><i class="fa fa-upload rightpadding_5"></i> Upload Files</a> <a href="#" class="theme_button bg_button color1 min_width_button"><i class="fa fa-pencil leftpadding_5"></i> Request Quote</a> </div>
-                                    </div>
+                        <div class="col-md-12">
+                            <div class="main-timeline4">
+                                <div class="timeline">
+                                    <a class="timeline-content">
+                                        <span class="year">
+                                            <ion-icon name="mail-outline"></ion-icon>
+                                        </span>
+                                        <div class="inner-content">
+                                            <h3 class="title">Email / Call / Website</h3>
+                                            <p class="description">
+                                                Pick your
+                                                service and get a price
+                                            </p>
+                                        </div>
+                                    </a>
                                 </div>
-                                <!-- eof .slide_description -->
+                                <div class="timeline">
+                                    <a class="timeline-content">
+                                        <span class="year">
+                                            <ion-icon name="send-outline"></ion-icon>
+                                        </span>
+                                        <div class="inner-content">
+                                            <h3 class="title">Place order</h3>
+                                            <p class="description">
+                                                Add all your project descriptions and email directly to us.
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="timeline">
+                                    <a class="timeline-content">
+                                        <span class="year">
+                                            <ion-icon name="calendar-outline"></ion-icon>
+                                        </span>
+                                        <div class="inner-content">
+                                            <h3 class="title">Setting up a date</h3>
+                                            <p class="description">
+                                                Pick a date and time
+                                                than works for you
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="timeline">
+                                    <a class="timeline-content">
+                                        <span class="year">
+                                            <ion-icon name="hammer-outline"></ion-icon>
+                                        </span>
+                                        <div class="inner-content">
+                                            <h3 class="title">Preparing for installation</h3>
+                                            <p class="description">
+                                                You can request a private consultation, special tools, pick up & delivery of metterial
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="timeline">
+                                    <a class="timeline-content">
+                                        <span class="year">
+                                            <ion-icon name="cash-outline"></ion-icon>
+                                        </span>
+                                        <div class="inner-content">
+                                            <h3 class="title">Deposit</h3>
+                                            <p class="description">
+                                                You must pay 20% down
+                                                before the job starts
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="timeline">
+                                    <a class="timeline-content">
+                                        <span class="year">
+                                            <ion-icon name="build-outline"></ion-icon>
+                                        </span>
+                                        <div class="inner-content">
+                                            <h3 class="title">Installation</h3>
+                                            <p class="description">
+                                                You will get a notification from us as each
+                                                step of installation is a progressing. We also invite you to be on site and watch how we are make a done
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="timeline">
+                                    <a class="timeline-content">
+                                        <span class="year">
+                                            <ion-icon name="reader-outline"></ion-icon>
+                                        </span>
+                                        <div class="inner-content">
+                                            <h3 class="title">Quality control </h3>
+                                            <p class="description">
+                                                On this step installers will go thought to make sure that everything is perfect, will take a final pictures and email them to you
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="timeline">
+                                    <a class="timeline-content">
+                                        <span class="year">
+                                            <ion-icon name="card-outline"></ion-icon>
+                                        </span>
+                                        <div class="inner-content">
+                                            <h3 class="title">Final payment</h3>
+                                            <p class="description">
+                                                If you satisfied with work, we will automatically charge rest of amount or email you invoice
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                            <!-- eof .slide_description_wrapper -->
                         </div>
-                        <!-- eof .col-* -->
                     </div>
-                    <!-- eof .row -->
                 </div>
-                <!-- eof .container -->
-            </li>
-        </ul>
-    </div>
-    <!-- eof flexslider -->
-</section>
-<section id="subscribe" class="cs main_color2 half_cs section_padding_top_40 section_padding_bottom_40 columns_padding_80">
-    <div class="container">
-        <div class="row flex-wrap v-center">
-            <div class="col-xs-12 col-sm-6 text-center text-sm-right">
-                <div class="toppadding_25 hidden-xs"></div>
-                <div class="small-text greylinks topmargin_5"> <a href="https://html.modernwebtemplates.com/cdn-cgi/l/email-protection#f3d0"><span class="__cf_email__" data-cfemail="355642544c75464045455a47411b565a58">[email&#160;protected]</span></a> </div>
-                <p class="hero black bottommargin_0">0-800-234-5678</p>
-                <div class="toppadding_25"></div>
             </div>
-            <div class="col-xs-12 col-sm-6 text-center text-sm-left">
-                <div class="toppadding_30 visible-xs"></div>
-                <div class="widget widget_mailchimp">
-                    <form class="signup form-inline" action="https://html.modernwebtemplates.com/colorway/" method="get">
-                        <div class="form-group-wrap">
-                            <div class="form-group"> <label for="mailchimp" class="sr-only">Enter your email here</label> <input name="email" type="email" id="mailchimp" class="mailchimp_email form-control" placeholder="Newsletter Subscribe"> <button type="submit" class="theme_button bg_button color2">Submit</button> </div>
+        </div>
+    </div>
+</section>
+
+<section id="products" class="ls section_padding_top_75 section_padding_bottom_75 alt-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <h2 class="section_header">What I Get</h2>
+                <div class="row flex-wrap loop-colors columns_padding_30 columns_margin_bottom_50">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
+                            <div>
+                                <div class="teaser_icon highlight size_small"> <i class="clr-maths"></i> </div>
+                                <h3 class="entry-title small bottommargin_0">Price calculation</h3>
+                                <p>You can see a price for your future project online</p>
+                            </div>
                         </div>
-                        <div class="response"></div>
-                    </form>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
+                            <div>
+                                <div class="teaser_icon highlight size_small"> <i class="fa fa-group"></i> </div>
+                                <h3 class="entry-title small bottommargin_0">Personal approach </h3>
+                                <p>Despite the calculator, you can always get your estimate by phone or email or have free consulting</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
+                            <div>
+                                <div class="teaser_icon highlight size_small"> <i class="rt-icon2-chat"></i> </div>
+                                <h3 class="entry-title small bottommargin_0">Real-time update</h3>
+                                <p>You will receive email notification about your job status</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
+                            <div>
+                                <div class="teaser_icon highlight size_small"> <i class="rt-icon2-medal"></i> </div>
+                                <h3 class="entry-title small bottommargin_0">Loyalty Program</h3>
+                                <p>After first installation you become our trusted client and we will call or meet with you to discuss your strategy for future projects</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
+                            <div>
+                                <div class="teaser_icon highlight size_small"> <i class="clr-car"></i> </div>
+                                <h3 class="entry-title small bottommargin_0">Pickup and delivery </h3>
+                                <p>You get delivery option from us. Now you can be sure your item will be deliver safe and install in quality</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
+                            <div>
+                                <div class="teaser_icon highlight size_small"> <i class="rt-icon2-time"></i> </div>
+                                <h3 class="entry-title small bottommargin_0">Completed in time </h3>
+                                <p>We are always let you know when we arrived at the job side</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="toppadding_10 visible-xs"></div>
             </div>
         </div>
     </div>
 </section>
-<section id="about-us" class="ls section_padding_top_150">
-    <div class="container">
-        <div class="row flex-wrap v-center">
-            <div class="col-xs-12 col-md-7"> <img src="/frontend/images/about.png" alt="" class="cover-image"> </div>
-            <div class="col-xs-12 col-md-5"> <span class="above_heading highlight">Welcome</span>
-                <h2 class="section_header">Colorway is the leader in defferent format printing</h2>
-                <p>With over 30 years of experience, we specialize in variety of high quality services.</p>
-                <div class="toppadding_10 visible-md visible-lg"></div>
-                <p> <a href="about.html" class="theme_button color1">Read more</a> </p>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="ls section_padding_top_150 section_padding_bottom_150" id="calculator">
+
+<section class="ls section_padding_top_75 section_padding_bottom_75" id="calculator">
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
                 <div class="file-upload-wrapper cs main_color1 with_padding big-padding " style="background: whitesmoke; box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;">
-                    <h2 class="section_header text-center">Calculate your services</h2>
+                    <h2 class="section_header text-center">Calculate Your Services</h2>
                     <div id="react-frontend-calculator"></div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<section id="partners" class="ls">
+
+<section class="ls section_padding_top_75 section_padding_bottom_75 alt-section">
     <div class="container">
-        <div class="row flex-wrap v-center">
-            <div class="col-xs-12 col-md-7 col-md-push-5"> <img src="/frontend/images/partners.png" alt="" class="cover-image"> </div>
-            <div class="col-xs-12 col-md-5 col-md-pull-7"> <span class="above_heading highlight2">Partners</span>
-                <h2 class="section_header">We have extended partnership and collaboration</h2>
-                <div class="toppadding_15"></div>
-                <div class="isotope_container isotope row masonry-layout images-grid bordered columns_margin_bottom_20">
-                    <div class="isotope-item col-xs-4"> <a href="#" class="partner-link">
-                            <img src="/frontend/images/partners/partner1.png" alt="">
-                        </a> </div>
-                    <div class="isotope-item col-xs-4"> <a href="#" class="partner-link">
-                            <img src="/frontend/images/partners/partner2.png" alt="">
-                        </a> </div>
-                    <div class="isotope-item col-xs-4"> <a href="#" class="partner-link">
-                            <img src="/frontend/images/partners/partner3.png" alt="">
-                        </a> </div>
-                    <div class="isotope-item col-xs-4"> <a href="#" class="partner-link">
-                            <img src="/frontend/images/partners/partner4.png" alt="">
-                        </a> </div>
-                    <div class="isotope-item col-xs-4"> <a href="#" class="partner-link">
-                            <img src="/frontend/images/partners/partner5.png" alt="">
-                        </a> </div>
-                    <div class="isotope-item col-xs-4"> <a href="#" class="partner-link">
-                            <img src="/frontend/images/partners/partner6.png" alt="">
-                        </a> </div>
-                    <div class="isotope-item col-xs-4"> <a href="#" class="partner-link">
-                            <img src="/frontend/images/partners/partner7.png" alt="">
-                        </a> </div>
-                    <div class="isotope-item col-xs-4"> <a href="#" class="partner-link">
-                            <img src="/frontend/images/partners/partner8.png" alt="">
-                        </a> </div>
-                    <div class="isotope-item col-xs-4"> <a href="#" class="partner-link">
-                            <img src="/frontend/images/partners/partner9.png" alt="">
-                        </a> </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="services" class="ls section_padding_top_75 section_padding_bottom_120">
-    <div class="container">
-        <div class="row flex-wrap v-center">
-            <div class="col-xs-12 col-md-7"> <img src="/frontend/images/services.jpg" alt="" class="cover-image"> </div>
-            <div class="col-xs-12 col-md-5"> <span class="above_heading highlight3">Services</span>
-                <h2 class="section_header">We specialize in a big variety of services</h2>
-                <div class="toppadding_10"></div>
-                <ul class="list1 no-bullets greylinks underlined-links color3">
-                    <li>
-                        <div class="media teaser media-icon-teaser">
-                            <div class="media-left media-middle">
-                                <div class="teaser_icon size_normal highlight3"> <i class="clr-service-copying"></i> </div>
-                            </div>
-                            <div class="media-body media-middle"> <a href="service-single.html">Copying Services</a> </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="media teaser media-icon-teaser">
-                            <div class="media-left media-middle">
-                                <div class="teaser_icon size_normal highlight3"> <i class="clr-service-design"></i> </div>
-                            </div>
-                            <div class="media-body media-middle"> <a href="service-single.html">Design Services</a> </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="media teaser media-icon-teaser">
-                            <div class="media-left media-middle">
-                                <div class="teaser_icon size_normal highlight3"> <i class="clr-service-scaning"></i> </div>
-                            </div>
-                            <div class="media-body media-middle"> <a href="service-single.html">Digital Scaning</a> </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="media teaser media-icon-teaser">
-                            <div class="media-left media-middle">
-                                <div class="teaser_icon size_normal highlight3"> <i class="clr-service-printing"></i> </div>
-                            </div>
-                            <div class="media-body media-middle"> <a href="service-single.html">Printing Services</a> </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="contact" class="cs parallax section_padding_top_150 section_padding_bottom_150">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-md-7 col-lg-6"> <span class="above_heading black">Request a quote</span>
-                <h2 class="section_header">We usually answer within one hour</h2>
-                <form class="contact-form" method="post" action="https://html.modernwebtemplates.com/colorway/">
-                    <div class="row columns_margin_bottom_20">
-                        <div class="col-xs-12 col-sm-6">
-                            <div class="form-group"> <input type="text" aria-required="true" size="30" value="" name="name" id="name" class="form-control" placeholder="Name"> </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                            <div class="form-group"> <input type="email" aria-required="true" size="30" value="" name="email" id="email" class="form-control" placeholder="Email"> </div>
-                        </div>
-                        <div class="col-xs-12">
-                            <div class="form-group"> <input type="text" name="subject" id="subject" class="form-control" placeholder="What you're interested in?"> </div>
-                        </div>
-                        <div class="col-xs-12">
-                            <div class="form-group"> <textarea aria-required="true" rows="3" cols="45" name="message" id="message" class="form-control" placeholder="Message"></textarea> </div>
-                        </div>
-                        <div class="col-xs-12">
-                            <div class="contact-form-submit"> <button type="submit" id="contact_form_submit" name="contact_submit" class="theme_button color1 margin_0">Submit a quote</button> </div>
+        <h2 class="section_header text-center">Our Works</h2>
+
+        <div class="col-md-12">
+            <!-- Tab panes -->
+            <div class="tab-content tab-unstyled">
+                <div class="tab-pane fade in active" id="tab-unstyled-1">
+                    <div style="width: 100%; height: 100%" id="slider" class="beer-slider " data-beer-label="BEFORE">
+                        <img style="width: 100%; height: 100%; object-fit: cover;" src="/frontend/images/gallery/before1.webp" class="lazyload" alt="">
+                        <div class="beer-reveal" data-beer-label="AFTER">
+                            <img style=" " src="/frontend/images/gallery/after1.webp" class="lazyload" alt="">
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="blog" class="ls section_padding_top_150 section_padding_bottom_140">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 text-center"> <span class="above_heading highlight">Blog</span>
-                <h2 class="section_header">News &amp; Events</h2>
-                <div class="toppadding_10 visible-lg"></div>
-                <div class="owl-carousel" data-responsive-lg="3" data-margin="60">
-                    <article class="vertical-item">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/blog-square/01.jpg" alt=""> <a href="blog-single-full.html" class="abs-link"></a> </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-unstyled-2">
+                    <div id="beer-slider" class="beer-slider" data-beer-label="before">
+                        <img src="/frontend/images/gallery/after2.webp" alt="Original - Man holding beer">
+                        <div class="beer-reveal" data-beer-label="after">
+                            <img src="/frontend/images/gallery/before2.webp" alt="Processed - Man holding beer">
                         </div>
-                        <div class="item-content">
-                            <div class="entry-meta small-text inline-content with_dividers"> <span class="categories-links">
-                                    <a href="blog-full.html">Design</a>
-                                </span> <span class="post-date greylinks">
-                                    <a href="blog-single-left.html">
-                                        <time datetime="2017-10-03T08:50:40+00:00">28.05.18</time>
-                                    </a>
-                                </span> </div>
-                            <h3 class="entry-title small"><a href="blog-single-full.html">Full color NCR forms from Colorway in San Diego</a></h3> <a href="blog-single-full.html" class="theme_button color1">Read More</a>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-unstyled-3">
+                    <div id="beer-slider" class="beer-slider" data-beer-label="before">
+                        <img src="/frontend/images/gallery/after3.webp" alt="Original - Man holding beer">
+                        <div class="beer-reveal" data-beer-label="after">
+                            <img src="/frontend/images/gallery/before3.webp" alt="Processed - Man holding beer">
                         </div>
-                    </article>
-                    <article class="vertical-item">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/blog-square/02.jpg" alt=""> <a href="blog-single-full.html" class="abs-link"></a> </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-unstyled-4">
+                    <div id="beer-slider" class="beer-slider" data-beer-label="before">
+                        <img src="/frontend/images/gallery/after3.webp" alt="Original - Man holding beer">
+                        <div class="beer-reveal" data-beer-label="after">
+                            <img src="/frontend/images/gallery/before3.webp" alt="Processed - Man holding beer">
                         </div>
-                        <div class="item-content">
-                            <div class="entry-meta small-text inline-content with_dividers"> <span class="categories-links">
-                                    <a href="blog-full.html">Printing</a>
-                                </span> <span class="post-date greylinks">
-                                    <a href="blog-single-left.html">
-                                        <time datetime="2017-10-03T08:50:40+00:00">26.05.18</time>
-                                    </a>
-                                </span> </div>
-                            <h3 class="entry-title small"><a href="blog-single-full.html">Overnight T-shirt printing from Colorway</a></h3> <a href="blog-single-full.html" class="theme_button color1">Read More</a>
-                        </div>
-                    </article>
-                    <article class="vertical-item">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/blog-square/03.jpg" alt=""> <a href="blog-single-full.html" class="abs-link"></a> </div>
-                        </div>
-                        <div class="item-content">
-                            <div class="entry-meta small-text inline-content with_dividers"> <span class="categories-links">
-                                    <a href="blog-full.html">Banners</a>
-                                </span> <span class="post-date greylinks">
-                                    <a href="blog-single-left.html">
-                                        <time datetime="2017-10-03T08:50:40+00:00">25.05.18</time>
-                                    </a>
-                                </span> </div>
-                            <h3 class="entry-title small"><a href="blog-single-full.html">San Francisco large banner printing from Colorway</a></h3> <a href="blog-single-full.html" class="theme_button color1">Read More</a>
-                        </div>
-                    </article>
-                    <article class="vertical-item">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/blog-square/04.jpg" alt=""> <a href="blog-single-full.html" class="abs-link"></a> </div>
-                        </div>
-                        <div class="item-content">
-                            <div class="entry-meta small-text inline-content with_dividers"> <span class="categories-links">
-                                    <a href="blog-full.html">Copying</a>
-                                </span> <span class="post-date greylinks">
-                                    <a href="blog-single-left.html">
-                                        <time datetime="2017-10-03T08:50:40+00:00">19.05.18</time>
-                                    </a>
-                                </span> </div>
-                            <h3 class="entry-title small"><a href="blog-single-full.html">The Best Way to Present Product Information</a></h3> <a href="blog-single-full.html" class="theme_button color1">Read More</a>
-                        </div>
-                    </article>
-                    <article class="vertical-item">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/blog-square/05.jpg" alt=""> <a href="blog-single-full.html" class="abs-link"></a> </div>
-                        </div>
-                        <div class="item-content">
-                            <div class="entry-meta small-text inline-content with_dividers"> <span class="categories-links">
-                                    <a href="blog-full.html">Brochures</a>
-                                </span> <span class="post-date greylinks">
-                                    <a href="blog-single-left.html">
-                                        <time datetime="2017-10-03T08:50:40+00:00">17.05.18</time>
-                                    </a>
-                                </span> </div>
-                            <h3 class="entry-title small"><a href="blog-single-full.html">10 Ingenious Newspaper Designs</a></h3> <a href="blog-single-full.html" class="theme_button color1">Read More</a>
-                        </div>
-                    </article>
-                    <article class="vertical-item">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/blog-square/06.jpg" alt=""> <a href="blog-single-full.html" class="abs-link"></a> </div>
-                        </div>
-                        <div class="item-content">
-                            <div class="entry-meta small-text inline-content with_dividers"> <span class="categories-links">
-                                    <a href="blog-full.html">Calendars</a>
-                                </span> <span class="post-date greylinks">
-                                    <a href="blog-single-left.html">
-                                        <time datetime="2017-10-03T08:50:40+00:00">09.05.18</time>
-                                    </a>
-                                </span> </div>
-                            <h3 class="entry-title small"><a href="blog-single-full.html">5 Great Magazines to Give for Christmas</a></h3> <a href="blog-single-full.html" class="theme_button color1">Read More</a>
-                        </div>
-                    </article>
+                    </div>
                 </div>
             </div>
+
+            <!-- Nav tabs -->
+            <ul class="nav-unstyled darklinks before-tabs col-md-12" role="tablist">
+                <li class="active"><a href="#tab-unstyled-1" role="tab" data-toggle="tab">
+                        <img src="/frontend/images/gallery/before1.webp" alt="">
+                    </a>
+                </li>
+                <li><a href="#tab-unstyled-2" role="tab" data-toggle="tab">
+                        <img src="/frontend/images/gallery/before2.webp" alt="">
+                    </a></li>
+                <li><a href="#tab-unstyled-3" role="tab" data-toggle="tab">
+                        <img src="/frontend/images/gallery/before3.webp" alt="">
+                    </a></li>
+                <li><a href="#tab-unstyled-4" role="tab" data-toggle="tab">
+                        <img src="/frontend/images/gallery/before4.webp" alt="">
+                    </a></li>
+            </ul>
         </div>
     </div>
 </section>
+
 <section id="featured-video" class="cs main_color5 overlay_color parallax section_padding_top_150 section_padding_bottom_150">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12 text-center"> <a href="https://www.youtube.com/watch?v=2Kvl0vpV6lM" class="theme_button bg_button color3 round_button play_button margin_0" data-gal="prettyPhoto[gal-video]">
+            <div class="col-sm-12 text-center"> <a href="https://www.youtube.com/watch?v=XPhNqMqtW1c&t=1s&ab_channel=EasyWayInstall" class="theme_button bg_button color3 round_button play_button margin_0" data-gal="prettyPhoto[gal-video]">
                     <i class="fa fa-play" aria-hidden="true"></i>
                 </a>
                 <div class="toppadding_30 visible-lg"></div>
@@ -312,222 +353,161 @@
         </div>
     </div>
 </section>
-<section id="products" class="ls section_padding_top_150 section_padding_bottom_145">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 text-center"> <span class="above_heading highlight">Products</span>
-                <h2 class="section_header">We will help you look<br> professional</h2>
-                <div class="row flex-wrap loop-colors columns_padding_30 columns_margin_bottom_50">
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
-                            <div>
-                                <div class="teaser_icon highlight size_small"> <i class="clr-service-card"></i> </div>
-                                <h3 class="entry-title small bottommargin_0">Business cards</h3>
-                                <p>Starting at $9.99</p>
-                            </div> <a href="shop.html" class="abs-link"></a>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
-                            <div>
-                                <div class="teaser_icon highlight size_small"> <i class="clr-service-booklet"></i> </div>
-                                <h3 class="entry-title small bottommargin_0">Brochures</h3>
-                                <p>Starting at $6.99</p>
-                            </div> <a href="shop.html" class="abs-link"></a>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
-                            <div>
-                                <div class="teaser_icon highlight size_small"> <i class="clr-service-copy"></i> </div>
-                                <h3 class="entry-title small bottommargin_0">Copy services</h3>
-                                <p>Starting at $4.99</p>
-                            </div> <a href="shop.html" class="abs-link"></a>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
-                            <div>
-                                <div class="teaser_icon highlight size_small"> <i class="clr-service-t-shirt"></i> </div>
-                                <h3 class="entry-title small bottommargin_0">T-shirt prints</h3>
-                                <p>Starting at $14.99</p>
-                            </div> <a href="shop.html" class="abs-link"></a>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
-                            <div>
-                                <div class="teaser_icon highlight size_small"> <i class="clr-service-calendar"></i> </div>
-                                <h3 class="entry-title small bottommargin_0">Calendars</h3>
-                                <p>Starting at $19.99</p>
-                            </div> <a href="shop.html" class="abs-link"></a>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="teaser hover-teaser main_bg_color big-padding text-center">
-                            <div>
-                                <div class="teaser_icon highlight size_small"> <i class="clr-service-banner"></i> </div>
-                                <h3 class="entry-title small bottommargin_0">Banners</h3>
-                                <p>Starting at $49.99</p>
-                            </div> <a href="shop.html" class="abs-link"></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="toppadding_20"></div>
-                <div class="toppadding_20 visible-lg"></div> <a href="#" class="theme_button color1">See More</a>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="gallery" class="ls fluid_padding_0 columns_padding_0">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="owl-carousel gallery-carousel" data-responsive-lg="3" data-responsive-md="3" data-responsive-sm="2" data-responsive-xs="2" data-responsive-xxs="1" data-loop="true" data-margin="0" data-center="true" data-nav="true">
-                    <div class="vertical-item gallery-item text-center">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/gallery/01.jpg" alt=""> <a class="abs-link prettyPhoto" data-gal="prettyPhoto[gal]" title="" href="images/gallery/01.jpg">
-                                </a> </div>
-                        </div>
-                        <div class="item-content">
-                            <h3 class="entry-title small"><a href="gallery-single.html">BrightSky beauty salon brochures</a></h3> <span class="categories-links small-text highlightlinks"><a href="gallery-fullwidth-4-cols.html">brochures</a></span>
-                        </div>
-                    </div>
-                    <div class="vertical-item gallery-item text-center">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/gallery/02.jpg" alt=""> <a class="abs-link prettyPhoto" data-gal="prettyPhoto[gal]" title="" href="images/gallery/02.jpg">
-                                </a> </div>
-                        </div>
-                        <div class="item-content">
-                            <h3 class="entry-title small"><a href="gallery-single.html">Nulla a enim id nunc maximus ultricies</a></h3> <span class="categories-links small-text highlightlinks"><a href="gallery-fullwidth-4-cols.html">Bussiness Cards</a></span>
-                        </div>
-                    </div>
-                    <div class="vertical-item gallery-item text-center">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/gallery/03.jpg" alt=""> <a class="abs-link prettyPhoto" data-gal="prettyPhoto[gal]" title="" href="images/gallery/03.jpg">
-                                </a> </div>
-                        </div>
-                        <div class="item-content">
-                            <h3 class="entry-title small"><a href="gallery-single.html">Curabitur congue nulla metus</a></h3> <span class="categories-links small-text highlightlinks"><a href="gallery-fullwidth-4-cols.html">Flyers</a></span>
-                        </div>
-                    </div>
-                    <div class="vertical-item gallery-item text-center">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/gallery/04.jpg" alt=""> <a class="abs-link prettyPhoto" data-gal="prettyPhoto[gal]" title="" href="images/gallery/04.jpg">
-                                </a> </div>
-                        </div>
-                        <div class="item-content">
-                            <h3 class="entry-title small"><a href="gallery-single.html">Maecenas sed eleifend arcu</a></h3> <span class="categories-links small-text highlightlinks"><a href="gallery-fullwidth-4-cols.html">T-shirts</a></span>
-                        </div>
-                    </div>
-                    <div class="vertical-item gallery-item text-center">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/gallery/05.jpg" alt=""> <a class="abs-link prettyPhoto" data-gal="prettyPhoto[gal]" title="" href="images/gallery/05.jpg">
-                                </a> </div>
-                        </div>
-                        <div class="item-content">
-                            <h3 class="entry-title small"><a href="gallery-single.html">Vestibulum vel convallis sapien</a></h3> <span class="categories-links small-text highlightlinks"><a href="gallery-fullwidth-4-cols.html">Banners</a></span>
-                        </div>
-                    </div>
-                    <div class="vertical-item gallery-item text-center">
-                        <div class="item-media-wrap">
-                            <div class="item-media"> <img src="/frontend/images/gallery/06.jpg" alt=""> <a class="abs-link prettyPhoto" data-gal="prettyPhoto[gal]" title="" href="images/gallery/06.jpg">
-                                </a> </div>
-                        </div>
-                        <div class="item-content">
-                            <h3 class="entry-title small"><a href="gallery-single.html">Donec non dolor eget nisl</a></h3> <span class="categories-links small-text highlightlinks"><a href="gallery-fullwidth-4-cols.html">Finishing</a></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="testimonials" class="ls section_padding_top_150 section_padding_bottom_140">
+
+<section id="testimonials" class="ls section_padding_top_75 section_padding_bottom_75">
     <div class="container">
         <div class="row">
             <div class="col-xs-12 text-center">
+                <h2 class="section_header text-center">Reviews</h2>
                 <div class="owl-carousel testimonials-owl-carousel" data-responsive-lg="1" data-responsive-md="1" data-responsive-sm="1" data-dots="true" data-nav="false">
                     <blockquote>
-                        <div class="avatar"> <img src="/frontend/images/faces/01.jpg" alt=""> </div>
-                        <footer><cite>Mary J. McQuiston</cite><span class="small-text highlight">manager</span></footer>
-                        <p>Colorway did an incredible job in creating our new marketing & sales pieces. Their prices are very competitive, and their quality is excellent. Thank you for the excellent service on the brochure reprints and the new display posters.</p>
+                        <footer><cite>Michael Stroh</cite><span class="small-text highlight">Vice President Sales, AlphaGraphics</span></footer>
+                        <p>The Easy Way Team are talented and accomplished install professionals. When we use Easy Way services our clients are very pleased with their work.</p>
                     </blockquote>
                     <blockquote>
-                        <div class="avatar"> <img src="/frontend/images/faces/02.jpg" alt=""> </div>
-                        <footer><cite>Ada B. Powell</cite><span class="small-text highlight">manager</span></footer>
-                        <p>Thank you for the excellent service on the brochure reprints and the new display posters. I really appreciate your fine quality, speed and low price. Colorway has consistently demonstrated the ability to provide quality work.</p>
+                        <footer><cite>Peter Brand</cite><span class="small-text highlight">President, Unique Advertising & Display Corp.
+                            </span></footer>
+                        <p>
+                            The Easy Way Team, your support and employees have been a great addition to our work we provide for our customers. Thank you for being responsive, professional and always working with our deadlines to get the job done. We look forward to working with you on many more jobs ahead.
+                        </p>
                     </blockquote>
                     <blockquote>
-                        <div class="avatar"> <img src="/frontend/images/faces/03.jpg" alt=""> </div>
-                        <footer><cite>Stephen I. Lebouef</cite><span class="small-text highlight">Businessman</span></footer>
-                        <p>Colorway has consistently demonstrated the ability to provide quality work at a competitive price. We can always rely on them to have our printing completed on time and for acceptable price.</p>
+                        <footer><cite>Ari Grazi</cite><span class="small-text highlight">President, Indiewalls</span></footer>
+                        <p>I highly recommend Viktor and his team. No complaints!</p>
                     </blockquote>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<section id="shop-search" class="cs background_cover columns_padding_80 columns_margin_0">
+
+<section class="ls section_padding_top_75 section_padding_bottom_75 alt-section">
     <div class="container">
-        <div class="row flex-wrap v-center-content">
-            <div class="col-xs-12 col-md-6 text-center text-md-right with_bg_image half_section_bg">
-                <div class="col_bg_image"> <img src="/frontend/images/studios-left-bg.jpg" alt=""> </div>
-                <div class="toppadding_30"></div>
-                <div class="toppadding_40 visible-md visible-lg"></div>
-                <h2 class="section_header small"> <span class="hero black"><strong>250</strong>+</span> Studios in North America </h2>
-                <div class="toppadding_70 visible-md visible-lg"></div>
-            </div>
-            <div class="col-xs-12 col-md-6 with_bg_image half_section_bg">
-                <div class="toppadding_40"></div>
-                <div class="toppadding_40 visible-md visible-lg"></div>
-                <div class="toppadding_40 visible-lg"></div>
-                <div class="col_bg_image"> <img src="/frontend/images/studios-right-bg.jpg" alt=""> </div>
-                <div class="text-center text-md-left">
-                    <div class="widget widget_search widget_search_shop">
-                        <form method="get" class="searchform shop-search" action="https://html.modernwebtemplates.com/colorway/">
-                            <div class="form-group margin_0"> <label class="sr-only" for="widget-search">Search for:</label> <input id="widget-search" type="text" value="" name="search" class="form-control" placeholder="City of zip"> <button type="submit" class="theme_button bg_button">Search</button> </div>
-                        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="row" style="display: flex; align-items: center; flex-wrap: wrap">
+                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
+                        <img data-src="/frontend/images/partners/partner1.png" class="lazyload" alt="">
+                    </div>
+                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
+                        <img style="max-width: 75%" data-src="/frontend/images/partners/partner2.svg" class="lazyload" alt="">
+                    </div>
+                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
+                        <img data-src="/frontend/images/partners/partner3.svg" class="lazyload" alt="">
+                    </div>
+                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
+                        <img style="max-width: 75%" data-src="/frontend/images/partners/partner4.svg" class="lazyload" alt="">
+                    </div>
+                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
+                        <img data-src="/frontend/images/partners/partner5.png" class="lazyload" alt="">
+                    </div>
+                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
+                        <img data-src="/frontend/images/partners/partner6.png" class="lazyload" alt="">
                     </div>
                 </div>
-                <div class="toppadding_80"></div>
-                <div class="toppadding_40 visible-lg"></div>
             </div>
         </div>
     </div>
 </section>
-<footer class="page_footer cs main_color7 section_padding_top_110 section_padding_bottom_120 columns_margin_bottom_30">
+
+<section id="contact" class="cs parallax section_padding_top_150 section_padding_bottom_150">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-sm-4">
-                <div class="teaser text-center">
-                    <div class="teaser_icon size_big highlight3"> <img src="/frontend/images/clr-phone-call-3.png" alt=""> </div>
-                    <p> <span class="small-text highlight3">call us 24/7</span><br> <span class="big black">0-800-234-5678</span> </p>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <div class="teaser text-center">
-                    <div class="teaser_icon size_big highlight8"> <img src="/frontend/images/clr-mail-5.png" alt=""> </div>
-                    <p> <span class="small-text highlight8">write us</span><br> <span class="big black darklinks"><a href="https://html.modernwebtemplates.com/cdn-cgi/l/email-protection#5f7c"><span class="__cf_email__" data-cfemail="385b4f5941784b4d4848574a4c165b5755">[email&#160;protected]</span></a></span> </p>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-                <div class="teaser text-center">
-                    <div class="teaser_icon size_big highlight9"> <img src="/frontend/images/clr-clock-5.png" alt=""> </div>
-                    <p> <span class="small-text highlight9">7 days a week</span><br> <span class="big black">9:00am - 8:00PM</span> </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-<section class="page_copyright cs section_padding_top_110 section_padding_bottom_100">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12 text-center">
-                <p class="page_social bottommargin_20"> <a href="#" class="social-icon light-bg-icon color-icon rounded-icon socicon-facebook"></a> <a href="#" class="social-icon light-bg-icon color-icon rounded-icon socicon-twitter"></a> <a href="#" class="social-icon light-bg-icon color-icon rounded-icon socicon-googleplus"></a> </p>
-                <p class="small-text black">&copy; Copyright 2018 All Rights Reserved</p>
+            <div class="col-xs-12 col-md-7 col-lg-6"> <span class="above_heading black">Request a quote</span>
+                <h2 class="section_header">We Usually Answer Within One Hour</h2>
+                <form class="contact-form" method="post" action="/contact">
+                    @csrf
+                    <div class="row columns_margin_bottom_20">
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="form-group"> <input type="text" aria-required="true" size="30" value="" name="name" id="name" class="form-control" placeholder="Name"> </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="form-group"> <input type="email" aria-required="true" size="30" value="" name="email" id="email" class="form-control" placeholder="Email"> </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group"> <input type="text" aria-required="true" name="subject" id="subject" class="form-control" placeholder="What you're interested in?"> </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="form-group"> <textarea aria-required="true" rows="3" cols="45" name="message" id="message" class="form-control" placeholder="Message"></textarea> </div>
+                        </div>
+                        <div class="">
+                            <div class="contact-form-submit col-xs-12 col-md-6"> <button type="submit" id="contact_form_submit" name="contact_submit" class="theme_button bg_button color1 margin_0" style="background: white; color: black; width: 100%;">Submit a quote</button> </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </section>
+
+<section id="testimonials" class="ls section_padding_top_75 section_padding_bottom_75">
+    <div class="container">
+        <h2 class="section_header text-center">FAQ</h2>
+        <div class="row">
+            <div class="panel-group color4 col-md-12" id="accordion1">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion1" href="#collapse1">
+                                Is that posible to install vinyl film on wood surface?
+                            </a> </h4>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse in">
+                        <div class="panel-body">Yes, we can install vinyl on wood surface by using "3M Architectural Finishes" films.</div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion1" href="#collapse2" class="collapsed">
+                                Can I track my service by using smartphone?
+                            </a> </h4>
+                    </div>
+                    <div id="collapse2" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            You will see your job status in client cabinet and also will receive notification about your job status
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion1" href="#collapse4" class="collapsed">
+                                What is the purpose of display?
+                            </a> </h4>
+                    </div>
+                    <div id="collapse4" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            The purpose of the display is present larger products, help customers determine if the product they are looking for suits their needs (if it looks good with other fixtures), and to entice customers to purchase the other products featured together.
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion1" href="#collapse5" class="collapsed">
+                                How to place order?
+                            </a> </h4>
+                    </div>
+                    <div id="collapse5" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            Please email us full information of your project (dimension and quantity, surface, working height and photos) or (Vehicle make, year, conditions and photos). After that we will provide you a quote. If the price will work for you we will schedule installation date.
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion1" href="#collapse6" class="collapsed">
+                                Do I need pay deposit?
+                            </a> </h4>
+                    </div>
+                    <div id="collapse6" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            After scheduling process we will email you request to pay 20% down of your invoice. This money will be on hold until the project complete.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@include('components.footer')
 @endsection

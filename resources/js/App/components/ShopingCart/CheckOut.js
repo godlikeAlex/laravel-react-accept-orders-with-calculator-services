@@ -213,7 +213,7 @@ function CheckOut() {
                         </div>
 
                         <aside className="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-0 col-lg-4">
-                            <h3 className="widget-title" id="order_review_heading">Your order</h3>
+                            <h3 className="widget-title col-md-12" id="order_review_heading">Your order</h3>
                             <div id="order_review" className="shop-checkout-review-order">
                                 <table className="table shop_table shop-checkout-review-order-table">
                                     <thead>

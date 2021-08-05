@@ -1,6 +1,6 @@
-Name <b>{{$name}}</b>
-Subject <b>{{$subject}}</b>
-Email <b>{{$email}}</b>
-
-Message:
+<p>Name <b>{{$name}}</b></p>
+<p>Subject <b>{{$subject}}</b></p>
+<p>Email <b>{{$email}}</b></p>
+<br />
+<p>Message:</p>
 <p>{{$body}}</p>

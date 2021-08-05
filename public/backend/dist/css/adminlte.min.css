@@ -55180,4 +55180,51 @@ a.text-muted:hover {
     color: #3f474e
 }
 
+.nav-tabs li {
+    padding: 15px;
+    cursor: pointer;
+    color: white;
+    margin-right: 5px;
+    justify-content: center;
+    padding: 0px 15px;
+    align-items: center;
+    display: flex;
+    border: 1px solid #e6e6e6;
+    border-bottom: unset;
+    color: #ec0798;
+}
+
+.nav-tabs li:last-child {
+    margin-right: 0;
+}
+
+.nav-tabs li:first-child {
+    margin-left: 0;
+}
+
+.nav-tabs .active {
+    background: #ec0798;
+    color: white;
+    border: none;
+}
+
+.nav-tabs .nav-link:hover {
+    border: 1px solid transparent;
+    color: white;
+    background: #ec0798;
+}
+
+.nav-tabs li:hover {
+    color: white;
+    background: #ec0798;
+}
+
+.nav-tabs li:hover a {
+    color: white;
+}
+
+input.form-control {
+    height: 76px !important;
+}
+
 /*# sourceMappingURL=adminlte.min.css.map */

@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import Calculator from '../Calculator/Calculator';
+
+const Calculator = lazy(() => import('../Calculator/Calculator'))
+
+const renderLoader = () => <p>Loading</p>;
 
 function FrontendCalculator() {
     const [data, setCalculatedData] = useState(null);
@@ -24,12 +27,14 @@ function FrontendCalculator() {
     }
 
     return (
-        <>
-            <Calculator onUpdate={data => setCalculatedData(data)} />
-            <hr />
-            <h4>Total price: ${data?.total}</h4>
-            <a class="theme_button color1" onClick={addToCart}>Add to cart</a>
-        </>
+        <Suspense fallback={renderLoader()}>
+            <Calculator
+                onUpdate={data => setCalculatedData(data)}
+                renderFooter
+                onAddCart={addToCart}
+                bottomAddMore
+            />
+        </Suspense>
     )
 };
 

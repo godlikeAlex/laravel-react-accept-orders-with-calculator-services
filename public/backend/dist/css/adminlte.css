@@ -55192,3 +55192,7 @@ a.text-muted:hover {
 }
 
 /*# sourceMappingURL=adminlte.css.map */
+
+input {
+    height: 76px !important;
+}

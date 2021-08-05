@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\WishListController;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,3 +37,9 @@ Route::post('/re-purchase', [PaymentController::class, 'rePurchase'])->middlewar
 
 Route::get('/user/orders', [OrderController::class, 'orders'])->middleware('auth:api');
 Route::get('/user/orders/{id}', [OrderController::class, 'show'])->middleware('auth:api');
+
+Route::prefix('wish')->group(function () {
+    Route::get('list', [WishListController::class, 'list']);
+    Route::get('remove/{id}', [WishListController::class, 'remove']);
+    Route::post('store', [WishListController::class, 'store'])->middleware('auth:api');
+});

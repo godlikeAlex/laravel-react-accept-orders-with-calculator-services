@@ -18,7 +18,7 @@ function App() {
                 url: '/api/me',
                 headers: { 'Authorization': `Bearer ${token}` }
             }).then(({ data }) => {
-                dispatch(initAuth({ user: data }));
+                dispatch(initAuth({ user: data, token }));
             }).catch(() => {
                 dispatch(setAuthLoading(false));
             });

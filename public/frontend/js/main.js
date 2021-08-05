@@ -221,6 +221,13 @@
         }
     }
 
+    function initBerSlider() {
+        const sliders = document.querySelectorAll('.beer-slider');
+        sliders.forEach(slider => {
+            new BeerSlider(slider);
+        })
+    }
+
     //function that initiating template plugins on window.load event
     function windowLoadInit() {
 
@@ -1465,6 +1472,8 @@
                 });
             }); //each
         }//google map length
+        initBerSlider();
+
     }
 
     $window.on('load', function () {
@@ -1510,26 +1519,28 @@ if (!token) {
     }).then((data) => {
         return data.json();
     }).then(user => {
-        needLogin.innerHTML = `
-        <a href="/cabinet/dashboard" className="sf-with-ul">
-            <span style="display: flex; align-items: center">
-                <ion-icon name="person-circle-outline" style="font-size: 35px"></ion-icon>
-                ${user.name}
-            </span>
-        </a>
-        <span className="sf-menu-item-mobile-toggler"></span>
-        <ul>
-            <li> <a href="/cabinet/dashboard"><span>My profile</span></a> </li>
-            <li id="logout"> <a id="logout" style="cursor: pointer"><span id="logout">Log out</span></a> </li>
-        </ul>
-    `;
+        if (needLogin) {
+            needLogin.innerHTML = `
+            <a href="/cabinet/dashboard" className="sf-with-ul">
+                <span style="display: flex; align-items: center">
+                    <ion-icon name="person-circle-outline" style="font-size: 35px"></ion-icon>
+                    ${user.name}
+                </span>
+            </a>
+            <span className="sf-menu-item-mobile-toggler"></span>
+            <ul>
+                <li> <a href="/cabinet/dashboard"><span>My profile</span></a> </li>
+                <li id="logout"> <a id="logout" style="cursor: pointer"><span id="logout">Log out</span></a> </li>
+            </ul>
+        `;
 
-        needLogin.addEventListener('click', (e) => {
-            if (e.target.getAttribute('id') === 'logout') {
-                e.preventDefault();
-                localStorage.removeItem('token');
-                window.location.reload(false);
-            }
-        })
+            needLogin.addEventListener('click', (e) => {
+                if (e.target.getAttribute('id') === 'logout') {
+                    e.preventDefault();
+                    localStorage.removeItem('token');
+                    window.location.reload(false);
+                }
+            })
+        }
     })
 }

@@ -21,9 +21,9 @@ function calculateServicePrice($data)
             $cPrice = $curentService->price +  $service->ftHeight->price;
             $service->totalPerSqFt = round(2, $curentService->price);
             $service->totalPerItem = round(2, $curentService->price);
-            $service->price = $cPrice <= 200 ? 200 : round($cPrice, 2);
+            $service->price = $cPrice <= 250 ? 250 : round($cPrice, 2);
         } else {
-            $service->price = $calculatedPrice <= 200 ? 200 : $calculatedPrice;
+            $service->price = $calculatedPrice <= 250 ? 250 : $calculatedPrice;
         }
         $total = $total + $service->price;
     }

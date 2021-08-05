@@ -1,23 +1,13 @@
-import React from 'react';
+import loadable from '@loadable/component'
 import ReactDOM from 'react-dom';
-import App from './components/App';
-import store from './store';
-import { Provider } from 'react-redux';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
 
-const stripePromise = loadStripe(process.env.MIX_STRIPE_KEY);
-function Root() {
+function LoadingSpinner() {
     return (
-        <Elements stripe={stripePromise}>
-            <Provider {...{ store }}>
-                <App />
-            </Provider>
-        </Elements>
-    );
+        <h1>Hello world</h1>
+    )
 }
 
-export default Root;
+const Root = loadable(() => import('./root'), { fallback: <LoadingSpinner /> });
 
 if (document.getElementById('app-react')) {
     ReactDOM.render(<Root />, document.getElementById('app-react'));

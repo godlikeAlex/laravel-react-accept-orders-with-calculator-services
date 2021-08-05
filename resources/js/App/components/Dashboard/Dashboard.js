@@ -7,6 +7,8 @@ import ReactLoading from 'react-loading';
 import TableOrders from './TableOrders';
 import useOrders from './useOrders';
 import MobileOrders from './MobileOrders';
+import LoadingSpinner from '../Auth/LoadingSpinner';
+import EmptyDashboard from './EmptyDashboard';
 
 const Dashboard = () => {
     const [page, setPage] = useState(1);
@@ -64,9 +66,8 @@ const Dashboard = () => {
         []
     )
 
-    if (isLoading) return <div>loading...</div>;
 
-    const content = () => (
+    const content = () => orders.length === 0 ? <EmptyDashboard title="No Orders yet" /> : (
         !isMobile ? (
             <div className="col-sm-12">
                 <TableOrders {...{ data, columns, setPage, page }} totalPage={lastPage} />
@@ -75,7 +76,7 @@ const Dashboard = () => {
     )
 
     const loadingContainer = () => (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '100px', height: '100%' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '100px', height: '100%', marginBottom: '100px' }}>
             <ReactLoading type="spin" color="#333" />
         </div>
     )

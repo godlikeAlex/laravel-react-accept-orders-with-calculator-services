@@ -91,6 +91,10 @@
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>List of orders</p>
                                     </a>
+                                    <a href="{{route('orders.index')}}?status=finished" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Completed orders</p>
+                                    </a>
                                     <a href="{{route('orders.create')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Create order</p>
