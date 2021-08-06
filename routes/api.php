@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WishListController;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -23,6 +24,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('user/update-profile', [UserController::class, 'update']);
+Route::post('user/change-password', [UserController::class, 'changePassword']);
+Route::get('user/card-wallet', [PaymentController::class, 'cardWallet'])->middleware('auth:api');
+Route::get('user/payment-methods', [PaymentController::class, 'listPaymentMethods'])->middleware('auth:api');
+Route::get('user/payment-methods/delete/{card}', [PaymentController::class, 'deletePaymentMethod'])->middleware('auth:api');
+
 Route::get('/page/order', function () {
     $orders = Order::latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(1);
     return $orders;

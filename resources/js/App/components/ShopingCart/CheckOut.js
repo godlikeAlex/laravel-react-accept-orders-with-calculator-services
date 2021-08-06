@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useFormik } from 'formik';
 import { Redirect, useHistory } from 'react-router-dom';
@@ -8,11 +8,16 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { clearCart } from '../../redux/cartSlice';
 import HeadSection from '../HeadSection';
+import SelectPaymentMethod from './SelectPaymentMethod';
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 export const OrderSchema = Yup.object().shape({
     name: Yup.string().required('Required'),
     email: Yup.string().email('Invalid email').required('Required'),
     phone: Yup.string().required('Required'),
+    date: Yup.date().required('Required'),
     address: Yup.string().required('Required'),
 });
 
@@ -20,37 +25,30 @@ function CheckOut() {
     const stripe = useStripe();
     const elements = useElements();
     const history = useHistory();
+    const [currentPaymentMethod, setCurrentPaymentMethod] = useState();
     const { services, total } = useSelector(state => state.cart);
     const { user, isAuth } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const token = localStorage.getItem('token');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { handleSubmit, handleChange, values, errors, touched, isSubmitting, setFieldError } = useFormik({
+    console.log(!isAuth || currentPaymentMethod?.value === 'new');
+
+    const { handleSubmit, handleChange, values, errors, touched, setFieldError, setFieldValue } = useFormik({
         initialValues: {
             'name': isAuth ? user.name : '',
             'email': isAuth ? user.email : '',
             'phone': isAuth ? user.phone : '',
-            'address': '',
+            'address': isAuth ? user.address : '',
+            'date': Date.now(),
             'notes': ''
         },
         validationSchema: OrderSchema,
-        onSubmit: async (values, { setSubmitting }) => {
-            if (!stripe || !elements) {
-                return;
-            }
+        onSubmit: async (values) => {
+            setIsSubmitting(true);
 
-            setSubmitting(true);
+            const submitPayment = async (paymentMethod) => {
 
-            const cardElement = elements.getElement(CardElement);
-
-            const { error, paymentMethod } = await stripe.createPaymentMethod({
-                type: 'card',
-                card: cardElement,
-            });
-
-            if (error) {
-                console.log('[error]', error);
-            } else {
                 try {
                     const { data } = await axios({
                         method: 'POST',
@@ -58,7 +56,7 @@ function CheckOut() {
                         data: {
                             ...values,
                             cart: JSON.stringify({ services, total }),
-                            payment_method_id: paymentMethod.id,
+                            payment_method_id: paymentMethod,
                         },
                         headers: {
                             'Content-type': 'application/json',
@@ -68,13 +66,34 @@ function CheckOut() {
                     history.push('/cart/thank-you');
                     dispatch(clearCart());
                     localStorage.removeItem('shoping-cart');
-                    setSubmitting(false);
+                    setIsSubmitting(false);
                 } catch (error) {
                     if (error.response.data.message) {
                         setFieldError('loginError', error.response.data.message);
                     }
-                    setSubmitting(false);
+                    setIsSubmitting(false);
                 }
+            }
+
+            if (currentPaymentMethod?.value === 'new' || !isAuth) {
+                if (!stripe || !elements) {
+                    return;
+                }
+
+                const cardElement = elements.getElement(CardElement);
+
+                const { error, paymentMethod } = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
+                });
+
+                if (error) {
+                    console.log('[error]', error);
+                } else {
+                    submitPayment(paymentMethod.id);
+                }
+            } else {
+                submitPayment(currentPaymentMethod.value);
             }
         }
     });
@@ -189,24 +208,50 @@ function CheckOut() {
 
                                 <div className="form-group">
                                     <label className="col-sm-3 control-label">
+                                        <span className="grey">Select date:</span>
+                                    </label>
+                                    <div className="col-sm-9">
+                                        <DatePicker
+                                            selected={values.date}
+                                            onChange={(date) => setFieldValue('date', date)}
+                                            customInput={
+                                                <InputMask
+                                                    className="form-control"
+                                                    mask="99/99/9999"
+                                                />
+                                            }
+                                        />
+                                        {errors.date && touched.date ? (
+                                            <div className="error">{errors.date}</div>
+                                        ) : null}
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="col-sm-3 control-label">
                                         <span className="grey">Card Number:</span>
                                     </label>
                                     <div className="col-sm-9">
-                                        <div style={{ padding: '21px 40px 23px', backgroundColor: '#f2f2f2' }}>
-                                            <CardElement lassName="card-element" options={{
-                                                style: {
-                                                    base: {
-                                                        fontSize: '18px',
-                                                        color: '#222',
-                                                        backgroundColor: '#f2f2f2',
-                                                        fontFamily: 'Poppins, Open Sans, Segoe UI, sans-serif',
-                                                    }
-                                                },
-                                                hidePostalCode: true,
-                                                disabled: isSubmitting
-                                            }}
-                                            />
-                                        </div>
+                                        {isAuth && (
+                                            <SelectPaymentMethod {...{ currentPaymentMethod, setCurrentPaymentMethod }} />
+                                        )}
+                                        {!isAuth || currentPaymentMethod?.value === 'new' ? (
+                                            <div style={{ padding: '21px 40px 23px', backgroundColor: '#f2f2f2' }}>
+                                                <CardElement lassName="card-element" options={{
+                                                    style: {
+                                                        base: {
+                                                            fontSize: '18px',
+                                                            color: '#222',
+                                                            backgroundColor: '#f2f2f2',
+                                                            fontFamily: 'Poppins, Open Sans, Segoe UI, sans-serif',
+                                                        }
+                                                    },
+                                                    hidePostalCode: true,
+                                                    disabled: isSubmitting
+                                                }}
+                                                />
+                                            </div>
+                                        ) : null}
                                     </div>
                                 </div>
                             </form>
@@ -252,7 +297,7 @@ function CheckOut() {
                                     </div>
                                     <div className="place-order topmargin_30" onClick={handleSubmit}> <button type="submit"
                                         className="theme_button color1 min_width_button" disabled={isSubmitting} name="checkout_place_order"
-                                        id="place_order">Place orders</button> </div>
+                                        id="place_order" disabled={isSubmitting || (isAuth && !currentPaymentMethod)}>Place orders</button> </div>
                                 </div>
                             </div>
                         </aside>

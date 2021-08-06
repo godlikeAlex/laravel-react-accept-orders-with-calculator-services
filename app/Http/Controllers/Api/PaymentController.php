@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRequest;
 use App\Http\Requests\RePaymentRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class PaymentController extends Controller
@@ -69,5 +70,23 @@ class PaymentController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
+    }
+
+    public function cardWallet(Request $request)
+    {
+        $user = $request->user('api');
+        return $user->createIntent();
+    }
+
+    public function listPaymentMethods(Request $request)
+    {
+        $user = $request->user();
+        return $user->listPaymentMethods();
+    }
+
+    public function deletePaymentMethod(Request $request, $card)
+    {
+        $user = $request->user();
+        return $user->deletePaymentMethod($card);
     }
 }

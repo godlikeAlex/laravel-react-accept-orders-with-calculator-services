@@ -28,7 +28,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone'
+        'phone',
+        'address',
+        'avatar'
     ];
 
     /**
@@ -88,5 +90,28 @@ class User extends Authenticatable
             'confirm' => true,
             'payment_method' => $payment_method,
         ]);
+    }
+
+    public function createIntent()
+    {
+        return $this->stripe()->setupIntents->create([
+            'customer' => $this->stripe_id,
+            'usage' => 'on_session'
+        ]);
+    }
+
+    public function listPaymentMethods()
+    {
+        return $this->stripe()->paymentMethods->all([
+            'customer' => $this->stripe_id,
+            'type' => 'card'
+        ]);
+    }
+
+    public function deletePaymentMethod($card)
+    {
+        return $this->stripe()->paymentMethods->detach(
+            $card
+        );
     }
 }

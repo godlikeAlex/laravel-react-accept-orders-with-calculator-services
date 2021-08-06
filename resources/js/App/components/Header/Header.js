@@ -45,6 +45,7 @@ const Header = () => {
                                             <span className="sf-menu-item-mobile-toggler"></span>
                                             <ul>
                                                 <li> <Link to="/cabinet/dashboard"><span>My profile</span></Link> </li>
+                                                <li> <Link to="/cabinet/dashboard/update-profile"><span>Update my profile</span></Link> </li>
                                                 <li> <Link to="/cabinet/dashboard/saved"><span>My saved</span></Link> </li>
                                                 <li> <a onClick={handleLogout} style={{ cursor: 'pointer' }}><span>Log out</span></a> </li>
                                             </ul>

@@ -5,12 +5,12 @@ import { useSelector } from 'react-redux';
 
 
 export default function useOrders(page) {
-    const auth = useSelector(state => state.auth);
+    const { token } = useSelector(state => state.auth);
     const [isLoading, setIsLoading] = useState(true);
     const [orders, setOrders] = useState([]);
     const [lastPage, setLastPage] = useState(1);
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        // const toketn = localStorage.getItem('token');
 
         async function fetchOrders() {
             const { data } = await axios({

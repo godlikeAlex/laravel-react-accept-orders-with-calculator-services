@@ -16,6 +16,12 @@ export const authSlice = createSlice({
             state.loading = false;
             state.token = token
         },
+        updateUser: (state, { payload }) => {
+            state.user = {
+                ...state.user,
+                ...payload
+            }
+        },
         logout: state => {
             state.isAuth = false;
             state.user = null;
@@ -28,6 +34,6 @@ export const authSlice = createSlice({
     },
 })
 
-export const { initAuth, logout, setAuthLoading } = authSlice.actions
+export const { initAuth, logout, setAuthLoading, updateUser } = authSlice.actions
 
 export default authSlice.reducer

@@ -34,6 +34,7 @@
         "form-data": "^4.0.0",
         "formik": "^2.2.9",
         "react-bootstrap-sweetalert": "^5.2.0",
+        "react-datepicker": "^4.1.1",
         "react-input-mask": "^2.0.4",
         "react-loading": "^2.0.3",
         "react-query": "^3.18.1",

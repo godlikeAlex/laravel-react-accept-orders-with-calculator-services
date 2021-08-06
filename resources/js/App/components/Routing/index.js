@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 import LoadingSpinner from '../Auth/LoadingSpinner';
 import Thanks from '../ShopingCart/Thanks';
 import Header from '../Header/Header';
-import { Dashboard, ShowOrder, Saved } from '../Dashboard';
+import { Dashboard, ShowOrder, Saved, UpdateProfile } from '../Dashboard';
 import NotFound from '../NotFound';
 
 function Routing() {
@@ -43,7 +43,7 @@ function Routing() {
                     <ProtectedRoute exact path="/cabinet/dashboard" component={Dashboard} />
                     <ProtectedRoute exact path="/cabinet/dashboard/show/:id" component={ShowOrder} />
                     <ProtectedRoute exact path="/cabinet/dashboard/saved" component={Saved} />
-                    <ProtectedRoute exact path="/cabinet/dashboard/update-profile" component={Saved} />
+                    <ProtectedRoute exact path="/cabinet/dashboard/update-profile" component={UpdateProfile} />
                     <Route component={NotFound} />
                 </Switch>
             </ScrollToTop>

@@ -4246,9 +4246,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "initAuth": () => (/* binding */ initAuth),
 /* harmony export */   "logout": () => (/* binding */ logout),
 /* harmony export */   "setAuthLoading": () => (/* binding */ setAuthLoading),
+/* harmony export */   "updateUser": () => (/* binding */ updateUser),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 var authSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
   name: 'auth',
@@ -4268,14 +4275,18 @@ var authSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
       state.loading = false;
       state.token = token;
     },
+    updateUser: function updateUser(state, _ref2) {
+      var payload = _ref2.payload;
+      state.user = _objectSpread(_objectSpread({}, state.user), payload);
+    },
     logout: function logout(state) {
       state.isAuth = false;
       state.user = null;
       state.loading = false;
       state.token = null;
     },
-    setAuthLoading: function setAuthLoading(state, _ref2) {
-      var payload = _ref2.payload;
+    setAuthLoading: function setAuthLoading(state, _ref3) {
+      var payload = _ref3.payload;
       state.loading = payload;
     }
   }
@@ -4283,7 +4294,8 @@ var authSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
 var _authSlice$actions = authSlice.actions,
     initAuth = _authSlice$actions.initAuth,
     logout = _authSlice$actions.logout,
-    setAuthLoading = _authSlice$actions.setAuthLoading;
+    setAuthLoading = _authSlice$actions.setAuthLoading,
+    updateUser = _authSlice$actions.updateUser;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (authSlice.reducer);
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPhoneToUsers extends Migration
+class AddPersonalManyInformationForUser extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,9 @@ class AddPhoneToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('phone', 15)->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('address')->nullable();
+            $table->string('current_payment_method')->nullable();
         });
     }
 
@@ -26,7 +28,9 @@ class AddPhoneToUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('phone');
+            $table->dropIfExists('avatar');
+            $table->dropIfExists('address');
+            $table->dropIfExists('current_payment_method');
         });
     }
 }
