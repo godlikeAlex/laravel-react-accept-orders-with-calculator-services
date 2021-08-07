@@ -41,11 +41,11 @@ export const MIN_PRICE = 250;
 const TEMPLATE_CALCULATOR = {
     width: 5,
     height: 5,
-    ftHeight: { label: calculatorValues.height[1].title, value: calculatorValues.height[1].title, price: calculatorValues.height[1].price },
+    ftHeight: calculatorValues.height[1],
     price: MIN_PRICE,
     quantity: 1,
     currentServiceType: serviceTypeOptions[0],
-    currentService: servicesForOptions['Vinyl'][0]
+    currentService: servicesForOptions['Vinyl'][0],
 };
 
 function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, renderFooter, onAddCart }) {
@@ -54,16 +54,33 @@ function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, render
         validationSchema: ServiceCalculatorSchema,
         initialValues: {
             currentTab: 0,
+            totalServices: data?.totalServices || MIN_PRICE,
             total: data?.total || MIN_PRICE,
-            services: data?.services || [TEMPLATE_CALCULATOR]
+            services: data?.services || [TEMPLATE_CALCULATOR],
+            removal: false,
+            installation: false,
         },
     });
+
+    React.useEffect(() => {
+        const { removal, total, totalServices } = values;
+
+        if (removal) {
+            setFieldValue('total', countTotal(total + (total * 0.5)));
+        } else {
+            setFieldValue('total', totalServices)
+        }
+
+    }, [values.removal]);
 
     React.useEffect(() => {
         if (resetAllFields) {
             setValues({
                 currentTab: 0,
+                totalServices: MIN_PRICE,
                 total: MIN_PRICE,
+                removal: false,
+                installation: false,
                 services: [TEMPLATE_CALCULATOR]
             })
         }
@@ -87,9 +104,13 @@ function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, render
         }, 0);
         const total = countTotal(totalCalculated);
 
+        onUpdate({ services: values.services, total });
 
-        onUpdate({ services: values.services, total })
-        setFieldValue('total', total);
+        setValues({
+            ...values,
+            totalServices: total,
+            total: values.removal ? total + (total * 0.5) : total
+        });
     }, [values.services]);
 
     const addNewService = () => {
@@ -144,19 +165,45 @@ function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, render
             <div ref={topBlockRef} style={{ position: 'absolute', top: 20 }}></div>
             <div className="d-flex p-0 col-md-12">
                 <ul className="nav nav-tabs color2" style={{ borderBottom: '5px solid #ED0598' }}>
-                    {values.services.map((_, index) => (
-                        <li key={`tab` + index} className={values.currentTab === index ? 'active' : ''} onClick={() => setFieldValue('currentTab', index)}><a>Tab {index + 1}</a></li>
+                    {values.services.map((service, index) => (
+                        <li key={`tab` + index} className={values.currentTab === index ? 'active' : ''} onClick={() => setFieldValue('currentTab', index)}><a>{service.currentService.label}</a></li>
                     ))}
                     {!bottomAddMore && (
                         <li className="nav-item" onClick={() => addNewService()}><a className='nav-link' >Add more</a></li>
                     )}
                 </ul>
             </div>
+
+            <div className="col-md-12">
+                <label>Additional services</label>
+                <div
+                    className="form-group"
+                >
+                    <input
+                        type="checkbox"
+                        onClick={() => setFieldValue('removal', !values.removal)}
+                        checked={values.removal}
+                    />
+                    <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('removal', !values.removal)}>Removal</label>
+                </div>
+
+                <div className="form-group"
+
+                >
+                    <input
+                        onClick={() => setFieldValue('installation', !values.installation)}
+                        type="checkbox"
+                        checked={values.installation}
+                    />
+                    <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('installation', !values.installation)}>Installation</label>
+                </div>
+            </div>
+
             {renderTabsContent()}
             {renderFooter && (
                 <div className="col-md-12">
                     <hr />
-                    <h4>Total price: ${values.total}</h4>
+                    <h4>Subtotal: ${values.total}</h4>
                     {bottomAddMore && (
                         <a
                             className="theme_button bg_button color1 btn-calc"

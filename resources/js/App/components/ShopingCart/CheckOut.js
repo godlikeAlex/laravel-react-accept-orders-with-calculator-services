@@ -12,12 +12,13 @@ import SelectPaymentMethod from './SelectPaymentMethod';
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { format } from 'date-fns';
 
 export const OrderSchema = Yup.object().shape({
     name: Yup.string().required('Required'),
     email: Yup.string().email('Invalid email').required('Required'),
     phone: Yup.string().required('Required'),
-    date: Yup.date().required('Required'),
+    date: Yup.string().required('Required'),
     address: Yup.string().required('Required'),
 });
 
@@ -40,7 +41,7 @@ function CheckOut() {
             'email': isAuth ? user.email : '',
             'phone': isAuth ? user.phone : '',
             'address': isAuth ? user.address : '',
-            'date': Date.now(),
+            'date': new Date(),
             'notes': ''
         },
         validationSchema: OrderSchema,

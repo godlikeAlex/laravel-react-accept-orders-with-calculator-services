@@ -8,8 +8,8 @@ function calculateServicePrice($data)
         $width = $service->width;
         $height = $service->height;
         $curentService = $service->currentService;
-        $squareFt = ($width * $height) / 144;
-        $totalSqFt = $squareFt * $service->quantity;
+        $squareFt = round(($width * $height) / 144, 2);
+        $totalSqFt = round($squareFt * $service->quantity, 2);
         $calculatedPrice = round(($totalSqFt * $curentService->price) + $service->ftHeight->price, 2);
         $totalPerSqFt = $squareFt * $service->quantity * (($curentService->price * $totalSqFt) / $totalSqFt);
         $totalPerItem = $squareFt * (($curentService->price * $totalSqFt) / $totalSqFt);

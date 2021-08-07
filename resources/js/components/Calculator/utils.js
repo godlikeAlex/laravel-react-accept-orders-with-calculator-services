@@ -2,10 +2,10 @@ import { MIN_PRICE } from "./Calculator";
 
 export const calculatePrice = (service) => {
     const { width, height, quantity, currentService, ftHeight } = service;
-    const squareFt = (height * width) / 144;
-    let totalSqFt = squareFt * quantity;
-    const totalPerSqFt = squareFt * quantity * ((currentService.price * totalSqFt) / totalSqFt);
-    const totalPerItem = squareFt * ((currentService.price * totalSqFt) / totalSqFt);
+    const squareFt = ((height * width) / 144).toFixed(2);
+    let totalSqFt = (squareFt * quantity).toFixed(2);
+    const totalPerSqFt = squareFt * quantity * ((totalSqFt * currentService.price) / totalSqFt);
+    const totalPerItem = squareFt * ((totalSqFt * currentService.price) / totalSqFt);
 
     if (currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT') {
         const price = currentService.price + ftHeight.price;
@@ -16,6 +16,8 @@ export const calculatePrice = (service) => {
         };
     }
 
+    // const totalForDefaultService = countTotal((totalSqFt * currentService.price) + ftHeight.price);
+
     return {
         total: countTotal((totalSqFt * currentService.price) + ftHeight.price),
         totalPerSqFt: +totalPerSqFt.toFixed(2),
@@ -24,6 +26,6 @@ export const calculatePrice = (service) => {
 }
 
 export const countTotal = (price) => {
-    return price <= MIN_PRICE ? MIN_PRICE : +price.toFixed(2);
+    return price <= MIN_PRICE ? MIN_PRICE : +price;
 }
 

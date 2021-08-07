@@ -4,7 +4,11 @@ import Select from 'react-select';
 import axios from 'axios';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import loadable from '@loadable/component'
-
+import DatePicker from "react-datepicker";
+import InputMask from 'react-input-mask';
+import "react-datepicker/dist/react-datepicker.css";
+import { customStyles } from '../Calculator/CalculatorTabScreen';
+import { format } from 'date-fns';
 const Calculator = loadable(() => import('../Calculator/Calculator'))
 
 const orderStatusList = [
@@ -26,12 +30,14 @@ function UpdateOrderBackend({ order }) {
         initialValues: {
             calculatedData: JSON.parse(currentOrder.details),
             status: orderStatusList.find(status => currentOrder.status === status.value),
+            date: new Date(currentOrder.date),
             image: null
         },
         onSubmit: async values => {
             const formData = new FormData();
             formData.append('details', JSON.stringify(values.calculatedData));
             formData.append('status', values.status.value);
+            formData.append('date', format(values.date, 'MM/dd/yyyy'));
             formData.append('_method', 'put');
             if (values.image) {
                 formData.append('image', values.image);
@@ -64,16 +70,37 @@ function UpdateOrderBackend({ order }) {
             <form>
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-6">
                             <div className="form-group">
                                 <label>Order Status</label>
                                 <Select
+                                    isSearchable={false}
                                     options={orderStatusList}
+                                    styles={customStyles}
+                                    className={'reselect2-order'}
                                     onChange={status => {
                                         setFieldValue('status', status)
                                     }}
                                     value={values.status}
                                 />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>Date</label>
+                                <div>
+                                    <DatePicker
+                                        className="form-control"
+                                        selected={values.date}
+                                        onChange={(date) => setFieldValue('date', date)}
+                                        customInput={
+                                            <InputMask
+                                                className="form-control"
+                                                mask="99/99/9999"
+                                            />
+                                        }
+                                    />
+                                </div>
                             </div>
                         </div>
                         {values.status.value === 'finished' && (

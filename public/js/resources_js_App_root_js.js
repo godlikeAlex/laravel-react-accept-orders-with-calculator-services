@@ -4501,12 +4501,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils.js */ "./resources/js/components/Calculator/utils.js");
 /* harmony import */ var _CalculatorTabScreen_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CalculatorTabScreen.js */ "./resources/js/components/Calculator/CalculatorTabScreen.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -4518,6 +4512,12 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -4558,11 +4558,7 @@ var MIN_PRICE = 250;
 var TEMPLATE_CALCULATOR = {
   width: 5,
   height: 5,
-  ftHeight: {
-    label: _calculator_values_js__WEBPACK_IMPORTED_MODULE_3__.calculatorValues.height[1].title,
-    value: _calculator_values_js__WEBPACK_IMPORTED_MODULE_3__.calculatorValues.height[1].title,
-    price: _calculator_values_js__WEBPACK_IMPORTED_MODULE_3__.calculatorValues.height[1].price
-  },
+  ftHeight: _calculator_values_js__WEBPACK_IMPORTED_MODULE_3__.calculatorValues.height[1],
   price: MIN_PRICE,
   quantity: 1,
   currentServiceType: serviceTypeOptions[0],
@@ -4583,8 +4579,11 @@ function Calculator(_ref) {
     validationSchema: ServiceCalculatorSchema,
     initialValues: {
       currentTab: 0,
+      totalServices: (data === null || data === void 0 ? void 0 : data.totalServices) || MIN_PRICE,
       total: (data === null || data === void 0 ? void 0 : data.total) || MIN_PRICE,
-      services: (data === null || data === void 0 ? void 0 : data.services) || [TEMPLATE_CALCULATOR]
+      services: (data === null || data === void 0 ? void 0 : data.services) || [TEMPLATE_CALCULATOR],
+      removal: false,
+      installation: false
     }
   }),
       values = _useFormik.values,
@@ -4594,10 +4593,24 @@ function Calculator(_ref) {
       setValues = _useFormik.setValues;
 
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    var removal = values.removal,
+        total = values.total,
+        totalServices = values.totalServices;
+
+    if (removal) {
+      setFieldValue('total', (0,_utils_js__WEBPACK_IMPORTED_MODULE_4__.countTotal)(total + total * 0.5));
+    } else {
+      setFieldValue('total', totalServices);
+    }
+  }, [values.removal]);
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     if (resetAllFields) {
       setValues({
         currentTab: 0,
+        totalServices: MIN_PRICE,
         total: MIN_PRICE,
+        removal: false,
+        installation: false,
         services: [TEMPLATE_CALCULATOR]
       });
     }
@@ -4625,7 +4638,10 @@ function Calculator(_ref) {
       services: values.services,
       total: total
     });
-    setFieldValue('total', total);
+    setValues(_objectSpread(_objectSpread({}, values), {}, {
+      totalServices: total,
+      total: values.removal ? total + total * 0.5 : total
+    }));
   }, [values.services]);
 
   var addNewService = function addNewService() {
@@ -4697,14 +4713,14 @@ function Calculator(_ref) {
         style: {
           borderBottom: '5px solid #ED0598'
         },
-        children: [values.services.map(function (_, index) {
+        children: [values.services.map(function (service, index) {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
             className: values.currentTab === index ? 'active' : '',
             onClick: function onClick() {
               return setFieldValue('currentTab', index);
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("a", {
-              children: ["Tab ", index + 1]
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
+              children: service.currentService.label
             })
           }, "tab" + index);
         }), !bottomAddMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
@@ -4718,10 +4734,49 @@ function Calculator(_ref) {
           })
         })]
       })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "col-md-12",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("label", {
+        children: "Additional services"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        className: "form-group",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+          type: "checkbox",
+          onClick: function onClick() {
+            return setFieldValue('removal', !values.removal);
+          },
+          checked: values.removal
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("label", {
+          style: {
+            marginLeft: 15
+          },
+          onClick: function onClick() {
+            return setFieldValue('removal', !values.removal);
+          },
+          children: "Removal"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        className: "form-group",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+          onClick: function onClick() {
+            return setFieldValue('installation', !values.installation);
+          },
+          type: "checkbox",
+          checked: values.installation
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("label", {
+          style: {
+            marginLeft: 15
+          },
+          onClick: function onClick() {
+            return setFieldValue('installation', !values.installation);
+          },
+          children: "Installation"
+        })]
+      })]
     }), renderTabsContent(), renderFooter && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "col-md-12",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("h4", {
-        children: ["Total price: $", values.total]
+        children: ["Subtotal: $", values.total]
       }), bottomAddMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
         className: "theme_button bg_button color1 btn-calc",
         onClick: function onClick() {
@@ -4756,6 +4811,7 @@ function Calculator(_ref) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "customStyles": () => (/* binding */ customStyles),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
@@ -4799,15 +4855,69 @@ var weightOptions = _calculator_values__WEBPACK_IMPORTED_MODULE_1__.calculatorVa
     title: title
   };
 });
+var customStyles = {
+  option: function option(styles, _ref2) {
+    var data = _ref2.data,
+        isDisabled = _ref2.isDisabled,
+        isFocused = _ref2.isFocused,
+        isSelected = _ref2.isSelected;
+    return _objectSpread(_objectSpread({}, styles), {}, {
+      backgroundColor: isSelected && '#ED0598',
+      ':active': _objectSpread(_objectSpread({}, styles[':active']), {}, {
+        color: 'white',
+        backgroundColor: '#ED0598'
+      })
+    });
+  },
+  container: function container(provided) {
+    return _objectSpread(_objectSpread({}, provided), {}, {
+      fontSize: '18px' // none of react-select's styles are passed to <Control />
 
-function CalculatorScreen(_ref2) {
+    });
+  },
+  indicatorSeparator: function indicatorSeparator(provided) {
+    return _objectSpread(_objectSpread({}, provided), {}, {
+      display: 'none'
+    });
+  },
+  indicatorsContainer: function indicatorsContainer() {
+    return {
+      position: 'absolute',
+      background: 'red',
+      right: 0,
+      height: '100%',
+      top: 0,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '80px',
+      backgroundColor: '#ED0598'
+    };
+  },
+  control: function control(provided) {
+    return _objectSpread(_objectSpread({}, provided), {}, {
+      padding: '24px 40px 21px',
+      border: 'none'
+    });
+  },
+  dropdownIndicator: function dropdownIndicator() {
+    return {
+      color: 'white'
+    };
+  },
+  valueContainer: function valueContainer(provided) {
+    return _objectSpread({}, provided);
+  }
+};
+
+function CalculatorScreen(_ref3) {
   var _jsx2, _jsx3;
 
-  var index = _ref2.index,
-      service = _ref2.service,
-      setFieldValueNested = _ref2.setFieldValueNested,
-      setFieldValue = _ref2.setFieldValue,
-      values = _ref2.values;
+  var index = _ref3.index,
+      service = _ref3.service,
+      setFieldValueNested = _ref3.setFieldValueNested,
+      setFieldValue = _ref3.setFieldValue,
+      values = _ref3.values;
 
   var setOnlyPassitiveValue = function setOnlyPassitiveValue(e, field, index) {
     e.preventDefault();
@@ -4833,61 +4943,6 @@ function CalculatorScreen(_ref2) {
   // }
 
 
-  var customStyles = {
-    option: function option(styles, _ref3) {
-      var data = _ref3.data,
-          isDisabled = _ref3.isDisabled,
-          isFocused = _ref3.isFocused,
-          isSelected = _ref3.isSelected;
-      return _objectSpread(_objectSpread({}, styles), {}, {
-        backgroundColor: isSelected && '#ED0598',
-        ':active': _objectSpread(_objectSpread({}, styles[':active']), {}, {
-          color: 'white',
-          backgroundColor: '#ED0598'
-        })
-      });
-    },
-    container: function container(provided) {
-      return _objectSpread(_objectSpread({}, provided), {}, {
-        fontSize: '18px' // none of react-select's styles are passed to <Control />
-
-      });
-    },
-    indicatorSeparator: function indicatorSeparator(provided) {
-      return _objectSpread(_objectSpread({}, provided), {}, {
-        display: 'none'
-      });
-    },
-    indicatorsContainer: function indicatorsContainer() {
-      return {
-        position: 'absolute',
-        background: 'red',
-        right: 0,
-        height: '100%',
-        top: 0,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '80px',
-        backgroundColor: '#ED0598'
-      };
-    },
-    control: function control(provided) {
-      return _objectSpread(_objectSpread({}, provided), {}, {
-        padding: '24px 40px 21px',
-        border: 'none'
-      });
-    },
-    dropdownIndicator: function dropdownIndicator() {
-      return {
-        color: 'white'
-      };
-    },
-    valueContainer: function valueContainer(provided) {
-      return _objectSpread({}, provided);
-    }
-  };
-
   var onChangeMaterialType = function onChangeMaterialType(serviceType, index) {
     var services = _toConsumableArray(values.services);
 
@@ -4908,69 +4963,12 @@ function CalculatorScreen(_ref2) {
   };
 
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: "col-md-6 col-sm-12",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Total Height"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_5__.default, {
-          isSearchable: false,
-          styles: customStyles,
-          className: 'reselect2-order',
-          options: weightOptions,
-          onChange: function onChange(ftHeight) {
-            setFieldValueNested('ftHeight', ftHeight, index);
-          },
-          value: service.ftHeight
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Quantity"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-          type: "text",
-          className: "form-control",
-          placeholder: "Quantity",
-          name: "quantity",
-          onChange: function onChange(e) {
-            return setOnlyPassitiveValue(e, 'quantity', index);
-          },
-          value: service.quantity
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: "col-md-6",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Height"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", (_jsx2 = {
-          type: "text",
-          className: "form-control",
-          disabled: service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT',
-          placeholder: "Height"
-        }, _defineProperty(_jsx2, "type", "number"), _defineProperty(_jsx2, "min", 1), _defineProperty(_jsx2, "name", "height"), _defineProperty(_jsx2, "onChange", function onChange(e) {
-          return setOnlyPassitiveValue(e, 'height', index);
-        }), _defineProperty(_jsx2, "value", service.height), _jsx2))]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Width"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", (_jsx3 = {
-          type: "text",
-          disabled: service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT',
-          className: "form-control"
-        }, _defineProperty(_jsx3, "type", "number"), _defineProperty(_jsx3, "min", 1), _defineProperty(_jsx3, "placeholder", "Width"), _defineProperty(_jsx3, "name", "width"), _defineProperty(_jsx3, "onChange", function onChange(e) {
-          return setOnlyPassitiveValue(e, 'width', index);
-        }), _defineProperty(_jsx3, "value", service.width), _jsx3))]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
       className: "col-md-6",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Material Type"
+          children: "Service Type"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_5__.default, {
           styles: customStyles,
           isSearchable: false,
@@ -4999,15 +4997,107 @@ function CalculatorScreen(_ref2) {
           value: service.currentService
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
-      className: "col-md-12",
-      children: ["Price for current service - $", service.price]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
-      className: "col-md-12",
-      children: ["Total Per Item - $", service.totalPerItem || 0]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
-      className: "col-md-12",
-      children: ["Total Per SqFt - $", service.totalPerSqFt || 0]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: "col-md-6",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "form-group",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          children: "Height"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", (_jsx2 = {
+          type: "text",
+          className: "form-control",
+          disabled: service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT',
+          placeholder: "Height"
+        }, _defineProperty(_jsx2, "type", "number"), _defineProperty(_jsx2, "min", 1), _defineProperty(_jsx2, "name", "height"), _defineProperty(_jsx2, "onChange", function onChange(e) {
+          return setOnlyPassitiveValue(e, 'height', index);
+        }), _defineProperty(_jsx2, "value", service.height), _jsx2))]
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: "col-md-6",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "form-group",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          children: "Width"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", (_jsx3 = {
+          type: "text",
+          disabled: service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT',
+          className: "form-control"
+        }, _defineProperty(_jsx3, "type", "number"), _defineProperty(_jsx3, "min", 1), _defineProperty(_jsx3, "placeholder", "Width"), _defineProperty(_jsx3, "name", "width"), _defineProperty(_jsx3, "onChange", function onChange(e) {
+          return setOnlyPassitiveValue(e, 'width', index);
+        }), _defineProperty(_jsx3, "value", service.width), _jsx3))]
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: "col-md-6",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "form-group",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          children: "Total Elevation"
+        }), _calculator_values__WEBPACK_IMPORTED_MODULE_1__.calculatorValues.height.map(function (_ref4, idx) {
+          var title = _ref4.title,
+              price = _ref4.price;
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: "form-check",
+            style: {
+              display: 'flex',
+              marginBottom: 15
+            },
+            onClick: function onClick(e) {
+              return setFieldValueNested('ftHeight', {
+                title: title,
+                price: price
+              }, index);
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+              className: "form-check-input",
+              type: "radio",
+              value: service.ftHeight.price,
+              checked: service.ftHeight.title === title
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
+              className: "form-check-label",
+              style: {
+                marginLeft: 15,
+                display: 'flex',
+                alignItems: 'center',
+                width: '130px',
+                justifyContent: 'space-between'
+              },
+              children: [title, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+                src: "/frontend/icons/".concat(idx + 1, ".png"),
+                style: {
+                  width: '25px'
+                },
+                alt: ""
+              })]
+            })]
+          }, title);
+        })]
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: "col-md-6",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "form-group",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          children: "Quantity"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+          type: "text",
+          className: "form-control",
+          placeholder: "Quantity",
+          name: "quantity",
+          onChange: function onChange(e) {
+            return setOnlyPassitiveValue(e, 'quantity', index);
+          },
+          value: service.quantity
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
+        className: "col-md-12",
+        children: ["Total Per Item - $", service.totalPerItem || 0]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
+        className: "col-md-12",
+        children: ["Total Per SqFt - $", service.totalPerSqFt || 0]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
+        className: "col-md-12",
+        children: ["Price for current service - $", service.price]
+      })]
     })]
   });
 }
@@ -5093,10 +5183,10 @@ var calculatorValues = {
     }],
     "Sign": [{
       "name": "Acrylic sign",
-      "price": 30
+      "price": 45
     }, {
       "name": "Aluminium sign",
-      "price": 30
+      "price": 55
     }, {
       "name": "Still sign",
       "price": 50
@@ -5231,10 +5321,10 @@ var calculatePrice = function calculatePrice(service) {
       quantity = service.quantity,
       currentService = service.currentService,
       ftHeight = service.ftHeight;
-  var squareFt = height * width / 144;
-  var totalSqFt = squareFt * quantity;
-  var totalPerSqFt = squareFt * quantity * (currentService.price * totalSqFt / totalSqFt);
-  var totalPerItem = squareFt * (currentService.price * totalSqFt / totalSqFt);
+  var squareFt = (height * width / 144).toFixed(2);
+  var totalSqFt = (squareFt * quantity).toFixed(2);
+  var totalPerSqFt = squareFt * quantity * (totalSqFt * currentService.price / totalSqFt);
+  var totalPerItem = squareFt * (totalSqFt * currentService.price / totalSqFt);
 
   if (currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT') {
     var price = currentService.price + ftHeight.price;
@@ -5243,7 +5333,8 @@ var calculatePrice = function calculatePrice(service) {
       totalPerSqFt: +currentService.price.toFixed(2),
       totalPerItem: +currentService.price.toFixed(2)
     };
-  }
+  } // const totalForDefaultService = countTotal((totalSqFt * currentService.price) + ftHeight.price);
+
 
   return {
     total: countTotal(totalSqFt * currentService.price + ftHeight.price),
@@ -5252,7 +5343,7 @@ var calculatePrice = function calculatePrice(service) {
   };
 };
 var countTotal = function countTotal(price) {
-  return price <= _Calculator__WEBPACK_IMPORTED_MODULE_0__.MIN_PRICE ? _Calculator__WEBPACK_IMPORTED_MODULE_0__.MIN_PRICE : +price.toFixed(2);
+  return price <= _Calculator__WEBPACK_IMPORTED_MODULE_0__.MIN_PRICE ? _Calculator__WEBPACK_IMPORTED_MODULE_0__.MIN_PRICE : +price;
 };
 
 /***/ }),

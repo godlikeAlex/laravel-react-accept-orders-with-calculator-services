@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\SendRequestController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WishListController;
 use App\Models\Order;
@@ -30,6 +31,7 @@ Route::post('user/change-password', [UserController::class, 'changePassword']);
 Route::get('user/card-wallet', [PaymentController::class, 'cardWallet'])->middleware('auth:api');
 Route::get('user/payment-methods', [PaymentController::class, 'listPaymentMethods'])->middleware('auth:api');
 Route::get('user/payment-methods/delete/{card}', [PaymentController::class, 'deletePaymentMethod'])->middleware('auth:api');
+Route::post('order/request', [SendRequestController::class, 'sendRequest']);
 
 Route::get('/page/order', function () {
     $orders = Order::latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(1);

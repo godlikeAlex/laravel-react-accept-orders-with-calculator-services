@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRequest;
 use App\Http\Requests\RePaymentRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -42,7 +43,8 @@ class PaymentController extends Controller
                 'status' => 'paid',
                 'uuid' => Str::random(8),
                 'stripe_payment_id' => $payment->id,
-                'transaction_id' => $payment->charges->data[0]->id
+                'transaction_id' => $payment->charges->data[0]->id,
+                'date' => Carbon::parse($request->input('date'))
             ]);
 
             return $order;

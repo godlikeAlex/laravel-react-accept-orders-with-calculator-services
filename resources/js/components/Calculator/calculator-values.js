@@ -84,11 +84,11 @@ export const calculatorValues = {
         "Sign": [
             {
                 "name": "Acrylic sign",
-                "price": 30
+                "price": 45
             },
             {
                 "name": "Aluminium sign",
-                "price": 30
+                "price": 55
             },
             {
                 "name": "Still sign",

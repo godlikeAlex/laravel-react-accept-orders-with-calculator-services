@@ -4,6 +4,11 @@ import Select from 'react-select';
 import axios from 'axios';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import loadable from '@loadable/component'
+import DatePicker from "react-datepicker";
+import InputMask from 'react-input-mask';
+import { customStyles } from '../Calculator/CalculatorTabScreen';
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from 'date-fns';
 
 const Calculator = loadable(() => import('../Calculator/Calculator'))
 
@@ -34,6 +39,7 @@ function CreateOrderBackend() {
             calculatedData: null,
             status: orderStatusList[0],
             user: { label: 'User are null', value: null },
+            date: new Date()
         },
         onSubmit: async values => {
             const data = await axios.post('/admin/orders/create');
@@ -47,11 +53,13 @@ function CreateOrderBackend() {
         formData.append('details', JSON.stringify(values.calculatedData));
         formData.append('status', values.status.value);
         formData.append('user_id', values.user.value);
+        formData.append('date', format(values.date, 'MM/dd/yyyy'));
         const data = await axios.post('/admin/orders', formData);
-        setFieldValue('calculatedData', null);
-        setResetCalculator(true);
+
         if (data.data.ok) {
             setSucess(true);
+            setFieldValue('calculatedData', null);
+            setResetCalculator(true);
         } else {
             setError(true);
         }
@@ -66,6 +74,8 @@ function CreateOrderBackend() {
                             <div className="form-group">
                                 <label>Order Status</label>
                                 <Select
+                                    styles={customStyles}
+
                                     options={orderStatusList}
                                     onChange={status => {
                                         setFieldValue('status', status)
@@ -79,6 +89,7 @@ function CreateOrderBackend() {
                             <div className="form-group">
                                 <label>User</label>
                                 <Select
+                                    styles={customStyles}
                                     options={
                                         [{ label: 'User are null', value: null }, ...listUsers]
                                     }
@@ -87,6 +98,25 @@ function CreateOrderBackend() {
                                     }}
                                     value={values.user}
                                 />
+                            </div>
+                        </div>
+
+                        <div className="col-md-12">
+                            <div className="form-group">
+                                <label>Date</label>
+                                <div>
+                                    <DatePicker
+                                        className="form-control"
+                                        selected={values.date}
+                                        onChange={(date) => setFieldValue('date', date)}
+                                        customInput={
+                                            <InputMask
+                                                className="form-control"
+                                                mask="99/99/9999"
+                                            />
+                                        }
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

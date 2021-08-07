@@ -78,11 +78,7 @@ var MIN_PRICE = 250;
 var TEMPLATE_CALCULATOR = {
   width: 5,
   height: 5,
-  ftHeight: {
-    label: _calculator_values_js__WEBPACK_IMPORTED_MODULE_3__.calculatorValues.height[1].title,
-    value: _calculator_values_js__WEBPACK_IMPORTED_MODULE_3__.calculatorValues.height[1].title,
-    price: _calculator_values_js__WEBPACK_IMPORTED_MODULE_3__.calculatorValues.height[1].price
-  },
+  ftHeight: _calculator_values_js__WEBPACK_IMPORTED_MODULE_3__.calculatorValues.height[1],
   price: MIN_PRICE,
   quantity: 1,
   currentServiceType: serviceTypeOptions[0],
@@ -217,14 +213,14 @@ function Calculator(_ref) {
         style: {
           borderBottom: '5px solid #ED0598'
         },
-        children: [values.services.map(function (_, index) {
+        children: [values.services.map(function (service, index) {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
             className: values.currentTab === index ? 'active' : '',
             onClick: function onClick() {
               return setFieldValue('currentTab', index);
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("a", {
-              children: ["Tab ", index + 1]
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
+              children: service.currentService.label
             })
           }, "tab" + index);
         }), !bottomAddMore && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
@@ -264,276 +260,6 @@ function Calculator(_ref) {
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Calculator);
-
-/***/ }),
-
-/***/ "./resources/js/components/Calculator/CalculatorTabScreen.js":
-/*!*******************************************************************!*\
-  !*** ./resources/js/components/Calculator/CalculatorTabScreen.js ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var _calculator_values__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./calculator-values */ "./resources/js/components/Calculator/calculator-values.js");
-/* harmony import */ var react_select__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-select */ "./node_modules/react-select/dist/react-select.esm.js");
-/* harmony import */ var _Calculator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Calculator */ "./resources/js/components/Calculator/Calculator.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils */ "./resources/js/components/Calculator/utils.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-
-
-
-
-
-
-var weightOptions = _calculator_values__WEBPACK_IMPORTED_MODULE_1__.calculatorValues.height.map(function (_ref) {
-  var title = _ref.title,
-      price = _ref.price;
-  return {
-    label: title,
-    value: title,
-    price: price,
-    title: title
-  };
-});
-
-function CalculatorScreen(_ref2) {
-  var _jsx2, _jsx3;
-
-  var index = _ref2.index,
-      service = _ref2.service,
-      setFieldValueNested = _ref2.setFieldValueNested,
-      setFieldValue = _ref2.setFieldValue,
-      values = _ref2.values;
-
-  var setOnlyPassitiveValue = function setOnlyPassitiveValue(e, field, index) {
-    e.preventDefault();
-    var value = e.target.value;
-    var regex = /^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/;
-
-    if (value.toString() === '') {
-      setFieldValueNested(field, value, index);
-    }
-
-    if (regex.test(value.toString())) {
-      setFieldValueNested(field, value, index);
-    }
-  }; // const updateTypeMaterial = () => {
-  //     const services
-  //     const updateServiceByIndex = (services, field, value, index) => {
-  //         services[index] = {
-  //             ...services[index],
-  //             [field]: value
-  //         };
-  //         return services;
-  //     }
-  // }
-
-
-  var customStyles = {
-    option: function option(styles, _ref3) {
-      var data = _ref3.data,
-          isDisabled = _ref3.isDisabled,
-          isFocused = _ref3.isFocused,
-          isSelected = _ref3.isSelected;
-      return _objectSpread(_objectSpread({}, styles), {}, {
-        backgroundColor: isSelected && '#ED0598',
-        ':active': _objectSpread(_objectSpread({}, styles[':active']), {}, {
-          color: 'white',
-          backgroundColor: '#ED0598'
-        })
-      });
-    },
-    container: function container(provided) {
-      return _objectSpread(_objectSpread({}, provided), {}, {
-        fontSize: '18px' // none of react-select's styles are passed to <Control />
-
-      });
-    },
-    indicatorSeparator: function indicatorSeparator(provided) {
-      return _objectSpread(_objectSpread({}, provided), {}, {
-        display: 'none'
-      });
-    },
-    indicatorsContainer: function indicatorsContainer() {
-      return {
-        position: 'absolute',
-        background: 'red',
-        right: 0,
-        height: '100%',
-        top: 0,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '80px',
-        backgroundColor: '#ED0598'
-      };
-    },
-    control: function control(provided) {
-      return _objectSpread(_objectSpread({}, provided), {}, {
-        padding: '24px 40px 21px',
-        border: 'none'
-      });
-    },
-    dropdownIndicator: function dropdownIndicator() {
-      return {
-        color: 'white'
-      };
-    },
-    valueContainer: function valueContainer(provided) {
-      return _objectSpread({}, provided);
-    }
-  };
-
-  var onChangeMaterialType = function onChangeMaterialType(serviceType, index) {
-    var services = _toConsumableArray(values.services);
-
-    services[index] = _objectSpread(_objectSpread({}, services[index]), {}, {
-      currentServiceType: serviceType,
-      currentService: _Calculator__WEBPACK_IMPORTED_MODULE_2__.servicesForOptions[serviceType.value][0]
-    });
-
-    var _calculatePrice = (0,_utils__WEBPACK_IMPORTED_MODULE_3__.calculatePrice)(services[index]),
-        total = _calculatePrice.total,
-        totalPerSqFt = _calculatePrice.totalPerSqFt,
-        totalPerItem = _calculatePrice.totalPerItem;
-
-    services[index].price = total;
-    services[index].totalPerSqFt = totalPerSqFt;
-    services[index].totalPerItem = totalPerItem;
-    setFieldValue('services', services);
-  };
-
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: "col-md-6 col-sm-12",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Total Height"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_5__.default, {
-          isSearchable: false,
-          styles: customStyles,
-          className: 'reselect2-order',
-          options: weightOptions,
-          onChange: function onChange(ftHeight) {
-            setFieldValueNested('ftHeight', ftHeight, index);
-          },
-          value: service.ftHeight
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Quantity"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
-          type: "text",
-          className: "form-control",
-          placeholder: "Quantity",
-          name: "quantity",
-          onChange: function onChange(e) {
-            return setOnlyPassitiveValue(e, 'quantity', index);
-          },
-          value: service.quantity
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: "col-md-6",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Height"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", (_jsx2 = {
-          type: "text",
-          className: "form-control",
-          disabled: service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT',
-          placeholder: "Height"
-        }, _defineProperty(_jsx2, "type", "number"), _defineProperty(_jsx2, "min", 1), _defineProperty(_jsx2, "name", "height"), _defineProperty(_jsx2, "onChange", function onChange(e) {
-          return setOnlyPassitiveValue(e, 'height', index);
-        }), _defineProperty(_jsx2, "value", service.height), _jsx2))]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Width"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", (_jsx3 = {
-          type: "text",
-          disabled: service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT',
-          className: "form-control"
-        }, _defineProperty(_jsx3, "type", "number"), _defineProperty(_jsx3, "min", 1), _defineProperty(_jsx3, "placeholder", "Width"), _defineProperty(_jsx3, "name", "width"), _defineProperty(_jsx3, "onChange", function onChange(e) {
-          return setOnlyPassitiveValue(e, 'width', index);
-        }), _defineProperty(_jsx3, "value", service.width), _jsx3))]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-      className: "col-md-6",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Material Type"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_5__.default, {
-          styles: customStyles,
-          isSearchable: false,
-          className: 'reselect2-order',
-          options: _Calculator__WEBPACK_IMPORTED_MODULE_2__.serviceTypeOptions,
-          onChange: function onChange(service) {
-            onChangeMaterialType(service, index);
-          },
-          value: service.currentServiceType
-        })]
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-      className: "col-md-6",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-        className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
-          children: "Material Type"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_select__WEBPACK_IMPORTED_MODULE_5__.default, {
-          isSearchable: false,
-          options: _Calculator__WEBPACK_IMPORTED_MODULE_2__.servicesForOptions[service.currentServiceType.value],
-          className: 'reselect2-order',
-          styles: customStyles,
-          onChange: function onChange(service) {
-            return setFieldValueNested('currentService', service, index);
-          },
-          value: service.currentService
-        })]
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
-      className: "col-md-12",
-      children: ["Price for current service - $", service.price]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
-      className: "col-md-12",
-      children: ["Total Per Item - $", service.totalPerItem || 0]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
-      className: "col-md-12",
-      children: ["Total Per SqFt - $", service.totalPerSqFt || 0]
-    })]
-  });
-}
-
-;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CalculatorScreen);
 
 /***/ }),
 
@@ -613,10 +339,10 @@ var calculatorValues = {
     }],
     "Sign": [{
       "name": "Acrylic sign",
-      "price": 30
+      "price": 45
     }, {
       "name": "Aluminium sign",
-      "price": 30
+      "price": 55
     }, {
       "name": "Still sign",
       "price": 50
@@ -751,10 +477,10 @@ var calculatePrice = function calculatePrice(service) {
       quantity = service.quantity,
       currentService = service.currentService,
       ftHeight = service.ftHeight;
-  var squareFt = height * width / 144;
-  var totalSqFt = squareFt * quantity;
-  var totalPerSqFt = squareFt * quantity * (currentService.price * totalSqFt / totalSqFt);
-  var totalPerItem = squareFt * (currentService.price * totalSqFt / totalSqFt);
+  var squareFt = (height * width / 144).toFixed(2);
+  var totalSqFt = (squareFt * quantity).toFixed(2);
+  var totalPerSqFt = squareFt * quantity * (totalSqFt * currentService.price / totalSqFt);
+  var totalPerItem = squareFt * (totalSqFt * currentService.price / totalSqFt);
 
   if (currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT') {
     var price = currentService.price + ftHeight.price;
@@ -765,6 +491,9 @@ var calculatePrice = function calculatePrice(service) {
     };
   }
 
+  console.log('tsqft', totalSqFt);
+  console.log('tsqft', totalSqFt);
+  console.log('total', totalSqFt * currentService.price + ftHeight.price);
   return {
     total: countTotal(totalSqFt * currentService.price + ftHeight.price),
     totalPerSqFt: +totalPerSqFt.toFixed(2),
@@ -772,7 +501,7 @@ var calculatePrice = function calculatePrice(service) {
   };
 };
 var countTotal = function countTotal(price) {
-  return price <= _Calculator__WEBPACK_IMPORTED_MODULE_0__.MIN_PRICE ? _Calculator__WEBPACK_IMPORTED_MODULE_0__.MIN_PRICE : +price.toFixed(2);
+  return price <= _Calculator__WEBPACK_IMPORTED_MODULE_0__.MIN_PRICE ? _Calculator__WEBPACK_IMPORTED_MODULE_0__.MIN_PRICE : +price;
 };
 
 /***/ }),

@@ -18,6 +18,7 @@ class Order extends Model
         'notes',
         'stripe_payment_id',
         'image',
+        'date'
     ];
 
     public function user()

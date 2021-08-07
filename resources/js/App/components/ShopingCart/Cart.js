@@ -63,8 +63,8 @@ const Cart = () => {
                                 <input type="number" style={{ height: '50px' }} step="1" readOnly min="0" value={item.quantity} name="product_quantity" title="Qty" className="form-control" />
                                 <input type="button" value="+" className="plus" style={{ top: '12px' }} onClick={() => dispatch(updateQuantity({ type: 'plus', index }))} /> <i className="fa fa-angle-up" style={{ top: '12px' }} aria-hidden="true"></i>
                             </div>
-                            <a className="remove fontsize_16" title="Remove this item" style={{ cursor: 'pointer' }}>
-                                <span className="fontsize_16">Delete</span> <i className="fa fa-trash-o" onClick={(e) => dispatch(removeFromCart(index))}></i>
+                            <a className="remove fontsize_16" title="Remove this item" style={{ cursor: 'pointer' }} onClick={(e) => dispatch(removeFromCart(index))}>
+                                <span className="fontsize_16">Delete</span> <i className="fa fa-trash-o" ></i>
                             </a>
                         </div>
 

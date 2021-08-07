@@ -55225,6 +55225,15 @@ a.text-muted:hover {
 
 input.form-control {
     height: 76px !important;
+    font-size: 18px;
+}
+
+.react-datepicker__input-container {
+    width: inherit;
+}
+
+.react-datepicker-wrapper {
+    width: 100%;
 }
 
 /*# sourceMappingURL=adminlte.min.css.map */

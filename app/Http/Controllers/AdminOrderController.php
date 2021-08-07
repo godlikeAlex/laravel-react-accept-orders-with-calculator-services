@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\User;
 use App\Notifications\OrderStatusUpdated;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -55,11 +56,13 @@ class AdminOrderController extends Controller
             'user_id' => 'nullable',
             'status' => 'nullable',
             'details' => 'required',
+            'date' => 'required',
         ]);
 
         try {
             $calculatedServices = calculateServicePrice($request->details);
             $order = new Order();
+            $order->date = Carbon::parse($request->input('date'));
             $order->user_id = $request->user_id;
             $order->status = $request->status;
             $order->details = json_encode($calculatedServices);
@@ -114,15 +117,16 @@ class AdminOrderController extends Controller
         $request->validate([
             'status' => 'required',
             'details' => 'required',
+            'date' => 'required',
             'photo' => 'nullable'
         ]);
 
         $calculatedServices = calculateServicePrice($request->details);
-
         $data = [
             'status' => $request->status,
             'details' => json_encode($calculatedServices),
-            'amount' => $calculatedServices->total
+            'amount' => $calculatedServices->total,
+            'date' => Carbon::parse($request->input('date')),
         ];
 
         if ($request->has('image')) {

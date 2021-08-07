@@ -3,6 +3,12 @@ import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import LoadingSpinner from '../Auth/LoadingSpinner';
+import DatePicker from "react-datepicker";
+import SweetAlert from 'react-bootstrap-sweetalert';
+import InputMask from 'react-input-mask';
+import { format } from 'date-fns';
+
+
 
 function ShowOrder() {
     const [order, setOrder] = useState(null);
@@ -14,12 +20,20 @@ function ShowOrder() {
     const stripe = useStripe();
     const elements = useElements();
     const [showPayment, setShowPayment] = useState(false);
+    const [showModalCancel, setShowModalCancel] = useState(false);
+    const [showModalRechudle, setShowModalRechudle] = useState(false);
+    const [showModalChangeOrder, setShowModalChangeOrder] = useState(false);
+    const [cancelReason, setCancelReason] = useState('');
+    const [updateNotes, setUpdateNotes] = useState('');
+    const [date, setDate] = useState('');
+    const [success, setSuceess] = useState(false);
 
     React.useEffect(() => {
         axios.get(`/api/user/orders/${id}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         }).then(({ data }) => {
             setOrder(data.order);
+            setDate(new Date(data.order.date));
             setLoading(false);
         })
     }, []);
@@ -69,10 +83,126 @@ function ShowOrder() {
         }
     };
 
+    const sendRequest = async (type, message) => {
+        const formData = new FormData();
+        formData.append('type', type);
+        formData.append('order_id', id);
+        formData.append('message', message);
+        const { data } = await axios.post('/api/order/request', formData, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (data.ok) {
+            if (type === 'cancel') {
+                setShowModalCancel(false);
+                setSuceess(true);
+            } else if (type === 'reschedule') {
+                setShowModalRechudle(false);
+                setSuceess(true);
+            } else if (type === 'update') {
+                setShowModalChangeOrder(false);
+                setSuceess(true);
+            }
+        }
+
+    }
+
     if (loading) return <LoadingSpinner />
 
     return (
         <div className="container">
+            {success && (
+                <SweetAlert
+                    success
+                    title="Success"
+                    timeout={2000}
+                    onConfirm={() => {
+                        setSuceess(false);
+                    }}
+                >
+                    Your request has been sent
+                </SweetAlert>
+            )}
+
+            {showModalCancel && (
+                <SweetAlert
+                    title={"Send request to cancel order"}
+                    onConfirm={() => sendRequest('cancel', cancelReason)}
+                    onCancel={() => { setShowModalCancel(false) }}
+                    confirmBtnText={"Send request"}
+                    confirmBtnCssClass={"theme_button bg_button color1 min_width_button"}
+                    confirmBtnStyle={{ boxShadow: 'unset' }}
+                    dependencies={[cancelReason]}
+                >
+                    {(renderProps) => (
+                        <form>
+                            <hr />
+                            <input
+                                type={'text'}
+                                className="form-control"
+                                value={cancelReason}
+                                onChange={(e) => setCancelReason(e.target.value)}
+                                placeholder={'Reason to cancel order'}
+                            />
+                        </form>
+                    )}
+                </SweetAlert>
+            )}
+
+            {showModalRechudle && (
+                <SweetAlert
+                    style={{ overflow: 'unset' }}
+                    title={"Send request to reschedule order"}
+                    showConfirm={false}
+                    onCancel={() => { setShowModalRechudle(false) }}
+                    dependencies={[date]}
+                >
+                    {(renderProps) => (
+                        <form>
+                            <hr />
+                            <DatePicker
+                                selected={date}
+                                onChange={(date) => setDate(date)}
+                                customInput={
+                                    <InputMask
+                                        className="form-control"
+                                        mask="99/99/9999"
+                                    />
+                                }
+                            />
+                            <hr />
+                            <a className="theme_button bg_button color1 min_width_button" onClick={() => sendRequest('reschedule', date)}>
+                                Send request to reschedule
+                            </a>
+                        </form>
+                    )}
+                </SweetAlert>
+            )}
+
+            {showModalChangeOrder && (
+                <SweetAlert
+                    title={"Send request to change order"}
+                    onConfirm={() => sendRequest('update', updateNotes)}
+                    onCancel={() => { setShowModalChangeOrder(false) }}
+                    confirmBtnText={"Send request"}
+                    confirmBtnCssClass={"theme_button bg_button color1 min_width_button"}
+                    confirmBtnStyle={{ boxShadow: 'unset' }}
+                    dependencies={[updateNotes]}
+                >
+                    {(renderProps) => (
+                        <form>
+                            <hr />
+                            <textarea
+                                type={'text'}
+                                className="form-control"
+                                value={updateNotes}
+                                onChange={(e) => setUpdateNotes(e.target.value)}
+                                placeholder={'Changes'}
+                            ></textarea>
+                        </form>
+                    )}
+                </SweetAlert>
+            )}
             <div className="row" style={{ justifyContent: 'center', display: 'flex' }}>
                 <div className="col-md-8" style={{ marginTop: 30, boxShadow: 'rgb(99 99 99 / 20%) 0px 2px 8px 0px' }}>
                     {order && (
@@ -85,7 +215,6 @@ function ShowOrder() {
                                             <tr>
                                                 <th class="grey medium">
                                                     {service.currentService.label} X {service.quantity}
-
                                                     <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Width: {service.width};</div>
                                                     <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Height: {service.height};</div>
                                                     <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Foot Height: {service.ftHeight.title};</div>
@@ -96,6 +225,11 @@ function ShowOrder() {
 
                                     </tbody>
                                 </table>
+                                <h3>Actions</h3>
+                                <a class="theme_button color1" onClick={() => setShowModalCancel(true)}>Request to cancel order</a>
+                                <a class="theme_button color1" onClick={() => setShowModalRechudle(true)}>Change schedule</a>
+                                <a class="theme_button color1" onClick={() => setShowModalChangeOrder(true)}>Update order</a>
+                                <h3>Details</h3>
                                 <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Amount: <span style={{ textTransform: 'capitalize' }}>${order.amount}</span> </h6>
                                 <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Order status: <span style={{ textTransform: 'capitalize' }}>{order.status}</span> </h6>
 

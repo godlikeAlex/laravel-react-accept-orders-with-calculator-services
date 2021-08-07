@@ -13,6 +13,52 @@ const weightOptions = calculatorValues.height.map(({ title, price }) => {
     }
 })
 
+export const customStyles = {
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+        return {
+            ...styles,
+            backgroundColor: isSelected && '#ED0598',
+            ':active': {
+                ...styles[':active'],
+                color: 'white',
+                backgroundColor: '#ED0598',
+            },
+        };
+    },
+    container: (provided) => ({
+        ...provided,
+        fontSize: '18px',
+        // none of react-select's styles are passed to <Control />
+    }),
+    indicatorSeparator: (provided) => ({
+        ...provided,
+        display: 'none'
+    }),
+    indicatorsContainer: () => ({
+        position: 'absolute',
+        background: 'red',
+        right: 0,
+        height: '100%',
+        top: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '80px',
+        backgroundColor: '#ED0598'
+    }),
+    control: (provided) => ({
+        ...provided,
+        padding: '24px 40px 21px',
+        border: 'none'
+    }),
+    dropdownIndicator: () => ({
+        color: 'white'
+    }),
+    valueContainer: (provided) => ({
+        ...provided,
+    }),
+}
+
 function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, values }) {
     const setOnlyPassitiveValue = (e, field, index) => {
         e.preventDefault();
@@ -39,52 +85,6 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
     //     }
     // }
 
-    const customStyles = {
-        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-            return {
-                ...styles,
-                backgroundColor: isSelected && '#ED0598',
-                ':active': {
-                    ...styles[':active'],
-                    color: 'white',
-                    backgroundColor: '#ED0598',
-                },
-            };
-        },
-        container: (provided) => ({
-            ...provided,
-            fontSize: '18px',
-            // none of react-select's styles are passed to <Control />
-        }),
-        indicatorSeparator: (provided) => ({
-            ...provided,
-            display: 'none'
-        }),
-        indicatorsContainer: () => ({
-            position: 'absolute',
-            background: 'red',
-            right: 0,
-            height: '100%',
-            top: 0,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '80px',
-            backgroundColor: '#ED0598'
-        }),
-        control: (provided) => ({
-            ...provided,
-            padding: '24px 40px 21px',
-            border: 'none'
-        }),
-        dropdownIndicator: () => ({
-            color: 'white'
-        }),
-        valueContainer: (provided) => ({
-            ...provided,
-        }),
-    }
-
     const onChangeMaterialType = (serviceType, index) => {
         const services = [...values.services];
 
@@ -104,66 +104,9 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
 
     return (
         <React.Fragment>
-            <div className="col-md-6 col-sm-12">
-                <div className="form-group">
-                    <label>Total Height</label>
-                    <Select
-                        isSearchable={false}
-                        styles={customStyles}
-                        className={'reselect2-order'}
-                        options={weightOptions}
-                        onChange={(ftHeight) => {
-                            setFieldValueNested('ftHeight', ftHeight, index)
-                        }}
-                        value={service.ftHeight}
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Quantity</label>
-                    <input type="text"
-                        className="form-control"
-                        placeholder="Quantity"
-                        name="quantity"
-                        onChange={(e) => setOnlyPassitiveValue(e, 'quantity', index)}
-                        value={service.quantity}
-                    />
-                </div>
-            </div>
-
             <div className="col-md-6">
                 <div className="form-group">
-                    <label>Height</label>
-                    <input type="text"
-                        className="form-control"
-                        disabled={service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT'}
-                        placeholder="Height"
-                        type="number"
-                        min={1}
-                        name="height"
-                        onChange={(e) => setOnlyPassitiveValue(e, 'height', index)}
-                        value={service.height}
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label>Width</label>
-                    <input type="text"
-                        disabled={service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT'}
-                        className="form-control"
-                        type="number"
-                        min={1}
-                        placeholder="Width"
-                        name="width"
-                        onChange={(e) => setOnlyPassitiveValue(e, 'width', index)}
-                        value={service.width}
-                    />
-                </div>
-            </div>
-
-            <div className="col-md-6">
-                <div className="form-group">
-                    <label>Material Type</label>
+                    <label>Service Type</label>
                     <Select
                         styles={customStyles}
                         isSearchable={false}
@@ -191,9 +134,84 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
                 </div>
             </div>
 
-            <h6 className="col-md-12">Price for current service - ${service.price}</h6>
-            <h6 className="col-md-12">Total Per Item - ${service.totalPerItem || 0}</h6>
-            <h6 className="col-md-12">Total Per SqFt - ${service.totalPerSqFt || 0}</h6>
+
+            <div className="col-md-6">
+                <div className="form-group">
+                    <label>Height</label>
+                    <input type="text"
+                        className="form-control"
+                        disabled={service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT'}
+                        placeholder="Height"
+                        type="number"
+                        min={1}
+                        name="height"
+                        onChange={(e) => setOnlyPassitiveValue(e, 'height', index)}
+                        value={service.height}
+                    />
+                </div>
+            </div>
+
+            <div className="col-md-6">
+                <div className="form-group">
+                    <label>Width</label>
+                    <input type="text"
+                        disabled={service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT'}
+                        className="form-control"
+                        type="number"
+                        min={1}
+                        placeholder="Width"
+                        name="width"
+                        onChange={(e) => setOnlyPassitiveValue(e, 'width', index)}
+                        value={service.width}
+                    />
+                </div>
+
+            </div>
+
+            <div className="col-md-6">
+                <div className="form-group">
+                    <label>Total Elevation</label>
+                    {calculatorValues.height.map(({ title, price }, idx) => (
+                        <div className="form-check" key={title} style={{ display: 'flex', marginBottom: 15 }} onClick={e => setFieldValueNested('ftHeight', { title, price }, index)}>
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                value={service.ftHeight.price}
+
+                                checked={service.ftHeight.title === title}
+                            />
+                            <label className="form-check-label" style={{ marginLeft: 15, display: 'flex', alignItems: 'center', width: '130px', justifyContent: 'space-between' }}>
+                                {title}
+                                <img
+                                    src={`/frontend/icons/${idx + 1}.png`}
+                                    style={{
+                                        width: '25px'
+                                    }}
+                                    alt=""
+                                />
+                            </label>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="col-md-6">
+                <div className="form-group">
+                    <label>Quantity</label>
+                    <input type="text"
+                        className="form-control"
+                        placeholder="Quantity"
+                        name="quantity"
+                        onChange={(e) => setOnlyPassitiveValue(e, 'quantity', index)}
+                        value={service.quantity}
+                    />
+                </div>
+
+
+                <h6 className="col-md-12">Total Per Item - ${service.totalPerItem || 0}</h6>
+                <h6 className="col-md-12">Total Per SqFt - ${service.totalPerSqFt || 0}</h6>
+                <h6 className="col-md-12">Price for current service - ${service.price}</h6>
+            </div>
         </React.Fragment>
     )
 };

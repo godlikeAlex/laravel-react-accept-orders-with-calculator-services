@@ -837,7 +837,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Calculator = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
-  return __webpack_require__.e(/*! import() */ "resources_js_components_Calculator_Calculator_js-resources_js_components_Calculator_utils_js--3089cf0").then(__webpack_require__.bind(__webpack_require__, /*! ../Calculator/Calculator */ "./resources/js/components/Calculator/Calculator.js"));
+  return __webpack_require__.e(/*! import() */ "resources_js_components_Calculator_Calculator_js-resources_js_components_Calculator_utils_js").then(__webpack_require__.bind(__webpack_require__, /*! ../Calculator/Calculator */ "./resources/js/components/Calculator/Calculator.js"));
 });
 
 var renderLoader = function renderLoader() {
@@ -32431,7 +32431,7 @@ if (false) {} else {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_components_CreateOrderBackend_CreateOrderBackend_js":1,"resources_js_components_UpdateOrderBackend_UpdateOrderBackend_js":1,"resources_js_App_root_js":1,"resources_js_components_Calculator_Calculator_js-resources_js_components_Calculator_utils_js--3089cf0":1,"resources_js_components_Calculator_Calculator_js-resources_js_components_Calculator_utils_js--3089cf1":1,"resources_js_App_components_App_index_js":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_components_CreateOrderBackend_CreateOrderBackend_js":1,"resources_js_components_UpdateOrderBackend_UpdateOrderBackend_js":1,"resources_js_App_root_js":1,"resources_js_components_Calculator_Calculator_js-resources_js_components_Calculator_utils_js":1,"resources_js_App_components_App_index_js":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
