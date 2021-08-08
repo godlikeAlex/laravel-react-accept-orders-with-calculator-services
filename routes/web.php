@@ -53,6 +53,9 @@ Route::prefix('admin')->group(function () {
     Route::get('users', [AdminController::class, 'getUsers']);
     Route::get('/invoce/print/{order}', [AdminOrderController::class, 'invoicePrint'])->name('invoice.print');
     Route::resource('orders', AdminOrderController::class);
+    Route::get('/dashboard/users', [AdminController::class, 'indexUsers'])->name('index.users');
+    Route::get('/dashboard/users/orders/{id}', [AdminController::class, 'userOrders'])->name('user.orders');
+    Route::get('/dashboard/users/delete/{id}', [AdminController::class, 'deleteUser'])->name('user.delete');
 });
 
 // Route::get('/home', 'HomeController@index')->name('home');

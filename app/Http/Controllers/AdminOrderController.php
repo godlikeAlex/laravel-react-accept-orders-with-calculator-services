@@ -23,13 +23,20 @@ class AdminOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (request()->query('status')) {
-            $orders = Order::where('status', request()->query('status'))->latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
+
+        $q = $request->input('uuid');
+        if ($q) {
+            $orders = Order::where('uuid', 'like', '%' . $q . '%')->paginate(50);
         } else {
-            $orders = Order::where('status', '!=', 'finished')->latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
+            if (request()->query('status')) {
+                $orders = Order::where('status', request()->query('status'))->latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
+            } else {
+                $orders = Order::where('status', '!=', 'completed')->latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
+            }
         }
+
         return view('admin.orders.index', compact('orders'));
     }
 

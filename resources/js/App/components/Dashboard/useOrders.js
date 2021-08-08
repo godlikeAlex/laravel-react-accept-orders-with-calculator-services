@@ -4,18 +4,17 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 
-export default function useOrders(page) {
+export default function useOrders(page, status) {
     const { token } = useSelector(state => state.auth);
     const [isLoading, setIsLoading] = useState(true);
     const [orders, setOrders] = useState([]);
     const [lastPage, setLastPage] = useState(1);
     useEffect(() => {
-        // const toketn = localStorage.getItem('token');
-
+        setIsLoading(true);
         async function fetchOrders() {
             const { data } = await axios({
                 method: 'GET',
-                url: `/api/user/orders?page=${page}`,
+                url: `/api/user/orders?page=${page}&status=${status === 'all' ? '' : status}`,
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -26,7 +25,7 @@ export default function useOrders(page) {
         }
 
         fetchOrders();
-    }, [page]);
+    }, [page, status]);
 
     return [orders, lastPage, isLoading];
 }

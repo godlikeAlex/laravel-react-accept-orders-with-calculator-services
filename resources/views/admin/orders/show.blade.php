@@ -10,7 +10,7 @@
                     <div class="col-12">
                         <h4>
                             <i class="fas fa-globe"></i> Easy Way Install NYC Inc
-                            <small class="float-right">Date: {{date('D M Y', strtotime($order->createdAt))}} ({{date('d-m-Y', strtotime($order->createdAt))}})</small>
+                            <small class="float-right">Date: {{date('D M Y', strtotime($order->date))}} ({{date('d-m-Y', strtotime($order->date))}})</small>
                         </h4>
                     </div>
                     <!-- /.col -->

@@ -18,7 +18,13 @@ function Saved() {
     useEffect(() => {
         axios.get('/api/wish/list', { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data }) => {
             setSavedForLetter(data.wishlist);
-            console.log(JSON.parse(data.wishlist[0].details))
+            const convertedData = data.wishlist.map((item) => {
+                return {
+                    ...item,
+                    details: JSON.parse(item.details)
+                }
+            });
+            setSavedForLetter(convertedData);
             setIsLoading(false);
         })
     }, []);
@@ -32,7 +38,7 @@ function Saved() {
     }
 
     const addToCart = wish => {
-        dispatch(initCart(JSON.parse(wish.details)));
+        dispatch(initCart(wish.details));
         history.push('/cart');
     }
 
@@ -53,7 +59,7 @@ function Saved() {
                                             <h3 class="entry-title"> {wish.name} </h3>
                                         </header>
                                         <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-                                            {JSON.parse(wish.details).services.map((service) => (
+                                            {wish.details.services.map((service) => (
                                                 <li style={{ borderTop: '1px solid #e8e8e8', padding: '10px 15px' }}>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                         <h5 style={{ fontWeight: 'normal', margin: 0 }}>{service.currentService.label}</h5>
@@ -65,7 +71,38 @@ function Saved() {
                                                 </li>
                                             ))}
                                         </ul>
+                                        <div className="row" style={{ flexDirection: 'column' }}>
+                                            <hr />
+                                            {wish.details.prices.installation > 0 && (
+                                                <div className="col-md-12">
+                                                    <h6 style={{ color: 'black' }}>Instalation price: <strong>${wish.details.prices.installation.toLocaleString()}</strong></h6>
+                                                </div>
+                                            )}
+
+                                            {wish.details.prices.removal > 0 && (
+                                                <div className="col-md-12">
+                                                    <h6 style={{ color: 'black' }}>Removal price: <strong>$ {wish.details.prices.removal.toLocaleString()}</strong></h6>
+                                                </div>
+                                            )}
+
+                                            {wish.details.prices.survey > 0 && (
+                                                <div className="col-md-12">
+                                                    <h6 style={{ color: 'black' }}>Site survey: <strong>$ {wish.details.prices.survey.toLocaleString()}</strong></h6>
+                                                </div>
+                                            )}
+
+                                            {wish.details.prices.urgencyInstsllstion > 0 && (
+                                                <div className="col-md-12">
+                                                    <h6 style={{ color: 'black' }}>Urgency installation: <strong>$ {wish.details.prices.urgencyInstsllstion.toLocaleString()}</strong></h6>
+                                                </div>
+                                            )}
+
+                                            <div className="col-md-12">
+                                                <h6>Subtotal: ${wish.details.total}</h6>
+                                            </div>
+                                        </div>
                                         <div className="row">
+
                                             <div className="col-sm-6">
                                                 <a className="theme_button bg_button color1 min_width_button" onClick={() => { addToCart(wish) }} style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Add to cart</a>
                                             </div>
@@ -81,7 +118,7 @@ function Saved() {
                     </div>
                 ))}
             </div>
-        </div>
+        </div >
     )
 
     const loadingContainer = () => (

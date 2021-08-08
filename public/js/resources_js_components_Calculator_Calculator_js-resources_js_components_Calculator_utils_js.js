@@ -2101,11 +2101,17 @@ function Calculator(_ref) {
     validationSchema: ServiceCalculatorSchema,
     initialValues: {
       currentTab: 0,
-      totalServices: (data === null || data === void 0 ? void 0 : data.totalServices) || MIN_PRICE,
       total: (data === null || data === void 0 ? void 0 : data.total) || MIN_PRICE,
+      totalServices: (data === null || data === void 0 ? void 0 : data.totalServices) || MIN_PRICE,
       services: (data === null || data === void 0 ? void 0 : data.services) || [TEMPLATE_CALCULATOR],
+      prices: (data === null || data === void 0 ? void 0 : data.prices) || {
+        installation: MIN_PRICE,
+        removal: 0,
+        survey: 0,
+        urgencyInstsllstion: 0
+      },
       removal: false,
-      installation: false
+      installation: true
     }
   }),
       values = _useFormik.values,
@@ -2115,25 +2121,49 @@ function Calculator(_ref) {
       setValues = _useFormik.setValues;
 
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    onUpdate({
+      services: values.services,
+      totalServices: values.totalServices,
+      prices: values.prices,
+      total: values.total
+    });
+  }, [values]);
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     var removal = values.removal,
         total = values.total,
-        totalServices = values.totalServices;
-
-    if (removal) {
-      setFieldValue('total', (0,_utils_js__WEBPACK_IMPORTED_MODULE_4__.countTotal)(total + total * 0.5));
-    } else {
-      setFieldValue('total', totalServices);
-    }
-  }, [values.removal]);
+        prices = values.prices,
+        totalServices = values.totalServices,
+        installation = values.installation;
+    var removalPrice = totalServices * 0.5;
+    setValues(_objectSpread(_objectSpread({}, values), {}, {
+      prices: _objectSpread(_objectSpread({}, prices), {}, {
+        removal: removal ? removalPrice : 0,
+        installation: installation ? totalServices : 0
+      })
+    }));
+  }, [values.removal, values.installation]);
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    var prices = values.prices;
+    var total = Object.keys(prices).reduce(function (total, item) {
+      return total + prices[item];
+    }, 0);
+    setFieldValue('total', total < MIN_PRICE ? MIN_PRICE : total.toFixed(2));
+  }, [values.prices]);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
     if (resetAllFields) {
       setValues({
         currentTab: 0,
-        totalServices: MIN_PRICE,
         total: MIN_PRICE,
         removal: false,
         installation: false,
-        services: [TEMPLATE_CALCULATOR]
+        services: [TEMPLATE_CALCULATOR],
+        totalServices: MIN_PRICE,
+        prices: {
+          installation: MIN_PRICE,
+          removal: 0,
+          survey: 0,
+          urgencyInstsllstion: 0
+        }
       });
     }
   }, [resetAllFields]);
@@ -2156,13 +2186,12 @@ function Calculator(_ref) {
       return total + currentPrice;
     }, 0);
     var total = (0,_utils_js__WEBPACK_IMPORTED_MODULE_4__.countTotal)(totalCalculated);
-    onUpdate({
-      services: values.services,
-      total: total
-    });
     setValues(_objectSpread(_objectSpread({}, values), {}, {
       totalServices: total,
-      total: values.removal ? total + total * 0.5 : total
+      prices: _objectSpread(_objectSpread({}, values.prices), {}, {
+        installation: total,
+        removal: values.removal ? total * 0.5 : 0
+      })
     }));
   }, [values.services]);
 
@@ -2618,7 +2647,7 @@ function CalculatorScreen(_ref3) {
         children: ["Total Per SqFt - $", service.totalPerSqFt || 0]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h6", {
         className: "col-md-12",
-        children: ["Price for current service - $", service.price]
+        children: ["Price for current service - $", service.price.toFixed(2)]
       })]
     })]
   });

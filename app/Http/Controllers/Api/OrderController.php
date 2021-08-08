@@ -10,8 +10,15 @@ class OrderController extends Controller
     public function orders(Request $request)
     {
         $user = $request->user();
+        $status = $request->query('status');
 
-        return response($user->orders()->latest()->paginate(5));
+        if ($status) {
+            $orders = $user->orders()->orderBy("date", "DESC")->where('status', $status)->paginate(10);
+        } else {
+            $orders = $user->orders()->orderBy("date", "DESC")->where('status', '!=', 'completed')->paginate(10);
+        }
+
+        return response($orders);
     }
 
     public function show(Request $request, $id)

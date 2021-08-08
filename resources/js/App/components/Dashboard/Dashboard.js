@@ -11,15 +11,16 @@ import LoadingSpinner from '../Auth/LoadingSpinner';
 import EmptyDashboard from './EmptyDashboard';
 
 const Dashboard = () => {
+    const [ordersOrder, setOrdersOrder] = useState('all');
     const [page, setPage] = useState(1);
-    const [orders, lastPage, isLoading] = useOrders(page);
+    const [orders, lastPage, isLoading] = useOrders(page, ordersOrder);
     const tableOrders = orders?.map((order) => {
         return {
             id: order.id,
             uuid: order.uuid,
             status: order.status,
             amount: order.amount,
-            date: format(Date.parse(order.created_at), 'd MMM Y'),
+            date: format(Date.parse(order.date), 'd MMM Y'),
             actions: order.id
         }
     });
@@ -47,7 +48,7 @@ const Dashboard = () => {
                 accessor: 'amount',
             },
             {
-                Header: 'CREATED ORDER DATE',
+                Header: 'SCHEDULE DATE',
                 accessor: 'date',
             },
             {
@@ -86,6 +87,16 @@ const Dashboard = () => {
             <HeadSection title={'Dashboard'} image={4} />
             <div className="container">
                 <div className="row">
+                    {!isLoading && (
+                        <div className="flex justify-between bg-red-100 p-4 col-md-12">
+                            <button onClick={() => setOrdersOrder('all')}>
+                                All orders
+                            </button>{' '}
+                            <button onClick={() => setOrdersOrder('completed')}>
+                                Completed orders
+                            </button>{' '}
+                        </div>
+                    )}
                     {isLoading ? loadingContainer() : content()}
                 </div>
             </div>

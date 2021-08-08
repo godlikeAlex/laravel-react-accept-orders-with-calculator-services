@@ -2,6 +2,7 @@
 function calculateServicePrice($data)
 {
     $encodedData = json_decode($data);
+    $totalServices = 0;
     $total = 0;
 
     foreach ($encodedData->services as $service) {
@@ -25,11 +26,34 @@ function calculateServicePrice($data)
         } else {
             $service->price = $calculatedPrice <= 250 ? 250 : $calculatedPrice;
         }
-        $total = $total + $service->price;
+        $totalServices = $totalServices + $service->price;
     }
 
+    if ($encodedData->acceptedServices->installation) {
+        $encodedData->prices->installation = $totalServices;
+    }
+
+    if ($encodedData->acceptedServices->removal) {
+        $encodedData->prices->removal = $totalServices * 0.5;
+    }
+
+    if ($encodedData->acceptedServices->survey) {
+        $encodedData->prices->survey = 250;
+    }
+
+    if ($encodedData->acceptedServices->urgencyInstsllstion) {
+        $encodedData->prices->urgencyInstsllstion = $totalServices * 0.2;
+    }
+
+    foreach ($encodedData->prices as $key => $value) {
+        $total += $value;
+    }
+
+    $encodedData->totalServices_php = $totalServices;
+    $encodedData->totalServices = $totalServices;
+
     $encodedData->total_php = $total;
-    $encodedData->total = $total;
+    $encodedData->total = round($total, 2);
 
     return $encodedData;
 }

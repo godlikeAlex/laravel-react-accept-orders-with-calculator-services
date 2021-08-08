@@ -54,34 +54,68 @@ function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, render
         validationSchema: ServiceCalculatorSchema,
         initialValues: {
             currentTab: 0,
-            totalServices: data?.totalServices || MIN_PRICE,
             total: data?.total || MIN_PRICE,
+            totalServices: data?.totalServices || MIN_PRICE,
             services: data?.services || [TEMPLATE_CALCULATOR],
+            prices: data?.prices || {
+                installation: MIN_PRICE,
+                removal: 0,
+                survey: 0,
+                urgencyInstsllstion: 0,
+            },
             removal: false,
-            installation: false,
+            installation: true,
         },
     });
 
     React.useEffect(() => {
-        const { removal, total, totalServices } = values;
+        onUpdate({
+            services: values.services,
+            totalServices: values.totalServices,
+            prices: values.prices,
+            total: values.total
+        });
+    }, [values]);
 
-        if (removal) {
-            setFieldValue('total', countTotal(total + (total * 0.5)));
-        } else {
-            setFieldValue('total', totalServices)
-        }
+    React.useEffect(() => {
+        const { removal, total, prices, totalServices, installation } = values;
 
-    }, [values.removal]);
+        const removalPrice = totalServices * 0.5;
+        setValues({
+            ...values,
+            prices: {
+                ...prices,
+                removal: removal ? removalPrice : 0,
+                installation: installation ? totalServices : 0
+            }
+        })
+
+    }, [values.removal, values.installation]);
+
+    React.useEffect(() => {
+        const { prices } = values;
+        const total = Object.keys(prices).reduce((total, item) => {
+            return total + prices[item];
+        }, 0);
+
+        setFieldValue('total', total < MIN_PRICE ? MIN_PRICE : total.toFixed(2));
+    }, [values.prices]);
 
     React.useEffect(() => {
         if (resetAllFields) {
             setValues({
                 currentTab: 0,
-                totalServices: MIN_PRICE,
                 total: MIN_PRICE,
                 removal: false,
                 installation: false,
-                services: [TEMPLATE_CALCULATOR]
+                services: [TEMPLATE_CALCULATOR],
+                totalServices: MIN_PRICE,
+                prices: {
+                    installation: MIN_PRICE,
+                    removal: 0,
+                    survey: 0,
+                    urgencyInstsllstion: 0,
+                },
             })
         }
     }, [resetAllFields]);
@@ -102,14 +136,17 @@ function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, render
             const { total: currentPrice } = calculatePrice(service);
             return total + currentPrice;
         }, 0);
-        const total = countTotal(totalCalculated);
 
-        onUpdate({ services: values.services, total });
+        const total = countTotal(totalCalculated);
 
         setValues({
             ...values,
             totalServices: total,
-            total: values.removal ? total + (total * 0.5) : total
+            prices: {
+                ...values.prices,
+                installation: total,
+                removal: values.removal ? total * 0.5 : 0
+            }
         });
     }, [values.services]);
 

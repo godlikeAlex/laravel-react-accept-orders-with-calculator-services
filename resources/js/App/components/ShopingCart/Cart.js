@@ -3,13 +3,13 @@ import { MIN_PRICE } from '../../../components/Calculator/Calculator';
 import { calculatePrice } from '../../../components/Calculator/utils';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeFromCart, setTotalTo, updateQuantity } from '../../redux/cartSlice';
+import { removeFromCart, setServiceTotalTo, setTotalTo, updatePrices, updateQuantity } from '../../redux/cartSlice';
 import HeadSection from '../HeadSection';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import axios from 'axios';
 
 const Cart = () => {
-    const { services, total } = useSelector(state => state.cart);
+    const { services, total, prices } = useSelector(state => state.cart);
     const { isAuth, user } = useSelector(state => state.auth);
     const [success, setSuceess] = useState(false);
     const [showSavedModal, setShowSavedModal] = useState(false);
@@ -18,17 +18,29 @@ const Cart = () => {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
+
+    }, [])
+
+    useEffect(() => {
         const total = services.reduce((acum, service) => {
             const servicePrice = calculatePrice(service);
             return acum + servicePrice.total;
         }, 0);
 
-        dispatch(setTotalTo(total));
+        dispatch(setServiceTotalTo(total));
     }, [services]);
+
+    useEffect(() => {
+        const total = Object.keys(prices).reduce((total, item) => {
+            return total + prices[item];
+        }, 0);
+
+        dispatch(setTotalTo(total));
+    }, [prices]);
 
     const addToSaved = () => {
         setShowSavedModal(false);
-        axios.post(`/api/wish/store`, { details: { services, total }, name: nameOfSaved }, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data }) => {
+        axios.post(`/api/wish/store`, { details: { services, total, prices }, name: nameOfSaved }, { headers: { 'Authorization': `Bearer ${token}` } }).then(({ data }) => {
             if (data.ok) {
                 setSuceess(true);
             }
@@ -172,13 +184,81 @@ const Cart = () => {
 
                             <div className="col-sm-4">
                                 <div className="card-check-out center" style={{ border: '1px solid #e8e8e8', padding: '20px' }}>
-                                    <p style={{ color: 'black' }}>Sub total ({services.length} items): <strong>$ {total.toLocaleString()}</strong></p>
+                                    {prices.installation > 0 && (
+                                        <p style={{ color: 'black' }}>Instalation price: <strong>${prices.installation.toLocaleString()}</strong></p>
+                                    )}
+
+                                    {prices.removal > 0 && (
+                                        <p style={{ color: 'black' }}>Removal price: <strong>$ {prices.removal.toLocaleString()}</strong></p>
+                                    )}
+
+                                    {prices.survey > 0 && (
+                                        <p style={{ color: 'black' }}>Site survey: <strong>$ {prices.survey.toLocaleString()}</strong></p>
+                                    )}
+
+                                    {prices.urgencyInstsllstion > 0 && (
+                                        <p style={{ color: 'black' }}>Urgency installation: <strong>$ {prices.urgencyInstsllstion.toLocaleString()}</strong></p>
+                                    )}
+
+                                    <p style={{ color: 'black' }}>Subtotal ({services.length} items): <strong>$ {total.toLocaleString()}</strong></p>
 
                                     {user && (
                                         <a className="theme_button bg_button color1 min_width_button" to="/cart/check-out" onClick={() => setShowSavedModal(true)} style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Saved for later</a>
                                     )}
                                     <Link className="theme_button bg_button color1 min_width_button" to="/cart/check-out" style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Order now</Link>
                                 </div>
+
+
+                                <div className="card-check-out center" style={{ marginTop: 25, border: '1px solid #e8e8e8', padding: '20px', }}>
+                                    <div className="form-group">
+                                        <h4>Additional services</h4>
+                                    </div>
+                                    <div
+                                        className="form-group"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onClick={() => dispatch(updatePrices({ type: 'installation' }))}
+                                            checked={prices.installation > 0}
+                                        />
+                                        <label style={{ marginLeft: 15 }} onClick={() => dispatch(updatePrices({ type: 'installation' }))}>Installation</label>
+                                    </div>
+
+                                    <div
+                                        className="form-group"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onClick={() => dispatch(updatePrices({ type: 'removal' }))}
+                                            checked={prices.removal > 0}
+                                        />
+                                        <label style={{ marginLeft: 15 }} onClick={() => dispatch(updatePrices({ type: 'removal' }))}>Removal</label>
+                                    </div>
+
+                                    <div
+                                        className="form-group"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onClick={() => dispatch(updatePrices({ type: 'survey' }))}
+                                            checked={prices.survey > 0}
+                                        />
+                                        <label style={{ marginLeft: 15 }} onClick={() => dispatch(updatePrices({ type: 'survey' }))}>Survey</label>
+                                    </div>
+
+                                    <div
+                                        className="form-group"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onClick={() => dispatch(updatePrices({ type: 'urgencyInstsllstion' }))}
+                                            checked={prices.urgencyInstsllstion > 0}
+                                        />
+                                        <label style={{ marginLeft: 15 }} onClick={() => dispatch(updatePrices({ type: 'urgencyInstsllstion' }))}>Urgency Instsllstion ⚡</label>
+                                    </div>
+
+                                </div>
+
                             </div>
                         </div>
                     </div>

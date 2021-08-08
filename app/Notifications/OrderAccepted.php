@@ -6,23 +6,23 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\HtmlString;
 
-use function PHPUnit\Framework\isNull;
-
-class OrderStatusUpdated extends Notification implements ShouldQueue
+class OrderAccepted extends Notification implements ShouldQueue
 {
     use Queueable;
 
     private $order;
+    private $user;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($order)
+    public function __construct($order, $user)
     {
         $this->order = $order;
+        $this->user = $user;
     }
 
     /**
@@ -44,22 +44,8 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $mail = (new MailMessage)
-            ->greeting(new HtmlString('<h1 style="font-size: 30px;">Order update</h1>'))
-            ->line("Dear **{$this->order->user->name}**,")
-            ->line("Order id: **{$this->order->id}**")
-            ->line(new HtmlString("Order status: <span style='color: #ec0798;text-transform: capitalize'>**{$this->order->status}**</span>"))
-            ->line("The status of your order has been updated, as shown above.")
-            ->line("You can check on the status of your order at any time, by goig **My orders** in your account.")
-            ->line('### Thank you for using services!');
-
-        if ($this->order->status == 'completed') {
-            $mail->attach(public_path('uploads/' . $this->order->image), [
-                'as' => $this->order->image,
-            ]);
-        }
-
-        return $mail;
+        return (new MailMessage)
+            ->view('emails.orderAccepted', ['order' => $this->order, 'user' => $this->user]);
     }
 
     /**

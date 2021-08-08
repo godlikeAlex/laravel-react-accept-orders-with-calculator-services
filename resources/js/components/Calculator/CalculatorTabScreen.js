@@ -210,7 +210,7 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
 
                 <h6 className="col-md-12">Total Per Item - ${service.totalPerItem || 0}</h6>
                 <h6 className="col-md-12">Total Per SqFt - ${service.totalPerSqFt || 0}</h6>
-                <h6 className="col-md-12">Price for current service - ${service.price}</h6>
+                <h6 className="col-md-12">Price for current service - ${service.price.toFixed(2)}</h6>
             </div>
         </React.Fragment>
     )

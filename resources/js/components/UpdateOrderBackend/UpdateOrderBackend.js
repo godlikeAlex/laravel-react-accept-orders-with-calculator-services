@@ -11,13 +11,13 @@ import { customStyles } from '../Calculator/CalculatorTabScreen';
 import { format } from 'date-fns';
 const Calculator = loadable(() => import('../Calculator/Calculator'))
 
-const orderStatusList = [
+export const orderStatusList = [
     { value: 'pending', label: 'Pending' },
     { value: 'paid', label: 'Paid' },
     { value: 'cancled', label: 'Cancled' },
-    { value: 'are going', label: 'Are going' },
-    { value: 'on process', label: 'On process' },
-    { value: 'finished', label: 'Finished' },
+    { value: 'last step to complete', label: 'Last step to complete' },
+    { value: 'in process', label: 'In process' },
+    { value: 'completed', label: 'Completed' },
 ];
 
 function UpdateOrderBackend({ order }) {
@@ -103,7 +103,7 @@ function UpdateOrderBackend({ order }) {
                                 </div>
                             </div>
                         </div>
-                        {values.status.value === 'finished' && (
+                        {values.status.value === 'completed' && (
                             <div className="col-md-12">
                                 <div class="form-group">
                                     <label >Result photo</label>
@@ -128,8 +128,13 @@ function UpdateOrderBackend({ order }) {
                         />
                     </div>
 
+                    <h3 style={{ marginBottom: '25' }} className={"col-md-12"}>
+                        Sub total: {values.calculatedData?.total} $
+                    </h3>
+
                 </div>
             </form>
+
             <div className="card-footer">
                 <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Update an order</button>
             </div>

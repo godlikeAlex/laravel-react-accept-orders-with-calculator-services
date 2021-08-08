@@ -4969,8 +4969,6 @@ function App() {
 
         if (_typeof(cart) === 'object' && cart !== null) {
           if (cart.hasOwnProperty('services') && cart.hasOwnProperty('total')) {
-            console.log(cart);
-            console.log(shopingCartFromStorage);
             dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_3__.initCart)(cart));
           }
         }
@@ -5795,12 +5793,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Dashboard = function Dashboard() {
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('all'),
       _useState2 = _slicedToArray(_useState, 2),
-      page = _useState2[0],
-      setPage = _useState2[1];
+      ordersOrder = _useState2[0],
+      setOrdersOrder = _useState2[1];
 
-  var _useOrders = (0,_useOrders__WEBPACK_IMPORTED_MODULE_5__.default)(page),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(1),
+      _useState4 = _slicedToArray(_useState3, 2),
+      page = _useState4[0],
+      setPage = _useState4[1];
+
+  var _useOrders = (0,_useOrders__WEBPACK_IMPORTED_MODULE_5__.default)(page, ordersOrder),
       _useOrders2 = _slicedToArray(_useOrders, 3),
       orders = _useOrders2[0],
       lastPage = _useOrders2[1],
@@ -5812,7 +5815,7 @@ var Dashboard = function Dashboard() {
       uuid: order.uuid,
       status: order.status,
       amount: order.amount,
-      date: (0,date_fns__WEBPACK_IMPORTED_MODULE_10__.default)(Date.parse(order.created_at), 'd MMM Y'),
+      date: (0,date_fns__WEBPACK_IMPORTED_MODULE_10__.default)(Date.parse(order.date), 'd MMM Y'),
       actions: order.id
     };
   });
@@ -5837,7 +5840,7 @@ var Dashboard = function Dashboard() {
       Header: 'AMOUNT',
       accessor: 'amount'
     }, {
-      Header: 'CREATED ORDER DATE',
+      Header: 'SCHEDULE DATE',
       accessor: 'date'
     }, {
       width: 300,
@@ -5899,9 +5902,22 @@ var Dashboard = function Dashboard() {
       image: 4
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
       className: "container",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "row",
-        children: isLoading ? loadingContainer() : content()
+        children: [!isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+          className: "flex justify-between bg-red-100 p-4 col-md-12",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
+            onClick: function onClick() {
+              return setOrdersOrder('all');
+            },
+            children: "All orders"
+          }), ' ', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
+            onClick: function onClick() {
+              return setOrdersOrder('completed');
+            },
+            children: "Completed orders"
+          }), ' ']
+        }), isLoading ? loadingContainer() : content()]
       })
     })]
   });
@@ -6372,6 +6388,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _redux_cartSlice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../redux/cartSlice */ "./resources/js/App/redux/cartSlice.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -6424,7 +6446,12 @@ function Saved() {
     }).then(function (_ref) {
       var data = _ref.data;
       setSavedForLetter(data.wishlist);
-      console.log(JSON.parse(data.wishlist[0].details));
+      var convertedData = data.wishlist.map(function (item) {
+        return _objectSpread(_objectSpread({}, item), {}, {
+          details: JSON.parse(item.details)
+        });
+      });
+      setSavedForLetter(convertedData);
       setIsLoading(false);
     });
   }, []);
@@ -6446,7 +6473,7 @@ function Saved() {
   };
 
   var addToCart = function addToCart(wish) {
-    dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_6__.initCart)(JSON.parse(wish.details)));
+    dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_6__.initCart)(wish.details));
     history.push('/cart');
   };
 
@@ -6495,7 +6522,7 @@ function Saved() {
                         listStyle: 'none',
                         paddingLeft: 0
                       },
-                      children: JSON.parse(wish.details).services.map(function (service) {
+                      children: wish.details.services.map(function (service) {
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("li", {
                           style: {
                             borderTop: '1px solid #e8e8e8',
@@ -6537,6 +6564,57 @@ function Saved() {
                           })]
                         });
                       })
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                      className: "row",
+                      style: {
+                        flexDirection: 'column'
+                      },
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), wish.details.prices.installation > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                        className: "col-md-12",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("h6", {
+                          style: {
+                            color: 'black'
+                          },
+                          children: ["Instalation price: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("strong", {
+                            children: ["$", wish.details.prices.installation.toLocaleString()]
+                          })]
+                        })
+                      }), wish.details.prices.removal > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                        className: "col-md-12",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("h6", {
+                          style: {
+                            color: 'black'
+                          },
+                          children: ["Removal price: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("strong", {
+                            children: ["$ ", wish.details.prices.removal.toLocaleString()]
+                          })]
+                        })
+                      }), wish.details.prices.survey > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                        className: "col-md-12",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("h6", {
+                          style: {
+                            color: 'black'
+                          },
+                          children: ["Site survey: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("strong", {
+                            children: ["$ ", wish.details.prices.survey.toLocaleString()]
+                          })]
+                        })
+                      }), wish.details.prices.urgencyInstsllstion > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                        className: "col-md-12",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("h6", {
+                          style: {
+                            color: 'black'
+                          },
+                          children: ["Urgency installation: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("strong", {
+                            children: ["$ ", wish.details.prices.urgencyInstsllstion.toLocaleString()]
+                          })]
+                        })
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                        className: "col-md-12",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("h6", {
+                          children: ["Subtotal: $", wish.details.total]
+                        })
+                      })]
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
                       className: "row",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
@@ -7861,7 +7939,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-function useOrders(page) {
+function useOrders(page, status) {
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_3__.useSelector)(function (state) {
     return state.auth;
   }),
@@ -7883,7 +7961,8 @@ function useOrders(page) {
       setLastPage = _useState6[1];
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    // const toketn = localStorage.getItem('token');
+    setIsLoading(true);
+
     function fetchOrders() {
       return _fetchOrders.apply(this, arguments);
     }
@@ -7899,7 +7978,7 @@ function useOrders(page) {
                 _context.next = 2;
                 return axios__WEBPACK_IMPORTED_MODULE_2___default()({
                   method: 'GET',
-                  url: "/api/user/orders?page=".concat(page),
+                  url: "/api/user/orders?page=".concat(page, "&status=").concat(status === 'all' ? '' : status),
                   headers: {
                     "Authorization": "Bearer ".concat(token)
                   }
@@ -7923,7 +8002,7 @@ function useOrders(page) {
     }
 
     fetchOrders();
-  }, [page]);
+  }, [page, status]);
   return [orders, lastPage, isLoading];
 }
 
@@ -8567,7 +8646,8 @@ var Cart = function Cart() {
     return state.cart;
   }),
       services = _useSelector.services,
-      total = _useSelector.total;
+      total = _useSelector.total,
+      prices = _useSelector.prices;
 
   var _useSelector2 = (0,react_redux__WEBPACK_IMPORTED_MODULE_3__.useSelector)(function (state) {
     return state.auth;
@@ -8592,20 +8672,28 @@ var Cart = function Cart() {
 
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_3__.useDispatch)();
   var token = localStorage.getItem('token');
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {}, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var total = services.reduce(function (acum, service) {
       var servicePrice = (0,_components_Calculator_utils__WEBPACK_IMPORTED_MODULE_2__.calculatePrice)(service);
       return acum + servicePrice.total;
     }, 0);
-    dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.setTotalTo)(total));
+    dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.setServiceTotalTo)(total));
   }, [services]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var total = Object.keys(prices).reduce(function (total, item) {
+      return total + prices[item];
+    }, 0);
+    dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.setTotalTo)(total));
+  }, [prices]);
 
   var addToSaved = function addToSaved() {
     setShowSavedModal(false);
     axios__WEBPACK_IMPORTED_MODULE_7___default().post("/api/wish/store", {
       details: {
         services: services,
-        total: total
+        total: total,
+        prices: prices
       },
       name: nameOfSaved
     }, {
@@ -8869,19 +8957,47 @@ var Cart = function Cart() {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(TableCart, {
               items: services
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
             className: "col-sm-4",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
               className: "card-check-out center",
               style: {
                 border: '1px solid #e8e8e8',
                 padding: '20px'
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+              children: [prices.installation > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
                 style: {
                   color: 'black'
                 },
-                children: ["Sub total (", services.length, " items): ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("strong", {
+                children: ["Instalation price: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("strong", {
+                  children: ["$", prices.installation.toLocaleString()]
+                })]
+              }), prices.removal > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+                style: {
+                  color: 'black'
+                },
+                children: ["Removal price: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("strong", {
+                  children: ["$ ", prices.removal.toLocaleString()]
+                })]
+              }), prices.survey > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+                style: {
+                  color: 'black'
+                },
+                children: ["Site survey: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("strong", {
+                  children: ["$ ", prices.survey.toLocaleString()]
+                })]
+              }), prices.urgencyInstsllstion > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+                style: {
+                  color: 'black'
+                },
+                children: ["Urgency installation: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("strong", {
+                  children: ["$ ", prices.urgencyInstsllstion.toLocaleString()]
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("p", {
+                style: {
+                  color: 'black'
+                },
+                children: ["Subtotal (", services.length, " items): ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("strong", {
                   children: ["$ ", total.toLocaleString()]
                 })]
               }), user && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
@@ -8906,7 +9022,104 @@ var Cart = function Cart() {
                 },
                 children: "Order now"
               })]
-            })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+              className: "card-check-out center",
+              style: {
+                marginTop: 25,
+                border: '1px solid #e8e8e8',
+                padding: '20px'
+              },
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                className: "form-group",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h4", {
+                  children: "Additional services"
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                  type: "checkbox",
+                  onClick: function onClick() {
+                    return dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.updatePrices)({
+                      type: 'installation'
+                    }));
+                  },
+                  checked: prices.installation > 0
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                  style: {
+                    marginLeft: 15
+                  },
+                  onClick: function onClick() {
+                    return dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.updatePrices)({
+                      type: 'installation'
+                    }));
+                  },
+                  children: "Installation"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                  type: "checkbox",
+                  onClick: function onClick() {
+                    return dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.updatePrices)({
+                      type: 'removal'
+                    }));
+                  },
+                  checked: prices.removal > 0
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                  style: {
+                    marginLeft: 15
+                  },
+                  onClick: function onClick() {
+                    return dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.updatePrices)({
+                      type: 'removal'
+                    }));
+                  },
+                  children: "Removal"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                  type: "checkbox",
+                  onClick: function onClick() {
+                    return dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.updatePrices)({
+                      type: 'survey'
+                    }));
+                  },
+                  checked: prices.survey > 0
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                  style: {
+                    marginLeft: 15
+                  },
+                  onClick: function onClick() {
+                    return dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.updatePrices)({
+                      type: 'survey'
+                    }));
+                  },
+                  children: "Survey"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                  type: "checkbox",
+                  onClick: function onClick() {
+                    return dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.updatePrices)({
+                      type: 'urgencyInstsllstion'
+                    }));
+                  },
+                  checked: prices.urgencyInstsllstion > 0
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                  style: {
+                    marginLeft: 15
+                  },
+                  onClick: function onClick() {
+                    return dispatch((0,_redux_cartSlice__WEBPACK_IMPORTED_MODULE_4__.updatePrices)({
+                      type: 'urgencyInstsllstion'
+                    }));
+                  },
+                  children: "Urgency Instsllstion \u26A1"
+                })]
+              })]
+            })]
           })]
         })
       })
@@ -9015,7 +9228,8 @@ function CheckOut() {
     return state.cart;
   }),
       services = _useSelector.services,
-      total = _useSelector.total;
+      total = _useSelector.total,
+      prices = _useSelector.prices;
 
   var _useSelector2 = (0,react_redux__WEBPACK_IMPORTED_MODULE_5__.useSelector)(function (state) {
     return state.auth;
@@ -9030,8 +9244,6 @@ function CheckOut() {
       _useState4 = _slicedToArray(_useState3, 2),
       isSubmitting = _useState4[0],
       setIsSubmitting = _useState4[1];
-
-  console.log(!isAuth || (currentPaymentMethod === null || currentPaymentMethod === void 0 ? void 0 : currentPaymentMethod.value) === 'new');
 
   var _useFormik = (0,formik__WEBPACK_IMPORTED_MODULE_3__.useFormik)({
     initialValues: {
@@ -9069,7 +9281,14 @@ function CheckOut() {
                               data: _objectSpread(_objectSpread({}, values), {}, {
                                 cart: JSON.stringify({
                                   services: services,
-                                  total: total
+                                  total: total,
+                                  prices: prices,
+                                  acceptedServices: {
+                                    installation: prices.installation > 0,
+                                    removal: prices.removal > 0,
+                                    survey: prices.survey > 0,
+                                    urgencyInstsllstion: prices.urgencyInstsllstion > 0
+                                  }
                                 }),
                                 payment_method_id: paymentMethod
                               }),

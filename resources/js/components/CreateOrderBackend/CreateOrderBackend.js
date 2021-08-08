@@ -9,17 +9,9 @@ import InputMask from 'react-input-mask';
 import { customStyles } from '../Calculator/CalculatorTabScreen';
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
+import { orderStatusList } from '../UpdateOrderBackend/UpdateOrderBackend';
 
 const Calculator = loadable(() => import('../Calculator/Calculator'))
-
-const orderStatusList = [
-    { value: 'pending', label: 'Pending' },
-    { value: 'paid', label: 'Paid' },
-    { value: 'cancled', label: 'Cancled' },
-    { value: 'finished', label: 'Finished' },
-    { value: 'are going', label: 'Are going' },
-    { value: 'on process', label: 'On process' }
-];
 
 function CreateOrderBackend() {
     const [error, setError] = useState(false);
@@ -129,30 +121,9 @@ function CreateOrderBackend() {
                             onUpdate={(calculatedData) => { setFieldValue('calculatedData', calculatedData) }}
                         />
                     </div>
-
-                    <div className="col-12">
-                        <p className="lead">Amount Due 2/22/2014</p>
-                        <div className="table-responsive">
-                            <table className="table">
-                                <tbody><tr>
-                                    <th style={{ width: '50%' }}>Subtotal:</th>
-                                    <td>${values.calculatedData?.total || 0}</td>
-                                </tr>
-                                    <tr>
-                                        <th>Tax (9.3%)</th>
-                                        <td>$10.34</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Shipping:</th>
-                                        <td>$5.80</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Total:</th>
-                                        <td>$265.24</td>
-                                    </tr>
-                                </tbody></table>
-                        </div>
-                    </div>
+                    <h3 style={{ marginBottom: '25' }} className={"col-md-12"}>
+                        Sub total: {values.calculatedData?.total} $
+                    </h3>
                 </div>
             </form>
             <div className="card-footer">

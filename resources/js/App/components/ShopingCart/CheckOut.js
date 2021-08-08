@@ -27,13 +27,11 @@ function CheckOut() {
     const elements = useElements();
     const history = useHistory();
     const [currentPaymentMethod, setCurrentPaymentMethod] = useState();
-    const { services, total } = useSelector(state => state.cart);
+    const { services, total, prices } = useSelector(state => state.cart);
     const { user, isAuth } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const token = localStorage.getItem('token');
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    console.log(!isAuth || currentPaymentMethod?.value === 'new');
 
     const { handleSubmit, handleChange, values, errors, touched, setFieldError, setFieldValue } = useFormik({
         initialValues: {
@@ -56,7 +54,17 @@ function CheckOut() {
                         url: '/api/purchase',
                         data: {
                             ...values,
-                            cart: JSON.stringify({ services, total }),
+                            cart: JSON.stringify({
+                                services,
+                                total,
+                                prices,
+                                acceptedServices: {
+                                    installation: prices.installation > 0,
+                                    removal: prices.removal > 0,
+                                    survey: prices.survey > 0,
+                                    urgencyInstsllstion: prices.urgencyInstsllstion > 0,
+                                },
+                            }),
                             payment_method_id: paymentMethod,
                         },
                         headers: {

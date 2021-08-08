@@ -10,7 +10,7 @@
                         <th>UUID</th>
                         <th>Status</th>
                         <th>Amount</th>
-                        <th>Created Date</th>
+                        <th>Schedule</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -20,7 +20,7 @@
                         <td>{{$order->uuid}}</td>
                         <td style="text-transform:capitalize">{{$order->status}}</td>
                         <td>{{$order->amount}} $</td>
-                        <td>{{date('D M Y', strtotime($order->createdAt))}} ({{date('d-m-Y', strtotime($order->createdAt))}})</td>
+                        <td>{{date('D M Y', strtotime($order->date))}} ({{date('d-m-Y', strtotime($order->date))}})</td>
                         <td>
                             <div class="btn-group">
                                 <a href="{{route('orders.show', $order->id)}}" class="btn btn-info">
@@ -46,7 +46,7 @@
                         <th>UUID</th>
                         <th>Status</th>
                         <th>Amount</th>
-                        <th>Created Date</th>
+                        <th>Schedule</th>
                         <th>Actions</th>
                     </tr>
                 </tfoot>
