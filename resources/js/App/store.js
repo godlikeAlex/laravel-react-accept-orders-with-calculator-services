@@ -13,6 +13,12 @@ store.subscribe(() => {
     const cart = store.getState().cart;
     if (!cart.loading) {
         localStorage.setItem('shoping-cart', JSON.stringify(cart));
+        console.log(cart.total)
+        if (cart.services.length == 0) {
+            localStorage.removeItem('shoping-cart');
+        } else {
+            localStorage.setItem('shoping-cart', JSON.stringify(cart));
+        }
     }
 });
 

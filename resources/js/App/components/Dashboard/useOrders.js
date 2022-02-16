@@ -12,16 +12,20 @@ export default function useOrders(page, status) {
     useEffect(() => {
         setIsLoading(true);
         async function fetchOrders() {
-            const { data } = await axios({
-                method: 'GET',
-                url: `/api/user/orders?page=${page}&status=${status === 'all' ? '' : status}`,
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-            setOrders([...data.data]);
-            setIsLoading(false);
-            setLastPage(data.last_page);
+            try {
+                const { data } = await axios({
+                    method: 'GET',
+                    url: `/api/user/orders?page=${page}&status=${status === 'all' ? '' : status}`,
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                setOrders([...data.data]);
+                setIsLoading(false);
+                setLastPage(data.last_page);
+            } catch (error) {
+                console.log(error);
+            }
         }
 
         fetchOrders();

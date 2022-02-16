@@ -54,10 +54,10 @@
   - template parallax sections
   - footer styles
   - copyrights styles
-  - google map 
+  - google map
   - intro slider inside content
 * Intro Section Styles
-* Main Menu 
+* Main Menu
   - Desktop menu
   - Mobile menu
   - Mobile menu toggler
@@ -89,7 +89,7 @@
   - teasers
   - testimonials
   - thumbnail
-  - price tables 
+  - price tables
   - contact forms
   - partners_carousel
 * Social Icons
@@ -112,12 +112,12 @@ Background color for dark muted section (.ds.ms): #141414
 Border colors for elements in light section (and .with_border elements): #e8e8e8, rgba(34, 34, 34, 0.1)
 Background color for elements in light section (.with_background): #f2f2f2
 
-Dark section (.ds) colors: 
+Dark section (.ds) colors:
 Text color in dark section: #b3b3b3
 Border colors for elements in dark section: rgba(255, 255, 255, 0.2)
 Background color for elements in dark section (.with_background): rgba(0, 0, 0, 0.2)
 
-Color section (.cs) colors: 
+Color section (.cs) colors:
 Border colors for elements in color section: rgba(255, 255, 255, 0.5)
 
 */
@@ -631,28 +631,32 @@ select .with_button,
     box-shadow: none;
 }
 
-.form-control:-moz-placeholder {
+.form-control:-moz-placeholder,
+#exampleFormControlSelect1-selectized:-moz-placeholder {
     color: #b2b2b2;
     font-size: 14px;
     font-weight: 500;
     text-transform: uppercase;
 }
 
-.form-control::-moz-placeholder {
+.form-control::-moz-placeholder,
+#exampleFormControlSelect1-selectized::-moz-placeholder {
     color: #b2b2b2;
     font-size: 14px;
     font-weight: 500;
     text-transform: uppercase;
 }
 
-.form-control:-ms-input-placeholder {
+.form-control:-ms-input-placeholder,
+#exampleFormControlSelect1-selectized:-ms-input-placeholder {
     color: #b2b2b2;
     font-size: 14px;
     font-weight: 500;
     text-transform: uppercase;
 }
 
-.form-control::-webkit-input-placeholder {
+.form-control::-webkit-input-placeholder,
+#exampleFormControlSelect1-selectized::-webkit-input-placeholder {
     color: #b2b2b2;
     font-size: 14px;
     font-weight: 500;
@@ -660,32 +664,40 @@ select .with_button,
 }
 
 @media (min-width: 400px) {
-    .form-control:-moz-placeholder {
+
+    .form-control:-moz-placeholder,
+    #exampleFormControlSelect1-selectized:-moz-placeholder {
         letter-spacing: 0.2em;
     }
 
-    .form-control::-moz-placeholder {
+    .form-control::-moz-placeholder,
+    #exampleFormControlSelect1-selectized::-moz-placeholder {
         letter-spacing: 0.2em;
     }
 
-    .form-control:-ms-input-placeholder {
+    .form-control:-ms-input-placeholder,
+    #exampleFormControlSelect1-selectized:-ms-input-placeholder {
         letter-spacing: 0.2em;
     }
 
-    .form-control::-webkit-input-placeholder {
+    .form-control::-webkit-input-placeholder,
+    #exampleFormControlSelect1-selectized::-webkit-input-placeholder {
         letter-spacing: 0.2em;
     }
 }
 
-.form-control:focus:-moz-placeholder {
+.form-control:focus:-moz-placeholder,
+#exampleFormControlSelect1-selectized:focus:-moz-placeholder {
     color: transparent;
 }
 
-.form-control:focus::-moz-placeholder {
+.form-control:focus::-moz-placeholder,
+#exampleFormControlSelect1-selectized:focus::-moz-placeholder {
     color: transparent;
 }
 
-.form-control:focus:-ms-input-placeholder {
+.form-control:focus:-ms-input-placeholder,
+#exampleFormControlSelect1-selectized:focus:-ms-input-placeholder {
     color: transparent;
 }
 
@@ -1309,7 +1321,6 @@ input[type=radio] {
 
 .nav-unstyled li a {
     display: inline-block;
-    padding: 0 12px;
     text-transform: uppercase;
     font-size: 14px;
     font-weight: 500;
@@ -2702,12 +2713,6 @@ input[type="submit"].disabled {
 .theme_buttons a {
     margin-bottom: 10px;
     margin-right: 6px;
-}
-
-.theme_button:last-child,
-.theme_buttons a:last-child {
-    margin-bottom: 0;
-    margin-right: 0;
 }
 
 .theme_buttons a:hover,
@@ -4337,8 +4342,8 @@ div.ppt {
     margin-top: 0;
 }
 
-/* 
-** Time Table 
+/*
+** Time Table
 */
 #timetable span {
     display: block;
@@ -4376,15 +4381,15 @@ div.ppt {
     color: #222222;
 }
 
-/* 
+/*
 ** toTop
 */
 #toTop {
-    bottom: 10px;
-    right: 10px;
+    bottom: 180px;
+    right: 20px;
     display: none;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     overflow: hidden;
     position: fixed;
     text-decoration: none;
@@ -4398,19 +4403,57 @@ div.ppt {
     transition-property: background, color;
 }
 
+.cart-circle {
+    position: fixed;
+    background: #d94a6c;
+    width: 60px;
+    height: 60px;
+    z-index: 9999;
+    bottom: 100px;
+    border-radius: 50%;
+    right: 20px !important;
+    display: none;
+}
+
+.cart-circle-icon {
+    font-size: 40px;
+    color: white;
+}
+
+.cart-cont {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#chatra.chatra--side-bottom:not(.chatra--expanded) {
+    right: 20px !important;
+}
+
 @media (min-width: 768px) {
     #toTop {
-        bottom: 30px;
-        right: 30px;
+        bottom: 120px;
+        right: 60px;
     }
+
+    #chatra.chatra--side-bottom:not(.chatra--expanded) {
+        right: 60px !important;
+    }
+
 }
 
 @media (min-width: 992px) {
     #toTop {
         width: 60px;
         height: 60px;
-        bottom: 60px;
+        bottom: 120px;
         right: 60px;
+    }
+
+
+    #chatra.chatra--side-bottom:not(.chatra--expanded) {
+        right: 60px !important;
     }
 }
 
@@ -4443,11 +4486,13 @@ div.ppt {
 
 #toTop:after {
     content: "\f106";
-    font-size: 16px;
-    line-height: 40px;
+    font-size: 35px;
+    line-height: 60px;
     font-family: FontAwesome;
     text-align: center;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     top: 0;
     right: 0;
@@ -4741,7 +4786,7 @@ div.ppt {
 
 .selectize-input.not-full input {
     font-size: 18px;
-    font-style: italic;
+    min-width: 75px;
 }
 
 .selectize-input {
@@ -6505,7 +6550,7 @@ h3+h2.section_header {
 /* boxed layout */
 #box_wrapper,
 #canvas {
-    overflow: hidden;
+    /* overflow: hidden; */
     position: relative;
 }
 
@@ -13023,7 +13068,7 @@ body.active-side-header.slide-right .page_header_side {
 
 /* copyrights styles */
 .page_copyright {
-    font-size: 16px;
+    font-size: 20px;
     letter-spacing: 0.2em;
 }
 
@@ -13130,7 +13175,7 @@ body.active-side-header.slide-right .page_header_side {
     }
 }
 
-/* 
+/*
 ** Intro Section Styles
 */
 @media (min-width: 992px) {
@@ -13635,8 +13680,9 @@ body.active-side-header.slide-right .page_header_side {
         text-align: left;
         list-style: none;
         padding: 20px 0;
-        background-color: #ED0598;
+        background-color: #3F3F3FE6;
         min-width: 10em;
+        margin-top: 2px !important;
         /* allow long menu items to determine submenu width */
     }
 
@@ -17622,8 +17668,8 @@ ul .size_normal {
     padding: 0 15px;
 }
 
-/* 
-** Testimonials 
+/*
+** Testimonials
 */
 @media (max-width: 600px) {
     .blockquote-big {
@@ -19926,8 +19972,10 @@ a.dark-icon {
 
 .social-icon.light-bg-icon {
     background-color: #e8e8e8;
+    border-radius: 20px !important;
     border: 2px solid #e8e8e8;
     padding: 10px;
+    width: 100px;
 }
 
 .social-icon.light-bg-icon:hover {
@@ -20660,9 +20708,10 @@ html {
 
 
 #products .teaser {
-    min-height: 326px;
+    min-height: 360px;
     display: flex;
     justify-content: center;
+    padding: 35px !important;
 }
 
 
@@ -20728,7 +20777,7 @@ html {
 }
 
 .alt-section {
-    background-color: #f7f7f7;
+    background-color: #fcfcfc;
 }
 
 .btn-calc {
@@ -20802,7 +20851,7 @@ html {
 .mobile-call-to-action__item {
     display: flex;
     color: #fff;
-    width: 50%;
+    width: 100%;
     justify-content: center;
     align-items: center;
 }
@@ -20824,7 +20873,57 @@ html {
     display: none;
 }
 
+.get-in-touch {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
 @media only screen and (max-width: 480px) {
+
+    .get-in-touch {}
+
+    .get-in-touch a {
+        width: 100%;
+        padding-left: 0 !important;
+        margin-bottom: 25px;
+    }
+
+    .get-in-touch img {
+        width: 40px !important;
+    }
+
+    .page_footer_social a {
+        width: 40px !important;
+        height: 40px;
+    }
+
+
+    .cart-circle {
+        display: block;
+    }
+
+    .tab-pane {
+        display: block !important;
+    }
+
+    .only-mobile {
+        display: none !important;
+    }
+
+    .success span {
+        font-size: 50px;
+    }
+
+    .success h1 {
+        font-size: 18px;
+    }
+
+    .btn-calc {
+        margin-right: 0px;
+    }
 
     .page_breadcrumbs {
         background: #ED0598 !important;
@@ -20890,18 +20989,23 @@ html {
     border: 2px solid #ED0598;
 }
 
+.before-tabs .active a {
+    padding: 0 !important;
+}
+
 .before-tabs li {
     border: 2px solid transparent;
     padding: 5px !important;
 }
 
 .before-tabs img {
-    width: 150px
+    width: 80px
 }
 
 .before-tabs {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .react-datepicker-wrapper,
@@ -20909,4 +21013,85 @@ html {
 .react-datepicker__input-container input {
     display: block;
     width: 100%;
+}
+
+.cart-indicator {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #ec0597;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.selectize-dropdown {
+    height: unset !important;
+    padding: 0 !important;
+}
+
+.selectize-dropdown-content .option {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.selectize-dropdown .active {
+    background-color: #ec0597;
+    color: white;
+}
+
+.header-social a {
+    background-color: unset !important;
+    width: 40px !important;
+    height: 40px;
+}
+
+.swal2-styled.swal2-confirm {
+    background-color: #ed0598 !important;
+}
+
+.swal2-styled.swal2-confirm:focus {
+    box-shadow: 0 0 0 3px rgb(220 32 151 / 32%) !important;
+}
+
+.with-input-changer ion-icon {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 30px;
+    cursor: pointer;
+}
+
+a.color-icon.socicon-telegram {
+    color: #00a1ff;
+}
+
+
+
+
+@media (max-width: 768px) {
+    .partners {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hide-on-mobile {
+        display: none;
+    }
+
+    #toTop {
+        display: none !important;
+    }
+
+}
+
+.cs .highlight9 {
+    color: white;
+}
+
+.cart-container-menu {
+    display: flex;
+    width: fit-content;
 }

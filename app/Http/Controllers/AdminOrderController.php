@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Installer;
 use App\Models\Order;
 use App\Models\User;
+use App\Notifications\OrderAccepted;
 use App\Notifications\OrderStatusUpdated;
+use App\Notifications\PleaseRateUs;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Str;
@@ -28,14 +31,25 @@ class AdminOrderController extends Controller
 
         $q = $request->input('uuid');
         if ($q) {
-            $orders = Order::where('uuid', 'like', '%' . $q . '%')->paginate(50);
+            $orders = Order::where('uuid', 'like', '%' . $q . '%')->orderBy("date", "DESC")->paginate(50);
         } else {
             if (request()->query('status')) {
-                $orders = Order::where('status', request()->query('status'))->latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
+                $orders = Order::where('status', request()->query('status'))->orderBy("date", "DESC")->paginate(50);
             } else {
-                $orders = Order::where('status', '!=', 'completed')->latest()->select('id', 'status', 'uuid', 'amount', 'created_at')->latest()->paginate(50);
+                $orders = Order::where([
+                    ['status', '!=', 'completed'],
+                    ['status', '!=', 'cancled'],
+                    ['status', '!=', 'refunded'],
+                ])->orderBy("date", "DESC")->paginate(50);
             }
         }
+
+        return view('admin.orders.index', compact('orders'));
+    }
+
+    public function urgency()
+    {
+        $orders = Order::where('urgencyInstsllstion', true)->orderBy("date", "DESC")->paginate(50);
 
         return view('admin.orders.index', compact('orders'));
     }
@@ -52,6 +66,103 @@ class AdminOrderController extends Controller
     }
 
     /**
+     * Show the form for creating a new custom resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function customOrder()
+    {
+        return view('admin.orders.custom-create');
+    }
+
+    /**
+     * Store a newly created custom-resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeCustom(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'status' => 'required',
+            'details' => 'required',
+            'total' => 'required',
+            'date' => 'required',
+            'installer_notes' => 'nullable',
+            'notes' => 'nullable',
+            'installer_id' => 'nullable',
+            'address' => 'nullable',
+            'notify' => 'required',
+            'images' => 'nullable',
+            'images_location' => 'nullable',
+        ]);
+
+        $excludedStatuses = [
+            'pending', 'cancled', 'paid'
+        ];
+
+        try {
+            $order = new Order();
+            $order->date = Carbon::parse($request->input('date'));
+            $order->status = $request->input('status');
+            $order->details = $request->input('details');
+            $order->amount = $request->input('total');
+            $order->user_id = $request->input('user_id');
+            $order->installer_id = $request->input('installer_id');
+            $order->notes = $request->input('notes');
+            $order->address = $request->input('address');
+            $order->custom = true;
+            $order->installer_notes = $request->input('installer_notes');
+            $order->uuid = Str::random(8);
+
+            $order->save();
+
+            if ($request->has('images')) {
+                foreach ($request->images as $image) {
+                    $filename = Str::random() . '.' . $image->extension();
+                    $image->storeAs('orders', $filename, 'public');
+                    $images[] = [
+                        'path' => "orders/$filename",
+                    ];
+                }
+                $order->images()->createMany($images);
+            }
+            
+
+            if ($request->has('images_location')) {
+                foreach ($request->images_location as $image) {
+                    $filename = Str::random() . '.' . $image->extension();
+                    $image->storeAs('orders', $filename, 'public');
+                    $imagesLocation[] = [
+                        'path' => "orders/$filename",
+                    ];
+                }
+                $order->placeImages()->createMany($imagesLocation);
+            }
+
+            $order->user->notify(new OrderAccepted($order, $order));
+
+            if (filter_var($request->input('notify'), FILTER_VALIDATE_BOOLEAN)) {
+
+                if (!in_array($request->input('status'), $excludedStatuses)) {
+                    $order->user->notify((new OrderStatusUpdated($order, $request->input('status')))->delay(now()->addMinute()));
+                }
+
+                if ($order->status === 'completed') {
+                    $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
+                }
+            }
+
+            return response()->json(['ok' => true]);
+        } catch (Exception $e) {
+            return $e;
+            return response()->json(['ok' => false]);
+        }
+    }
+
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -64,19 +175,54 @@ class AdminOrderController extends Controller
             'status' => 'nullable',
             'details' => 'required',
             'date' => 'required',
+            'notes' => 'nullable',
+            'installer_notes' => 'nullable',
+            'installer_id' => 'nullable',
+            'address' => 'nullable'
         ]);
+
+        $excludedStatuses = [
+            'pending', 'cancled', 'paid'
+        ];
 
         try {
             $calculatedServices = calculateServicePrice($request->details);
             $order = new Order();
             $order->date = Carbon::parse($request->input('date'));
-            $order->user_id = $request->user_id;
             $order->status = $request->status;
+            $order->user_id = $request->user_id;
+            $order->installer_id = $request->installer_id;
+            $order->notes = $request->notes;
+            $order->installer_notes = $request->installer_notes;
+            $order->address = $request->address;
             $order->details = json_encode($calculatedServices);
+            $order->urgencyInstsllstion = $calculatedServices->acceptedServices->urgencyInstsllstion;
             $order->amount = $calculatedServices->total;
             $order->uuid = Str::random(8);
+            $order->email = $order->user->email;
 
             $order->save();
+
+            $order->user->notify(new OrderAccepted($order, $order));
+
+            if ($request->has('images')) {
+                foreach ($request->images as $image) {
+                    $filename = Str::random() . '.' . $image->extension();
+                    $image->storeAs('orders', $filename, 'public');
+                    $images[] = [
+                        'path' => "orders/$filename",
+                    ];
+                }
+                $order->images()->createMany($images);
+            }
+
+            if (!in_array($request->input('status'), $excludedStatuses)) {
+                $order->user->notify(new OrderStatusUpdated($order, $request->input('status')));
+            }
+
+            if ($order->status === 'completed') {
+                $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
+            }
 
             return response()->json(['ok' => true]);
         } catch (Exception $e) {
@@ -113,6 +259,17 @@ class AdminOrderController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function customEdit(Order $order)
+    {
+        return view('admin.orders.custom-edit', compact('order'));
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -125,29 +282,158 @@ class AdminOrderController extends Controller
             'status' => 'required',
             'details' => 'required',
             'date' => 'required',
-            'photo' => 'nullable'
+            'images' => 'nullable|array',
+            'images.*' => 'mimes:jpg,jpeg,png,webp',
+            'notes' => 'nullable',
+            'installer_id' => 'nullable',
+            'address' => 'nullable',
+            'uuid' => 'required',
+            'installer_notes' => 'nullable',
+            'notify' => 'nullable'
         ]);
+        $excludedStatuses = [
+            'pending', 'cancled', 'paid'
+        ];
 
         $calculatedServices = calculateServicePrice($request->details);
+
         $data = [
             'status' => $request->status,
             'details' => json_encode($calculatedServices),
             'amount' => $calculatedServices->total,
+            'notes' => $request->notes,
+            'installer_id' => $request->installer_id,
+            'address' => $request->address,
+            'uuid' => $request->uuid,
+            'installer_notes' => $request->installer_notes,
+            'urgencyInstsllstion' => $calculatedServices->acceptedServices->urgencyInstsllstion,
             'date' => Carbon::parse($request->input('date')),
         ];
 
-        if ($request->has('image')) {
-            $fileName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('uploads'), $fileName);
-            $data['image'] = $fileName;
+        if ($request->has('images')) {
+            foreach ($request->images as $image) {
+                $filename = Str::random() . '.' . $image->extension();
+                $image->storeAs('orders', $filename, 'public');
+                $images[] = [
+                    'path' => "orders/$filename",
+                ];
+            }
+            $order->images()->createMany($images);
         }
 
         $order->update($data);
 
-        $order->user->notify((new OrderStatusUpdated($order))->delay(now()->addMinutes(1)));
+        if (filter_var($request->input('notify'), FILTER_VALIDATE_BOOLEAN)) {
+            if (!in_array($data['status'], $excludedStatuses)) {
+                $order->user->notify((new OrderStatusUpdated($order, $data['status']))->delay(now()->addMinute()));
+            }
 
+            if ($order->status === 'completed') {
+                $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
+            }
+        }
 
         return response()->json(['ok' => true]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function customUpdate(Request $request, Order $order)
+    {
+        $request->validate([
+            'status' => 'required',
+            'user_id' => 'required',
+            'details' => 'required',
+            'total' => 'required',
+            'date' => 'required',
+            'images' => 'nullable|array',
+            'images.*' => 'mimes:jpeg,png,jpg,gif,svg',
+            'notify' => 'required',
+            'installer_id' => 'nullable',
+            'phone' => 'nullable',
+            'notes' => 'nullable',
+            'address' => 'nullable',
+            'uuid' => 'required',
+            'installer_notes' => 'nullable',
+            'images_location' => 'nullable',
+        ]);
+        $excludedStatuses = [
+            'pending', 'cancled', 'paid'
+        ];
+
+        $data = [
+            'status' => $request->input('status'),
+            'user_id' => $request->input('user_id'),
+            'details' => $request->input('details'),
+            'amount' => $request->input('total'),
+            'date' => Carbon::parse($request->input('date')),
+            'installer_id' => $request->input('installer_id'),
+            'phone' => $request->input('phone'),
+            'notes' => $request->input('notes'),
+            'address' => $request->input('address'),
+            'uuid' => $request->input('uuid'),
+            'installer_notes' => $request->input('installer_notes')
+        ];
+
+        if ($request->has('images')) {
+            foreach ($request->images as $image) {
+                $filename = Str::random() . '.' . $image->extension();
+                $image->storeAs('orders', $filename, 'public');
+                $images[] = [
+                    'path' => "orders/$filename",
+                ];
+            }
+            $order->images()->createMany($images);
+        }
+
+        if ($request->has('images_location')) {
+            foreach ($request->images_location as $image) {
+                $filename = Str::random() . '.' . $image->extension();
+                $image->storeAs('orders', $filename, 'public');
+                $imagesLocation[] = [
+                    'path' => "orders/$filename",
+                ];
+            }
+            $order->placeImages()->createMany($imagesLocation);
+        }
+
+        $order->update($data);
+
+
+        if (filter_var($request->input('notify'), FILTER_VALIDATE_BOOLEAN)) {
+            if (!in_array($data['status'], $excludedStatuses)) {
+                $order->user->notify(new OrderStatusUpdated($order, $data['status']));
+            }
+
+            if ($order->status === 'completed') {
+                $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
+            }
+        }
+
+        return response()->json(['ok' => true]);
+    }
+
+    public function refunded(Order $order)
+    {
+        if ($order->custom == 1) {
+            $order->update([
+                'status' => 'refunded'
+            ]);
+        } else {
+            $order->cancelOrder();
+        }
+        // $order->update(['status' => 'refunded']);
+        return ['ok' => true];
+    }
+
+    public function getAllInstallers()
+    {
+        return Installer::all();
     }
 
     /**

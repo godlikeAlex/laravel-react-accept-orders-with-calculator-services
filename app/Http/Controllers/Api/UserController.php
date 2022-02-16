@@ -27,7 +27,10 @@ class UserController extends Controller
             $user->update(['avatar' => "users/$filename"]);
         }
 
-        return response(['ok' => true]);
+        return response([
+            'ok' => true,
+            'avatar' => $user->avatar
+        ]);
     }
 
     public function changePassword(ChangePasswordRequest $request)

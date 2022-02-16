@@ -14,7 +14,7 @@ class AddStripePaymentIdToOrder extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('stripe_payment_id')->unique();
+            $table->string('stripe_payment_id')->nullable()->unique();
         });
     }
 

@@ -13,9 +13,9 @@ class OrderController extends Controller
         $status = $request->query('status');
 
         if ($status) {
-            $orders = $user->orders()->orderBy("date", "DESC")->where('status', $status)->paginate(10);
+            $orders = $user->orders()->orderBy("date", "DESC")->latest()->where('status', $status)->paginate(10);
         } else {
-            $orders = $user->orders()->orderBy("date", "DESC")->where('status', '!=', 'completed')->paginate(10);
+            $orders = $user->orders()->orderBy("date", "DESC")->latest()->where('status', '!=', 'completed')->paginate(10);
         }
 
         return response($orders);

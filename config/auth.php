@@ -46,6 +46,11 @@ return [
             'provider' => 'admins',
         ],
 
+        'installer' => [
+            'driver' => 'session',
+            'provider' => 'installers'
+        ],
+
         'api' => [
             'driver' => 'passport',
             'provider' => 'users',
@@ -81,6 +86,11 @@ return [
             'model' => App\Models\Admin::class,
         ],
 
+        'installers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Installer::class
+        ]
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -103,18 +113,19 @@ return [
     */
 
     'passwords' => [
+        // Времено поменял таблицу юзера на Админа, потом бы создать два разных контролера...
         'users' => [
-            'provider' => 'users',
-            'table' => 'password_resets',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
-        'admins' => [
             'provider' => 'admins',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],
+        // 'admins' => [
+        //     'provider' => 'admins',
+        //     'table' => 'password_resets',
+        //     'expire' => 60,
+        //     'throttle' => 60,
+        // ],
     ],
 
     /*

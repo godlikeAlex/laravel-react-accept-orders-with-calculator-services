@@ -52,6 +52,8 @@ class AuthController extends Controller
             'password' => Hash::make($request->input('password'))
         ]);
 
+        $user->saveAsCustomer();
+
         return response([
             'ok' => true,
             'user' => $user,

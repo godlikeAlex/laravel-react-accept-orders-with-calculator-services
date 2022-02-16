@@ -53,22 +53,35 @@ function UpdateProfile() {
                 }
             }
         }
-    })
+    });
+
     const { values, handleChange, isSubmitting, handleSubmit, errors, setValues, touched } = useFormik({
         initialValues: {
             name: user.name,
             phone: user.phone,
             email: user.email,
             address: user.address,
-            avatar: user.avatar ? `/storage/${user.avatar}` : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+            avatar: user.avatar ? `/storage/${user.avatar}` : '/frontend/avatar.png',
             fileAvatar: null
         },
+        validationSchema: Yup.object({
+            name: Yup.string().required('Name is required'),
+            email: Yup.string().email('Invalid email').required('Required'),
+            phone: Yup.string().required('Phone is required'),
+            address: Yup.string().nullable('')
+        }),
         onSubmit: async ({ email, name, phone, address, fileAvatar, avatar }, { setErrors }) => {
             const formData = new FormData();
             formData.append('email', email);
             formData.append('name', name);
-            formData.append('phone', phone);
-            formData.append('address', address);
+            if (address) {
+                formData.append('address', address);
+            }
+
+            if (phone) {
+                formData.append('phone', phone);
+            }
+
             if (fileAvatar) {
                 formData.append('avatar', fileAvatar);
             }
@@ -80,7 +93,7 @@ function UpdateProfile() {
                 if (result.data.ok) {
                     setSuceess(true);
                     dispatch(updateUser({
-                        email, name, phone, address, avatar
+                        email, name, phone, address, avatar: result.data.avatar
                     }));
                 }
 
@@ -100,7 +113,7 @@ function UpdateProfile() {
 
     return (
         <>
-            <HeadSection title={'Update my profile'} image={5} />
+            <HeadSection title={'Update my profile'} image={'update-profile'} />
             <section className="ls section_padding_top_150 section_padding_bottom_150 columns_padding_30">
                 <div className="container">
                     <div className="row">
@@ -206,13 +219,18 @@ function UpdateProfile() {
                                 </div>
 
                                 <div className="form-group" style={{ textAlign: 'center', paddingTop: '15px' }}>
-                                    <button type="submit" className="theme_button bg_button color1 btn-calc" >UPDATE PROFILE</button>
+                                    <div className="container">
+                                        <button type="submit" className="theme_button bg_button color1 btn-calc" >UPDATE PROFILE</button>
+
+                                    </div>
                                 </div>
                                 {success && (
                                     <SweetAlert
                                         success
                                         title="Success"
                                         timeout={2000}
+                                        confirmBtnCssClass={"theme_button bg_button color1 min_width_button"}
+                                        confirmBtnStyle={{ boxShadow: 'unset' }}
                                         onConfirm={() => {
                                             setSuceess(false);
                                         }}
@@ -229,6 +247,8 @@ function UpdateProfile() {
                                         onConfirm={() => {
                                             setError(false);
                                         }}
+                                        confirmBtnCssClass={"theme_button bg_button color1 min_width_button"}
+                                        confirmBtnStyle={{ boxShadow: 'unset' }}
                                     >
                                         Whoops... Something went wrong.
                                     </SweetAlert>
@@ -290,7 +310,9 @@ function UpdateProfile() {
                                 </div>
 
                                 <div className="form-group" style={{ textAlign: 'center', paddingTop: '15px' }}>
-                                    <button type="submit" className="theme_button bg_button color1 btn-calc" >UPDATE PROFILE</button>
+                                    <div className="container">
+                                        <button type="submit" className="theme_button bg_button color1 btn-calc" >UPDATE PASSWORD</button>
+                                    </div>
                                 </div>
                             </form>
                             <h2 className="topmargin_20 col-md-12" style={{ marginTop: '50px' }}>Payment methods</h2>

@@ -16,7 +16,7 @@ class WishListController extends Controller
 
     public function list(Request $request)
     {
-        $wishlist = $request->user()->wishList->all();
+        $wishlist = $request->user()->wishList()->latest()->get();
         return response(['wishlist' => $wishlist]);
     }
 

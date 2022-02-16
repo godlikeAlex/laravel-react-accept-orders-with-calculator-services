@@ -7,7 +7,7 @@ import {
 import Cart from '../ShopingCart/Cart';
 import CheckOut from '../ShopingCart/CheckOut';
 import ScrollToTop from './ScrollToTop';
-import { Login, SignUp } from '../Auth';
+import { FargotPassword, Login, SignUp, ResetPassword } from '../Auth';
 import ProtectedRoute from '../Auth/ProtectedRoute';
 import { useSelector } from 'react-redux';
 import LoadingSpinner from '../Auth/LoadingSpinner';
@@ -39,6 +39,12 @@ function Routing() {
                     </Route>
                     <Route exact path="/cabinet/sign-up">
                         <SignUp />
+                    </Route>
+                    <Route exact path="/cabinet/fargot-password">
+                        <FargotPassword />
+                    </Route>
+                    <Route exact path="/cabinet/reset/:token">
+                        <ResetPassword />
                     </Route>
                     <ProtectedRoute exact path="/cabinet/dashboard" component={Dashboard} />
                     <ProtectedRoute exact path="/cabinet/dashboard/show/:id" component={ShowOrder} />

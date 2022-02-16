@@ -1,10 +1,10 @@
 import React from 'react';
 import { useFormik } from 'formik';
+import utils from './utils.js';
 import * as Yup from 'yup';
-
 import { calculatorValues } from './calculator-values.js';
-import { calculatePrice, countTotal } from './utils.js';
 import CalculatorScreen from './CalculatorTabScreen.js';
+const { calculatePrice, countTotal } = utils;
 
 const ServiceCalculatorSchema = Yup.object().shape({
     services: Yup.array().of(
@@ -38,42 +38,68 @@ export const servicesForOptions = Object.keys(calculatorValues.services).reduce(
 
 export const MIN_PRICE = 250;
 
-const TEMPLATE_CALCULATOR = {
-    width: 5,
-    height: 5,
+let TEMPLATE_CALCULATOR = {
+    width: 1,
+    height: 1,
     ftHeight: calculatorValues.height[1],
-    price: MIN_PRICE,
+    price: 5,
     quantity: 1,
     currentServiceType: serviceTypeOptions[0],
-    currentService: servicesForOptions['Vinyl'][0],
+    currentService: servicesForOptions['Adhesive Vinyl'][0],
 };
 
-function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, renderFooter, onAddCart }) {
-    const topBlockRef = React.useRef(null)
+export const generateTemplate = () => {
+    const { total, totalPerItem, totalPerSqFt } = calculatePrice(TEMPLATE_CALCULATOR);
+
+    return {
+        ...TEMPLATE_CALCULATOR,
+        price: total,
+        totalPerSqFt,
+        totalPerItem
+    }
+}
+
+
+function Calculator({ onUpdate, data = {}, resetAllFields, showOptions = true, calculateOptionalPrices = false, bottomAddMore, renderFooter, onAddCart }) {
+    const topBlockRef = React.useRef(null);
+
     const { values, errors, handleSubmit, setFieldValue, setValues } = useFormik({
         validationSchema: ServiceCalculatorSchema,
         initialValues: {
             currentTab: 0,
             total: data?.total || MIN_PRICE,
             totalServices: data?.totalServices || MIN_PRICE,
-            services: data?.services || [TEMPLATE_CALCULATOR],
+            services: data?.services || [generateTemplate()],
             prices: data?.prices || {
                 installation: MIN_PRICE,
                 removal: 0,
                 survey: 0,
                 urgencyInstsllstion: 0,
             },
-            removal: false,
-            installation: true,
+            delivery: false,
+            removal: data?.prices?.removal && data?.prices?.removal > 0,
+            installation: data?.prices?.installation ? data?.prices?.installation > 0 : true,
         },
     });
+
+
+    React.useEffect(() => {
+        if (data.prices) {
+            setValues({
+                ...values,
+                prices: data.prices,
+                removal: data.prices.removal > 0 ? true : false
+            });
+        }
+    }, [data?.prices]);
 
     React.useEffect(() => {
         onUpdate({
             services: values.services,
             totalServices: values.totalServices,
             prices: values.prices,
-            total: values.total
+            total: values.total,
+            delivery: data?.prices?.delivery || false
         });
     }, [values]);
 
@@ -108,7 +134,8 @@ function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, render
                 total: MIN_PRICE,
                 removal: false,
                 installation: false,
-                services: [TEMPLATE_CALCULATOR],
+                delivery: false,
+                services: [generateTemplate()],
                 totalServices: MIN_PRICE,
                 prices: {
                     installation: MIN_PRICE,
@@ -137,24 +164,32 @@ function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, render
             return total + currentPrice;
         }, 0);
 
-        const total = countTotal(totalCalculated);
+        let prices = {
+            ...values.prices,
+            installation: values.installation ? totalCalculated : 0,
+            removal: values.removal ? totalCalculated * 0.5 : 0
+        }
+
+        if (calculateOptionalPrices) {
+            if (prices.urgencyInstsllstion != 0) {
+                const total = prices.installation + prices.removal + prices?.survey;
+                prices.urgencyInstsllstion = total * 0.20;
+            }
+
+        }
 
         setValues({
             ...values,
-            totalServices: total,
-            prices: {
-                ...values.prices,
-                installation: total,
-                removal: values.removal ? total * 0.5 : 0
-            }
+            totalServices: totalCalculated,
+            prices
         });
     }, [values.services]);
 
     const addNewService = () => {
         const services = [...values.services];
-        services.push(TEMPLATE_CALCULATOR);
+        services.push(generateTemplate());
         setFieldValue('services', services);
-        setFieldValue('currentTab', values.currentTab + 1);
+        setFieldValue('currentTab', services.length - 1);
         if (bottomAddMore) {
             topBlockRef.current.scrollIntoView();
         }
@@ -197,13 +232,33 @@ function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, render
         ))
     )
 
+    const deleteItem = index => {
+        if (values.services.length > 1) {
+            setFieldValue('services', values.services.filter((_, idx) => idx !== index));
+
+            if (values.currentTab === index) {
+                setFieldValue('currentTab', 0);
+            }
+        }
+    };
+
+    const setCurrentTab = (e, index) => {
+        if (e.target.tagName !== 'SPAN') {
+            setFieldValue('currentTab', index)
+        }
+    }
+
     return (
         <div className="row">
             <div ref={topBlockRef} style={{ position: 'absolute', top: 20 }}></div>
             <div className="d-flex p-0 col-md-12">
                 <ul className="nav nav-tabs color2" style={{ borderBottom: '5px solid #ED0598' }}>
                     {values.services.map((service, index) => (
-                        <li key={`tab` + index} className={values.currentTab === index ? 'active' : ''} onClick={() => setFieldValue('currentTab', index)}><a>{service.currentService.label}</a></li>
+                        <li key={`tab` + index} className={values.currentTab === index ? 'active' : ''} onClick={(e) => setCurrentTab(e, index)}>
+                            <a style={{ paddingLeft: '10px', paddingRight: '10px' }}>
+                                {service.currentService.label} <span onClick={() => deleteItem(index)} style={{ paddingLeft: '40px' }}>&#10005;</span>
+                            </a>
+                        </li>
                     ))}
                     {!bottomAddMore && (
                         <li className="nav-item" onClick={() => addNewService()}><a className='nav-link' >Add more</a></li>
@@ -211,48 +266,51 @@ function Calculator({ onUpdate, data = {}, resetAllFields, bottomAddMore, render
                 </ul>
             </div>
 
-            <div className="col-md-12">
-                <label>Additional services</label>
-                <div
-                    className="form-group"
-                >
-                    <input
-                        type="checkbox"
-                        onClick={() => setFieldValue('removal', !values.removal)}
-                        checked={values.removal}
-                    />
-                    <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('removal', !values.removal)}>Removal</label>
-                </div>
+            {showOptions && (
+                <div className="col-md-12">
+                    <label>Additional services</label>
+                    <div
+                        className="form-group"
+                    >
+                        <input
+                            type="checkbox"
+                            onClick={() => setFieldValue('removal', !values.removal)}
+                            checked={values.removal}
+                        />
+                        <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('removal', !values.removal)}>Removal</label>
+                    </div>
 
-                <div className="form-group"
+                    <div className="form-group"
 
-                >
-                    <input
-                        onClick={() => setFieldValue('installation', !values.installation)}
-                        type="checkbox"
-                        checked={values.installation}
-                    />
-                    <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('installation', !values.installation)}>Installation</label>
+                    >
+                        <input
+                            onClick={() => setFieldValue('installation', !values.installation)}
+                            type="checkbox"
+                            checked={values.installation}
+                        />
+                        <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('installation', !values.installation)}>Installation</label>
+                    </div>
                 </div>
-            </div>
+            )}
 
             {renderTabsContent()}
             {renderFooter && (
                 <div className="col-md-12">
                     <hr />
                     <h4>Subtotal: ${values.total}</h4>
-                    {bottomAddMore && (
-                        <a
-                            className="theme_button bg_button color1 btn-calc"
-                            onClick={() => addNewService()}
-                            style={{ minWidth: '215px' }}
-                        >
-                            Add More
-                        </a>
-                    )}
-                    <a className="theme_button bg_button color1 btn-calc" style={{ minWidth: '215px' }} onClick={onAddCart}>Add to cart</a>
-
-
+                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                        {bottomAddMore && (
+                            <a
+                                className="theme_button bg_button color1 btn-calc"
+                                onClick={() => addNewService()}
+                                style={{ minWidth: '215px' }}
+                            >
+                                Add More
+                            </a>
+                        )}
+                        <a className="theme_button bg_button color1 btn-calc" style={{ minWidth: '215px' }} onClick={onAddCart}>Add to cart</a>
+                        <a href="#contact" className="theme_button bg_button color1 btn-calc" style={{ minWidth: '215px', marginLeft: 'auto' }}>OTHER</a>
+                    </div>
                 </div>
             )}
 

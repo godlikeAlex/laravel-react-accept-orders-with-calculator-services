@@ -1,6 +1,21 @@
-<p>Name <b>{{$name}}</b></p>
-<p>Subject <b>{{$subject}}</b></p>
-<p>Email <b>{{$email}}</b></p>
-<br />
+@component('mail::message')
+<h1>Request from site</h1>
+<p>Name <b>{{$data['name']}}</b></p>
+@if(!isset($data['service']))
+<p>Subject <b>{{$data['subject']}}</b></p>
+@endif
+
+@if (isset($data['phone']))
+<p>Phone <b>{{$data['phone']}}</b></p>
+@else
+<p>Email <b>{{$data['email']}}</b></p>
+@endif
+
+@if (isset($data['service']))
+<p>Service: {{$data['service']}}</p>
+@else
 <p>Message:</p>
-<p>{{$body}}</p>
+<p>{{$data['body']}}</p>
+@endif
+
+@endcomponent

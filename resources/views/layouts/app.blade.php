@@ -21,16 +21,61 @@
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="/frontend/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/frontend/css/animations.css">
+    {{-- <link rel="stylesheet" href="/frontend/css/animations.css"> --}}
     <link rel="stylesheet" href="/frontend/css/fonts.css">
-    <!-- <link rel="stylesheet" href="/frontend/css/app.css"> -->
-    <link rel="stylesheet" href="/frontend/css/main.css" class="color-switcher-link">
-    <link rel="stylesheet" href="/frontend/css/shop.css" class="color-switcher-link">
+    <link rel="stylesheet" href="/frontend/css/app.css">
+    {{-- <link rel="stylesheet" href="/frontend/css/main.css" class="color-switcher-link"> --}}
+    {{-- <link rel="stylesheet" href="/frontend/css/shop.css" class="color-switcher-link"> --}}
     <script src="/frontend/js/vendor/modernizr-2.6.2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.min.css">
+
     <!--[if lt IE 9]>
 		<script src="/frontend/js/vendor/html5shiv.min.js"></script>
 		<script src="/frontend/js/vendor/respond.min.js"></script>
 	<![endif]-->
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        var fired = false;
+
+        window.addEventListener('scroll', () => {
+            if (fired === false) {
+                fired = true;
+
+                setTimeout(() => {
+                    (function(m, e, t, r, i, k, a) {
+                        m[i] = m[i] || function() {
+                            (m[i].a = m[i].a || []).push(arguments)
+                        };
+                        m[i].l = 1 * new Date();
+                        k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+                    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+                    ym(84440728, "init", {
+                        clickmap: true,
+                        trackLinks: true,
+                        accurateTrackBounce: true,
+                        webvisor: true
+                    });
+
+                    (function(d, w, c) {
+                        w.ChatraID = 'Zma9o7LEsueHNKSHY';
+                        var s = d.createElement('script');
+                        w[c] = w[c] || function() {
+                            (w[c].q = w[c].q || []).push(arguments);
+                        };
+                        s.async = true;
+                        s.src = 'https://call.chatra.io/chatra.js';
+                        if (d.head) d.head.appendChild(s);
+                    })(document, window, 'Chatra');
+                }, 1000)
+            }
+        });
+    </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/84440728" style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
+
 </head>
 
 <body>
@@ -64,11 +109,15 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/frontend/js/compressed.js"></script>
     <script src="/frontend/js/selectize.min.js"></script>
-    <!-- <script src="/frontend/js/main.js"></script> -->
-    <script src="/frontend/js/main.min.js"></script>
+    <script src="/frontend/js/main.js"></script>
+    {{-- <script src="/frontend/js/main.min.js"></script> --}}
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    @if(!is_null(\Request::route()) && \Request::route()->getName() === 'main.page')
+    <script src="/js/calculator.js"></script>
+    @else
     <script src="/js/app.js"></script>
+    @endif
 </body>
 
 </html>

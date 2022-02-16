@@ -6,7 +6,7 @@
 @if ($level === 'error')
 # @lang('Whoops!')
 @else
-# Order status updated
+{{-- # Order status updated --}}
 @endif
 @endif
 

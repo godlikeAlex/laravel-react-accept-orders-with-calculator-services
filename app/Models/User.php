@@ -14,9 +14,7 @@ class User extends Authenticatable
 
     static function stripe()
     {
-        return new \Stripe\StripeClient(
-            'sk_test_51JAtkbFjRSGcEV2otTj49Ndz5yYd5a62FdeGlJR3vyUKn4sayyO41rL3xYaAeLN3KIC2ZVlhPGsIuEqZIbd2Z7yy00JTzTGxhm'
-        );
+        return new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
     }
 
     /**
@@ -29,6 +27,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'addressBook',
         'address',
         'avatar'
     ];
@@ -94,6 +93,10 @@ class User extends Authenticatable
 
     public function createIntent()
     {
+        if (!$this->stripe_id) {
+            $this->saveAsCustomer();
+        }
+
         return $this->stripe()->setupIntents->create([
             'customer' => $this->stripe_id,
             'usage' => 'on_session'
@@ -106,6 +109,14 @@ class User extends Authenticatable
             'customer' => $this->stripe_id,
             'type' => 'card'
         ]);
+    }
+
+    public function updatePaymentMethod($id, $data)
+    {
+        return $this->stripe()->paymentMethods->update(
+            $id,
+            $data
+        );
     }
 
     public function deletePaymentMethod($card)

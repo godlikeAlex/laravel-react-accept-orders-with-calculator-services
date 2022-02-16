@@ -1,4 +1,4 @@
-import { MIN_PRICE } from "./Calculator";
+const MIN_PRICE = 250;
 
 export const calculatePrice = (service) => {
     const { width, height, quantity, currentService, ftHeight } = service;
@@ -19,7 +19,7 @@ export const calculatePrice = (service) => {
     // const totalForDefaultService = countTotal((totalSqFt * currentService.price) + ftHeight.price);
 
     return {
-        total: countTotal((totalSqFt * currentService.price) + ftHeight.price),
+        total: (totalSqFt * currentService.price) + ftHeight.price,
         totalPerSqFt: +totalPerSqFt.toFixed(2),
         totalPerItem: +totalPerItem.toFixed(2)
     };
@@ -27,5 +27,10 @@ export const calculatePrice = (service) => {
 
 export const countTotal = (price) => {
     return price <= MIN_PRICE ? MIN_PRICE : +price;
+}
+
+export default {
+    countTotal,     
+    calculatePrice
 }
 

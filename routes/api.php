@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\SendRequestController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WishListController;
+use App\Http\Controllers\ForgotController;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ Route::post('user/update-profile', [UserController::class, 'update']);
 Route::post('user/change-password', [UserController::class, 'changePassword']);
 Route::get('user/card-wallet', [PaymentController::class, 'cardWallet'])->middleware('auth:api');
 Route::get('user/payment-methods', [PaymentController::class, 'listPaymentMethods'])->middleware('auth:api');
+Route::post('user/payment-methods/{id}', [PaymentController::class, 'updatePaymentMethod'])->middleware('auth:api');
+
 Route::get('user/payment-methods/delete/{card}', [PaymentController::class, 'deletePaymentMethod'])->middleware('auth:api');
 Route::post('order/request', [SendRequestController::class, 'sendRequest']);
 
@@ -41,6 +44,8 @@ Route::get('/page/order', function () {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/me', [AuthController::class, 'me'])->middleware('auth:api');
+Route::post('/forgot', [ForgotController::class, 'forgot']);
+Route::post('/reset', [ForgotController::class, 'reset']);
 
 Route::post('/purchase', [PaymentController::class, 'purchase']);
 Route::post('/re-purchase', [PaymentController::class, 'rePurchase'])->middleware('auth:api');

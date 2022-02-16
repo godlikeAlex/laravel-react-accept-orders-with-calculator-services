@@ -45,7 +45,7 @@ function SignUp() {
 
     return (
         <>
-            <HeadSection title="Signup" image={4} />
+            <HeadSection title="Signup" image={'signup'} />
             <section className="ls section_padding_top_150 section_padding_bottom_150">
                 <div className="container">
                     <div className="row">

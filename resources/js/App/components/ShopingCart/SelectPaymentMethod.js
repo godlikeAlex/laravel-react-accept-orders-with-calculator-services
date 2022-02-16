@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import usePaymentMethods from '../Dashboard/usePaymentMethods';
 import ReactLoading from 'react-loading';
 import Select, { components } from 'react-select';
+import { IconsPaymentMethods } from '../Dashboard/PaymentMethods';
 const { Option, SingleValue } = components;
 
 const customStyles = {
@@ -68,8 +69,6 @@ function SelectPaymentMethod({ currentPaymentMethod, setCurrentPaymentMethod }) 
     }, [isLoading]);
 
     useEffect(() => {
-        console.log(paymentMethods.length === 0 && !isLoading);
-        console.log('is', isLoading);
         if (paymentMethods.length === 0 && !isLoading) {
             setCurrentPaymentMethod({
                 label: 'Select new card',
@@ -81,7 +80,9 @@ function SelectPaymentMethod({ currentPaymentMethod, setCurrentPaymentMethod }) 
 
     const IconOption = (props) => (
         <Option {...props}>
-            <i className={`fa fa-cc-${props.data.brand}`} aria-hidden="true"></i>
+            {Object.keys(IconsPaymentMethods).includes(props.data.brand) ? (
+                <i className={IconsPaymentMethods[props.data.brand]} aria-hidden="true"></i>
+            ) : (<i className={IconsPaymentMethods.unknown} aria-hidden="true"></i>)}
             <span style={{ marginLeft: 20 }}>
                 {props.data.label}
             </span>

@@ -10,6 +10,7 @@ import { customStyles } from '../Calculator/CalculatorTabScreen';
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
 import { orderStatusList } from '../UpdateOrderBackend/UpdateOrderBackend';
+import { MIN_PRICE } from '../Calculator/Calculator';
 
 const Calculator = loadable(() => import('../Calculator/Calculator'))
 
@@ -17,7 +18,36 @@ function CreateOrderBackend() {
     const [error, setError] = useState(false);
     const [success, setSucess] = useState(false);
     const [listUsers, setListUsers] = useState([]);
-    const [resetCalculator, setResetCalculator] = useState(false);
+    const [listInstallers, setListInstallers] = useState([]);
+
+    const { values, setFieldValue, initialValues, handleChange } = useFormik({
+        initialValues: {
+            calculatedData: {
+                prices: {
+                    installation: MIN_PRICE,
+                    removal: 0,
+                    survey: 0,
+                    urgencyInstsllstion: 0,
+                }
+            },
+            installer: null,
+            status: orderStatusList[0],
+            notes: '',
+            installer_notes: '',
+            address: '',
+            user: { label: 'User are null', value: null },
+            date: new Date(),
+            images: []
+        }
+    });
+
+
+    useEffect(() => {
+        axios.get('/admin/installers').then(({ data }) => {
+            const users = data.map((user) => ({ value: user.id, label: user.name }));
+            setListInstallers(users);
+        });
+    }, []);
 
     useEffect(() => {
         axios.get('/admin/users').then(({ data }) => {
@@ -26,35 +56,71 @@ function CreateOrderBackend() {
         });
     }, []);
 
-    const { values, setFieldValue } = useFormik({
-        initialValues: {
-            calculatedData: null,
-            status: orderStatusList[0],
-            user: { label: 'User are null', value: null },
-            date: new Date()
-        },
-        onSubmit: async values => {
-            const data = await axios.post('/admin/orders/create');
-            console.log(data);
-            console.log(values);
-        }
-    });
-
     const onSubmit = async () => {
         const formData = new FormData();
-        formData.append('details', JSON.stringify(values.calculatedData));
+        formData.append('details', JSON.stringify({
+            ...values.calculatedData,
+            acceptedServices: {
+                installation: values.calculatedData.prices.installation > 0,
+                removal: values.calculatedData.prices.removal > 0,
+                survey: values.calculatedData.prices.survey > 0,
+                urgencyInstsllstion: values.calculatedData.prices.urgencyInstsllstion > 0,
+            },
+        }));
+        formData.delete('images[]');
         formData.append('status', values.status.value);
         formData.append('user_id', values.user.value);
-        formData.append('date', format(values.date, 'MM/dd/yyyy'));
+        formData.append('notes', values.notes);
+        formData.append('installer_notes', values.installer_notes);
+        formData.append('address', values.address);
+        formData.append('date', (new Date(values.date)).toUTCString());
+
+        if (values.images) {
+            Array.from(values.images).forEach(img => {
+                formData.append('images[]', img);
+            })
+        }
+
+        if (values.installer) {
+            formData.append('installer_id', values.installer.value);
+        }
+
         const data = await axios.post('/admin/orders', formData);
 
         if (data.data.ok) {
             setSucess(true);
-            setFieldValue('calculatedData', null);
-            setResetCalculator(true);
         } else {
             setError(true);
         }
+    }
+
+
+    const onUpdateAddationServices = type => {
+        const { calculatedData } = values;
+        let data = { ...calculatedData.prices };
+        switch (type) {
+            case 'installation':
+                data.installation = calculatedData.prices.installation > 0 ? 0 : calculatedData.totalServices
+                break;
+            case 'removal':
+                data.removal = calculatedData.prices.removal > 0 ? 0 : calculatedData.totalServices * 0.5
+                break;
+            case 'survey':
+                data.survey = calculatedData.prices.survey > 0 ? 0 : 250
+                break;
+            case 'urgencyInstsllstion':
+                data.urgencyInstsllstion = calculatedData.prices.urgencyInstsllstion > 0 ? 0 : calculatedData.totalServices * 0.20
+                break;
+        }
+        if (data.urgencyInstsllstion != 0) {
+            const total = data.installation + data.removal + data.survey;
+            data.urgencyInstsllstion = total * 0.20
+        }
+
+        setFieldValue('calculatedData', {
+            ...values.calculatedData,
+            prices: data
+        })
     }
 
     return (
@@ -64,10 +130,9 @@ function CreateOrderBackend() {
                     <div className="row">
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label>Order Status</label>
+                                <label>Order Status *:</label>
                                 <Select
                                     styles={customStyles}
-
                                     options={orderStatusList}
                                     onChange={status => {
                                         setFieldValue('status', status)
@@ -75,11 +140,27 @@ function CreateOrderBackend() {
                                     value={values.status}
                                 />
                             </div>
-                        </div>
 
+                            {values.status?.value === 'completed' && (
+                                <div className="col-md-12">
+                                    <div class="form-group">
+                                        <label >Result photo</label>
+                                        <input
+                                            type="file"
+                                            class="form-control-file"
+                                            multiple
+                                            onChange={e => {
+                                                setFieldValue('images', e.target.files)
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                        </div>
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label>User</label>
+                                <label>User *:</label>
                                 <Select
                                     styles={customStyles}
                                     options={
@@ -93,30 +174,120 @@ function CreateOrderBackend() {
                             </div>
                         </div>
 
-                        <div className="col-md-12">
+
+
+                        <div className="col-md-6">
                             <div className="form-group">
-                                <label>Date</label>
+                                <label>Date *:</label>
                                 <div>
                                     <DatePicker
                                         className="form-control"
                                         selected={values.date}
                                         onChange={(date) => setFieldValue('date', date)}
+                                        showTimeSelect
+                                        timeFormat="HH:mm"
+                                        dateFormat="dd/MM/yyyy HH:mm"
                                         customInput={
                                             <InputMask
                                                 className="form-control"
-                                                mask="99/99/9999"
+                                                mask="99/99/9999 99:99"
                                             />
                                         }
                                     />
                                 </div>
                             </div>
                         </div>
+
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>Notes</label>
+                                <textarea name="notes" value={values.notes} onChange={handleChange} className="form-control" rows="4"> </textarea>
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>Address *:</label>
+                                <textarea name="address" value={values.address} onChange={handleChange} className="form-control" rows="4"> </textarea>
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>Notes for installer</label>
+                                <textarea name="installer_notes" value={values?.installer_notes} onChange={handleChange} className="form-control" rows="4"> </textarea>
+                            </div>
+                        </div>
+
+
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>Installer</label>
+                                <Select
+                                    styles={customStyles}
+                                    options={listInstallers}
+                                    onChange={installer => {
+                                        setFieldValue('installer', installer)
+                                    }}
+                                    value={values.installer}
+                                />
+                            </div>
+                        </div>
                     </div>
+
+                    <div className="form-group col-md-12">
+                        <h4>Additional services</h4>
+                    </div>
+                    <div
+                        className="form-group col-md-12"
+                    >
+                        <input
+                            type="checkbox"
+                            onClick={() => onUpdateAddationServices('installation')}
+                            checked={values.calculatedData.prices.installation > 0}
+                        />
+                        <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('installation')}>Installation</label>
+                    </div>
+
+                    <div
+                        className="form-group col-md-12"
+                    >
+                        <input
+                            type="checkbox"
+                            onClick={() => onUpdateAddationServices('removal')}
+                            checked={values.calculatedData.prices.removal > 0}
+                        />
+                        <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('removal')}>Removal</label>
+                    </div>
+
+                    <div
+                        className="form-group col-md-12"
+                    >
+                        <input
+                            type="checkbox"
+                            onClick={() => onUpdateAddationServices('survey')}
+                            checked={values.calculatedData.prices.survey > 0}
+                        />
+                        <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('survey')}>Survey</label>
+                    </div>
+
+                    <div
+                        className="form-group col-md-12"
+                    >
+                        <input
+                            type="checkbox"
+                            onClick={() => onUpdateAddationServices('urgencyInstsllstion')}
+                            checked={values.calculatedData.prices.urgencyInstsllstion > 0}
+                        />
+                        <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('urgencyInstsllstion')}>Urgency Instsllstion ⚡</label>
+                    </div>
+
 
                     <hr />
                     <div className="col-md-12">
                         <Calculator
-                            resetAllFields={resetCalculator}
+                            calculateOptionalPrices={true}
+                            showOptions={false}
                             data={values.calculatedData}
                             onUpdate={(calculatedData) => { setFieldValue('calculatedData', calculatedData) }}
                         />
@@ -137,7 +308,7 @@ function CreateOrderBackend() {
                     title="Order Created"
                     onConfirm={() => {
                         setSucess(false);
-                        setResetCalculator(false);
+                        setFieldValue('calculatedData', initialValues.calculatedData)
                     }}
                     onCancel={() => window.location.href = '/admin/orders'}
                 >

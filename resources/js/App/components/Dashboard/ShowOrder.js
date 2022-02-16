@@ -6,9 +6,7 @@ import LoadingSpinner from '../Auth/LoadingSpinner';
 import DatePicker from "react-datepicker";
 import SweetAlert from 'react-bootstrap-sweetalert';
 import InputMask from 'react-input-mask';
-import { format } from 'date-fns';
-
-
+import { addDays, format } from 'date-fns';
 
 function ShowOrder() {
     const [order, setOrder] = useState(null);
@@ -32,9 +30,13 @@ function ShowOrder() {
         axios.get(`/api/user/orders/${id}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         }).then(({ data }) => {
-            setOrder(data.order);
-            setDate(new Date(data.order.date));
-            setLoading(false);
+            if (data.ok) {
+                setOrder(data.order);
+                setDate(new Date(data.order.date));
+                setLoading(false);
+            } else {
+                history.push('/cabinet/dashboard');
+            }
         })
     }, []);
 
@@ -107,6 +109,35 @@ function ShowOrder() {
 
     }
 
+    const orderDetails = () => {
+        return (
+            <table class="table margin_0">
+                <tbody>
+                    {JSON.parse(order.details).services.map(service => (
+                        order.custom === 0 ? (
+                            <tr>
+                                <th class="grey medium">
+                                    {service.currentService.label} X {service.quantity}
+                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Width: {service.width};</div>
+                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Height: {service.height};</div>
+                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Foot Height: {service.ftHeight.title};</div>
+                                </th>
+                                <td> <span>${service.price}</span> </td>
+                            </tr>
+                        ) : (
+                            <tr>
+                                <th class="grey medium">
+                                    {service.name}
+                                </th>
+                                <td> <span>${service.price}</span> </td>
+                            </tr>
+                        )
+                    ))}
+                </tbody>
+            </table>
+        )
+    }
+
     if (loading) return <LoadingSpinner />
 
     return (
@@ -119,6 +150,8 @@ function ShowOrder() {
                     onConfirm={() => {
                         setSuceess(false);
                     }}
+                    confirmBtnCssClass={"theme_button bg_button color1 min_width_button"}
+                    confirmBtnStyle={{ boxShadow: 'unset' }}
                 >
                     Your request has been sent
                 </SweetAlert>
@@ -163,10 +196,13 @@ function ShowOrder() {
                             <DatePicker
                                 selected={date}
                                 onChange={(date) => setDate(date)}
+                                minDate={addDays(new Date(order.date), 2)}
+                                timeFormat="HH:mm"
+                                dateFormat="dd/MM/yyyy HH:mm"
                                 customInput={
                                     <InputMask
                                         className="form-control"
-                                        mask="99/99/9999"
+                                        mask="99/99/9999 99:99"
                                     />
                                 }
                             />
@@ -209,54 +245,42 @@ function ShowOrder() {
                         <>
                             <div className="col-md-12">
                                 <h2 style={{ textAlign: 'center' }}>ORDER ID: {order.id}</h2>
-                                <table class="table margin_0">
-                                    <tbody>
-                                        {JSON.parse(order.details).services.map(service => (
-                                            <tr>
-                                                <th class="grey medium">
-                                                    {service.currentService.label} X {service.quantity}
-                                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Width: {service.width};</div>
-                                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Height: {service.height};</div>
-                                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Foot Height: {service.ftHeight.title};</div>
-                                                </th>
-                                                <td> <span>${service.price}</span> </td>
-                                            </tr>
-                                        ))}
-
-                                    </tbody>
-                                </table>
+                                {orderDetails()}
                                 <h3>Actions</h3>
                                 <a class="theme_button color1" onClick={() => setShowModalCancel(true)}>Request to cancel order</a>
                                 <a class="theme_button color1" onClick={() => setShowModalRechudle(true)}>Change schedule</a>
                                 <a class="theme_button color1" onClick={() => setShowModalChangeOrder(true)}>Update order</a>
                                 <h3>Details</h3>
-                                <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Amount: <span style={{ textTransform: 'capitalize' }}>${order.amount}</span> </h6>
-                                <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Order status: <span style={{ textTransform: 'capitalize' }}>{order.status}</span> </h6>
 
+                                <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Tax (8.75%): <span style={{ textTransform: 'capitalize' }}>$ {(order.amount * 0.0875).toLocaleString()}</span> </h6>
+                                <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Amount: <span style={{ textTransform: 'capitalize' }}>$ {(order.amount * 1.0875).toLocaleString()}</span> </h6>
+                                <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Order status: <span style={{ textTransform: 'capitalize' }}>{order.status}</span> </h6>
                             </div>
-                            {!showPayment ? (
-                                <div class="col-md-12">
-                                    <a onClick={() => setShowPayment(true)} style={{ width: '100%' }} class="theme_button bg_button color2 min_width_button">Reorder</a>
-                                </div>
-                            ) : (
-                                <div class="col-md-12">
-                                    <div style={{ padding: '11px 30px 13px', backgroundColor: '#f2f2f2' }}>
-                                        <CardElement lassName="card-element" options={{
-                                            style: {
-                                                base: {
-                                                    fontSize: '18px',
-                                                    color: '#222',
-                                                    backgroundColor: '#f2f2f2',
-                                                    fontFamily: 'Poppins, Open Sans, Segoe UI, sans-serif',
-                                                }
-                                            },
-                                            hidePostalCode: true,
-                                            disabled
-                                        }}
-                                        />
+                            {order.custom !== 1 && (
+                                !showPayment ? (
+                                    <div class="col-md-12">
+                                        <a onClick={() => setShowPayment(true)} style={{ width: '100%' }} class="theme_button bg_button color2 min_width_button">Reorder</a>
                                     </div>
-                                    <button disabled={disabled} onClick={handleSubmit} style={{ width: '100%', marginTop: '10px' }} class="theme_button bg_button color2 min_width_button">Reorder</button>
-                                </div>
+                                ) : (
+                                    <div class="col-md-12">
+                                        <div style={{ padding: '11px 30px 13px', backgroundColor: '#f2f2f2' }}>
+                                            <CardElement lassName="card-element" options={{
+                                                style: {
+                                                    base: {
+                                                        fontSize: '18px',
+                                                        color: '#222',
+                                                        backgroundColor: '#f2f2f2',
+                                                        fontFamily: 'Poppins, Open Sans, Segoe UI, sans-serif',
+                                                    }
+                                                },
+                                                hidePostalCode: true,
+                                                disabled
+                                            }}
+                                            />
+                                        </div>
+                                        <button disabled={disabled} onClick={handleSubmit} style={{ width: '100%', marginTop: '10px' }} class="theme_button bg_button color2 min_width_button">Reorder</button>
+                                    </div>
+                                )
                             )}
                         </>
                     )}

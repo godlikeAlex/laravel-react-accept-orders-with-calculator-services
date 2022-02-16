@@ -31,7 +31,9 @@ class PaymentRequest extends FormRequest
             'notes' => 'nullable',
             'cart' => 'required',
             'date' => 'required',
-            'payment_method_id' => 'required'
+            'payment_method_id' => 'required',
+            'images' => 'nullable|array',
+            'images.*' => 'mimes:jpeg,png,jpg,gif,svg'
         ];
     }
 }

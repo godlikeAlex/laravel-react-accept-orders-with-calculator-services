@@ -6,7 +6,7 @@ function Thanks() {
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3 text-center">
-                        <p class="not_found highlight" style={{ fontSize: '120px' }}> <span>Sucess!</span> </p>
+                        <p class="not_found highlight" style={{ fontSize: '80px' }}> <span>Sucess!</span> </p>
                         <h1>Thank you for order!</h1>
                         <p> <a href="/" class="theme_button color1">Go to homepage</a> </p>
                     </div>

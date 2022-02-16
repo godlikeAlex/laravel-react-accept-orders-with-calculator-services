@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Easy way install | Dashboard</title>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -33,6 +33,11 @@
     <link rel="stylesheet" href="/backend/plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
     <link rel="stylesheet" href="/backend/plugins/summernote/summernote-bs4.min.css">
+
+    <link rel="stylesheet" href="/backend/plugins/ekko-lightbox/ekko-lightbox.css">
+
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
 
     <style>
         #example1_filter {
@@ -92,8 +97,24 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
+                        <li class="nav-item">
+                            <a href="{{route('orders.create')}}" class="nav-link">
+                                <i class="nav-icon far fa-circle nav-icon"></i>
+                                <p>
+                                    Create order
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{route('custom.order.create')}}" class="nav-link">
+                                <i class="nav-icon far fa-circle nav-icon"></i>
+                                <p>
+                                    Create custom order
+                                </p>
+                            </a>
+                        </li>
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
@@ -104,29 +125,78 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
+                                    <a href="{{route('orders.urgency')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>⚡ Urgency Instsllstion</p>
+                                    </a>
                                     <a href="{{route('orders.index')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>List of orders</p>
                                     </a>
-                                    <a href="{{route('orders.index')}}?status=finished" class="nav-link">
+                                    <a href="{{route('orders.index')}}?status=on the way" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>On the way</p>
+                                    </a>
+
+                                    <a href="{{route('orders.index')}}?status=in process" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>In process</p>
+                                    </a>
+
+                                    <a href="{{route('orders.index')}}?status=last step to complete" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Last step to complete</p>
+                                    </a>
+
+                                    <a href="{{route('orders.index')}}?status=cancled" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Canceled orders</p>
+                                    </a>
+
+                                    <a href="{{route('orders.index')}}?status=refunded" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Refunded orders</p>
+                                    </a>
+
+                                    <a href="{{route('orders.index')}}?status=completed" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Completed orders</p>
                                     </a>
-                                    <a href="{{route('orders.create')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Create order</p>
-                                    </a>
+
                                 </li>
                             </ul>
                         </li>
+
                         <li class="nav-item">
-                            <a href="{{route('index.users')}}" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon ion ion-person-add"></i>
                                 <p>
-                                    Users
+                                    User
+                                    <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('index.users')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Manage customers</p>
+                                    </a>
+                                    @if(Auth::user()->isOwner)
+                                    <a href="{{route('index.stuff')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Manage Stuff</p>
+                                    </a>
+                                    @endif
+                                    @if(Auth::user()->isOwner)
+                                    <a href="{{route('index.installer')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Manage Installer</p>
+                                    </a>
+                                    @endif
+                                </li>
+                            </ul>
                         </li>
+
                         <li class="nav-item">
                             <a href="{{route('admin.logout')}}" class="nav-link">
                                 <i class="nav-icon fa fa-reply"></i>
@@ -222,12 +292,21 @@
     <script>
         $(function() {
             if (document.querySelector('#example1')) {
-                $("#example1").DataTable({
+                let table = $("#example1").DataTable({
+
                     "responsive": true,
                     "lengthChange": false,
                     "autoWidth": false,
                     "paging": false,
-                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+
+                    "columnDefs": [{
+                        "targets": 3,
+                        "type": "date-eu"
+                    }],
+                    "order": [
+                        [3, "desc"]
+                    ],
                 }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             }
 
@@ -240,6 +319,9 @@
             }
         });
     </script>
+
+    @yield('custom-script')
+
 
 </body>
 

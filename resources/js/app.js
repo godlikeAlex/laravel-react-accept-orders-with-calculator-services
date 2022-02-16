@@ -14,8 +14,11 @@
 
 require('./components/CreateOrderBackend');
 require('./components/UpdateOrderBackend');
+require('./components/CreateCustomOrder');
+require('./components/UpdateCustomOrderBackend');
+require('./components/UpdateInstallerOrderBackend');
 
 // Frontend
 // require('./App/components/ShopingCart');
 require('./App/index');
-require('./components/FrontendCalculator');
+// require('./components/FrontendCalculator');

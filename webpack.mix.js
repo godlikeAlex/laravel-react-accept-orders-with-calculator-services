@@ -17,3 +17,6 @@ mix.minify('public/frontend/js/main.js');
 mix.js('resources/js/app.js', 'public/js')
     .react()
     .sass('resources/sass/app.scss', 'public/css');
+mix.js('resources/js/calculator.js', 'public/js')
+    .react()
+mix.minify('public/js/app.js');

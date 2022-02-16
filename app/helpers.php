@@ -11,7 +11,7 @@ function calculateServicePrice($data)
         $curentService = $service->currentService;
         $squareFt = round(($width * $height) / 144, 2);
         $totalSqFt = round($squareFt * $service->quantity, 2);
-        $calculatedPrice = round(($totalSqFt * $curentService->price) + $service->ftHeight->price, 2);
+        $calculatedPrice = ($totalSqFt * $curentService->price) + $service->ftHeight->price;
         $totalPerSqFt = $squareFt * $service->quantity * (($curentService->price * $totalSqFt) / $totalSqFt);
         $totalPerItem = $squareFt * (($curentService->price * $totalSqFt) / $totalSqFt);
 
@@ -22,9 +22,9 @@ function calculateServicePrice($data)
             $cPrice = $curentService->price +  $service->ftHeight->price;
             $service->totalPerSqFt = round(2, $curentService->price);
             $service->totalPerItem = round(2, $curentService->price);
-            $service->price = $cPrice <= 250 ? 250 : round($cPrice, 2);
+            $service->price = round($cPrice, 2);
         } else {
-            $service->price = $calculatedPrice <= 250 ? 250 : $calculatedPrice;
+            $service->price = $calculatedPrice;
         }
         $totalServices = $totalServices + $service->price;
     }
@@ -42,7 +42,8 @@ function calculateServicePrice($data)
     }
 
     if ($encodedData->acceptedServices->urgencyInstsllstion) {
-        $encodedData->prices->urgencyInstsllstion = $totalServices * 0.2;
+        $t = $encodedData->prices->survey + $encodedData->prices->removal + $encodedData->prices->installation;
+        $encodedData->prices->urgencyInstsllstion = $t * 0.2;
     }
 
     foreach ($encodedData->prices as $key => $value) {
@@ -52,8 +53,8 @@ function calculateServicePrice($data)
     $encodedData->totalServices_php = $totalServices;
     $encodedData->totalServices = $totalServices;
 
-    $encodedData->total_php = $total;
-    $encodedData->total = round($total, 2);
+    $encodedData->total_php = $total <= 250 ? 250 : round($total, 2);
+    $encodedData->total = $total <= 250 ? 250 : $total;
 
     return $encodedData;
 }

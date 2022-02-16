@@ -14,6 +14,11 @@ export const cartSlice = createSlice({
             survey: 0,
             urgencyInstsllstion: 0,
         },
+        additional: {
+            installation: false,
+            removal: false
+        },
+        delivery: false,
         loading: true
     },
     reducers: {
@@ -21,6 +26,52 @@ export const cartSlice = createSlice({
             state.services = payload.services;
             state.totalServices = payload.totalServices;
             state.prices = payload.prices;
+            state.delivery = payload.delivery;
+            state.loading = false;
+            state.additional = payload.additional || {installation: false, removal: false};
+            console.log('hello blad')
+        },
+        extendCart: (state, { payload }) => {
+            const { services, totalServices, prices, total } = state;
+            state.services = [
+                ...services,
+                ...payload.services
+            ];
+            state.totalServices = state.services.reduce((total, service) => {
+                const { total: currentPrice } = calculatePrice(service);
+                return total + currentPrice;
+            }, 0);
+            state.delivery = payload.delivery;
+            let calculatedPrices = {};
+            Object.keys(payload.prices).forEach(priceKey => {
+                if (priceKey === 'installation') {
+                    calculatedPrices.installation = payload.prices[priceKey] ? state.totalServices : 0;
+                }
+
+                if (priceKey === 'removal') {
+                    calculatedPrices.removal = payload.prices[priceKey] ? state.totalServices * 0.5 : 0;
+                }
+
+                if (priceKey === 'survey') {
+                    calculatedPrices.survey = payload.prices[priceKey] ? 250 : 0;
+                }
+
+                if (priceKey === 'urgencyInstsllstion') {
+                    console.log(payload.prices[priceKey] > 0 ? total * 0.20 : 0);
+                    calculatedPrices.urgencyInstsllstion = payload.prices[priceKey] > 0 ? total * 0.20 : 0;
+                }
+            });
+
+
+
+            if (calculatedPrices.urgencyInstsllstion != 0) {
+                const total = calculatedPrices.installation + calculatedPrices.removal + calculatedPrices.survey;
+
+                calculatedPrices.urgencyInstsllstion = total * 0.20;
+            }
+
+            state.prices = calculatedPrices;
+
             state.loading = false;
         },
         removeFromCart: (state, { payload: index }) => {
@@ -42,7 +93,7 @@ export const cartSlice = createSlice({
 
                     // wtf?
                     const calculatedPrice = calculatePrice(serviceToUpdate);
-                    serviceToUpdate.price = calculatedPrice.total <= MIN_PRICE ? MIN_PRICE : calculatedPrice.total;
+                    serviceToUpdate.price = calculatedPrice.total;
                     return serviceToUpdate;
                 }
 
@@ -50,7 +101,7 @@ export const cartSlice = createSlice({
             });
         },
         updatePrices: (state, { payload }) => {
-            const { totalServices, prices } = state;
+            const { totalServices, prices, total } = state;
             switch (payload.type) {
                 case 'installation':
                     state.prices.installation = state.prices.installation > 0 ? 0 : totalServices;
@@ -62,8 +113,17 @@ export const cartSlice = createSlice({
                     state.prices.survey = state.prices.survey > 0 ? 0 : 250;
                     break;
                 case 'urgencyInstsllstion':
-                    state.prices.urgencyInstsllstion = state.prices.urgencyInstsllstion > 0 ? 0 : totalServices * 0.20;
+                    state.prices.urgencyInstsllstion = state.prices.urgencyInstsllstion > 0 ? 0 : total * 0.20;
                     break;
+                case 'delivery':
+                    state.delivery = !state.delivery;
+                    break;
+            }
+
+            if (state.prices.urgencyInstsllstion != 0) {
+                const total = state.prices.installation + state.prices.removal + state.prices.survey;
+
+                state.prices.urgencyInstsllstion = total * 0.20;
             }
         },
         setTotalTo: (state, { payload }) => {
@@ -71,14 +131,29 @@ export const cartSlice = createSlice({
         },
         setServiceTotalTo: (state, { payload }) => {
             state.totalServices = payload;
+
+            state.prices.installation = state.prices.installation != 0 && payload;
+            state.prices.removal = state.prices.removal != 0 && payload * 0.5;
+
+            if (state.prices.urgencyInstsllstion != 0) {
+                const total = state.prices.installation + state.prices.removal + state.prices.survey;
+
+                state.prices.urgencyInstsllstion = total * 0.20;
+            }
         },
         clearCart: (state) => {
             state.services = [];
             state.total = 0;
+            state.prices = {
+                installation: MIN_PRICE,
+                removal: 0,
+                survey: 0,
+                urgencyInstsllstion: 0,
+            }
         }
     },
 })
 
-export const { removeFromCart, setServiceTotalTo, setTotalTo, initCart, updateQuantity, clearCart, updatePrices } = cartSlice.actions
+export const { removeFromCart, setServiceTotalTo, setTotalTo, extendCart, initCart, updateQuantity, clearCart, updatePrices } = cartSlice.actions
 
 export default cartSlice.reducer

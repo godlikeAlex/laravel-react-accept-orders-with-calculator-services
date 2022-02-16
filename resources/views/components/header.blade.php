@@ -13,12 +13,12 @@
                             <nav class="mainmenu_wrapper" style="">
                                 <ul class="mainmenu nav sf-menu sf-js-enabled sf-arrows" style="touch-action: pan-y;">
                                     <li className="active">
-                                        <a href="/" className="sf-with-ul"><span>Home</span></a><span className="sf-menu-item-mobile-toggler"></span>
+                                        <a href="/" class="close-menu-link"><span>Home</span></a><span class="sf-menu-item-mobile-toggler"></span>
                                     </li>
-                                    <li> <a href="/#about-us" className="sf-with-ul"><span>About us</span></a><span className="sf-menu-item-mobile-toggler"></span></li>
-                                    <li> <a href="/#process" className="sf-with-ul"><span>Process</span></a><span className="sf-menu-item-mobile-toggler"></span></li>
-                                    <li> <a href="/#calculator"><span>Calculator</span></a> </li>
-                                    <li className=""> <a href="/#contact" className="sf-with-ul"><span>Contact</span></a><span className="sf-menu-item-mobile-toggler"></span></li>
+                                    <li> <a href="/#about-us" class="close-menu-link"><span>About us</span></a><span class="sf-menu-item-mobile-toggler"></span></li>
+                                    <li> <a href="/#process" class="close-menu-link"><span>Process</span></a><span class="sf-menu-item-mobile-toggler"></span></li>
+                                    <li> <a href="/#calculator" class="close-menu-link"><span>Calculator</span></a> </li>
+                                    <li> <a href="/#contact" class="close-menu-link"><span>Contact</span></a> </li>
 
                                     <li class="need_log_in">
                                         <a href="/cabinet/login" className="sf-with-ul"><span>Sign In</span></a>
@@ -26,19 +26,18 @@
 
                                     <li>
                                         <a href="/cart">
-                                            <span style="display: flex">
+                                            <span class="cart-container-menu">
                                                 <ion-icon style="font-size: 35px" name="cart-outline"></ion-icon>
+                                                <div class="cart-indicator" id="c-id">
+                                            </div>
                                             </span>
                                         </a>
                                     </li>
                                     <li class="only-mobile-menu">
                                         <p style=" color: white;">
-                                            <a href="mailto:info@easywayinstall.com">info@easywayinstall.com</a>
+                                            <a href="tel:(949) 942-1363">(949) 942-1363</a>
                                         </p>
-                                        <p style=" color: white;">
-                                            <a href="tel:+1 201 855 63 45">+1 201 855 63 45</a>
-                                        </p>
-                                        <p class="page_social bottommargin_20">
+                                        <p class="page_social bottommargin_20 header-social">
                                             <a href="https://www.facebook.com/easywayinstall" target="_blank" class="social-icon light-bg-icon color-icon rounded-icon socicon-facebook"></a>
                                             <a href="https://www.instagram.com/easywayinstall/" target="_blank" class="social-icon light-bg-icon color-icon rounded-icon socicon-instagram"></a>
                                             <a href="https://t.me/EasyWayInstall_Bot" target="_blank" class="social-icon light-bg-icon color-icon rounded-icon socicon-telegram"></a>
@@ -51,7 +50,6 @@
                             </nav>
                             <!-- eof main nav -->
                             <!-- header toggler --><span class="toggle_menu"><span></span></span>
-
                         </div>
                     </div>
                 </div>
@@ -59,3 +57,9 @@
         </header>
     </div>
 </div>
+
+<a href="/cart" class="cart-circle">
+    <div class="cart-cont">
+        <ion-icon class="cart-circle-icon" name="cart-outline"></ion-icon>
+    </div>
+</a>

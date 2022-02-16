@@ -41,7 +41,7 @@ function Login() {
 
     return (
         <>
-            <HeadSection title="Login" image={5} />
+            <HeadSection title="Login" image={'login'} />
             <section className="ls section_padding_top_150 section_padding_bottom_150" style={{ display: 'flex', justifyContent: 'center' }}>
                 <div className="col-md-6">
                     <div className="container">
@@ -97,6 +97,10 @@ function Login() {
 
                                 <div className="col-sm-12" style={{ marginTop: "30px" }}>
                                     Don't have an account yet? <Link to="/cabinet/sign-up">Sign Up</Link> now!
+                                </div>
+
+                                <div className="col-sm-12" style={{ marginTop: "30px" }}>
+                                    Fargot your password? <Link to="/cabinet/fargot-password">Reset</Link> it now!
                                 </div>
                             </form>
                         </div>

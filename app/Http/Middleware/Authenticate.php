@@ -43,6 +43,10 @@ class Authenticate extends Middleware
                 return route('admin.login');
             }
 
+            if (Arr::first($this->guards) === 'installer') {
+                return route('login.installer');
+            }
+
             if (Arr::first($this->guards) === 'api') {
                 return abort(response()->json('Unauthorized', 403));
             }

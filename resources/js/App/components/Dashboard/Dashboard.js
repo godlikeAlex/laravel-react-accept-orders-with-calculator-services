@@ -20,7 +20,7 @@ const Dashboard = () => {
             uuid: order.uuid,
             status: order.status,
             amount: order.amount,
-            date: format(Date.parse(order.date), 'd MMM Y'),
+            date: format(Date.parse(order.date), 'MMM dd yyyy HH:mm'),
             actions: order.id
         }
     });
@@ -46,6 +46,11 @@ const Dashboard = () => {
             {
                 Header: 'AMOUNT',
                 accessor: 'amount',
+                Cell: ({ value }) => (
+                    <span>
+                        {value} $
+                    </span>
+                )
             },
             {
                 Header: 'SCHEDULE DATE',
@@ -84,7 +89,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <HeadSection title={'Dashboard'} image={4} />
+            <HeadSection title={'Dashboard'} image={'dashboard'} />
             <div className="container">
                 <div className="row">
                     {!isLoading && (

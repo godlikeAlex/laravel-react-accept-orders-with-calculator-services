@@ -137,7 +137,7 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
 
             <div className="col-md-6">
                 <div className="form-group">
-                    <label>Height</label>
+                    <label>Height (inches)</label>
                     <input type="text"
                         className="form-control"
                         disabled={service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT'}
@@ -153,7 +153,7 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
 
             <div className="col-md-6">
                 <div className="form-group">
-                    <label>Width</label>
+                    <label>Width (inches)</label>
                     <input type="text"
                         disabled={service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT'}
                         className="form-control"
@@ -208,9 +208,9 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
                 </div>
 
 
-                <h6 className="col-md-12">Total Per Item - ${service.totalPerItem || 0}</h6>
-                <h6 className="col-md-12">Total Per SqFt - ${service.totalPerSqFt || 0}</h6>
-                <h6 className="col-md-12">Price for current service - ${service.price.toFixed(2)}</h6>
+                <h6>Total Per Item - ${service.totalPerItem || 0}</h6>
+                <h6>Total Per SqFt - ${service.totalPerSqFt || 0}</h6>
+                <h6>Price for current service - $ {service.price.toLocaleString()}</h6>
             </div>
         </React.Fragment>
     )

@@ -14,7 +14,7 @@ class AddTransactionIdToOrders extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('transaction_id')->unique();
+            $table->string('transaction_id')->nullable()->unique();
         });
     }
 

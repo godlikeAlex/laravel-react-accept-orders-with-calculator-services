@@ -1,7 +1,7 @@
 import React, { useState, lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { calculatePrice } from '../Calculator/utils';
-
+import NewCalculator from './Calculator';
 const Calculator = lazy(() => import('../Calculator/Calculator'))
 
 const renderLoader = () => <p>Loading</p>;
@@ -38,14 +38,18 @@ function FrontendCalculator() {
             }, 0);
 
             parsedShopingCart.total = total;
+            parsedShopingCart.delivery = false;
 
             localStorage.setItem('shoping-cart', JSON.stringify(parsedShopingCart));
             window.location.href = "/cart";
 
-            return;
+            return false;
         }
+
         localStorage.setItem('shoping-cart', JSON.stringify(data));
         window.location.href = "/cart";
+
+        return false;
     }
 
     return (
@@ -63,5 +67,5 @@ function FrontendCalculator() {
 export default FrontendCalculator;
 
 if (document.getElementById('react-frontend-calculator')) {
-    ReactDOM.render(<FrontendCalculator />, document.getElementById('react-frontend-calculator'));
+    ReactDOM.render(<NewCalculator/>, document.getElementById('react-frontend-calculator'));
 }

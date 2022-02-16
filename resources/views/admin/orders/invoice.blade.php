@@ -23,7 +23,14 @@
                 <div class="col-12">
                     <h4>
                         <i class="fas fa-globe"></i> Easy Way Install NYC Inc
-                        <small class="float-right">Date: {{date('D M Y', strtotime($order->createdAt))}} ({{date('d-m-Y', strtotime($order->createdAt))}})</small>
+                        <small class="float-right">Date: <span id="date" data-date="{{$order->date->toW3cString()}}"></span>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                            <script>
+                                const date = document.querySelector('#date');
+                                const d = moment(date.dataset['date']).format('lll')
+                                date.innerHTML = d;
+                            </script>
+                        </small>
                     </h4>
                 </div>
                 <!-- /.col -->
@@ -44,20 +51,25 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    To
                     <address>
+                        To
+                        {{$order->adderss}}<br>
+                        <strong>{{$order->customer_name}}</strong><br>
+                        @if($order->user)
                         <strong>{{$order->user->name}}</strong><br>
-                        795 Folsom Ave, Suite 600<br>
-                        Email: {{$order->user->email}}
+                        @endif
+                        Email: {{$order->email}}
                     </address>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <b>Invoice #007612</b><br>
-                    <br>
+                    <b>Invoice {{$order->uuid}}</b><br>
                     <b>Order ID:</b> {{$order->id}}<br>
                     <b>Order UUID:</b> {{$order->uuid}}<br>
+                    @if($order->user)
                     <b>Account ID:</b> {{$order->user->id}}
+                    @endif
+                    <br>
                 </div>
                 <!-- /.col -->
             </div>
@@ -77,6 +89,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if($order->custom)
+                            @foreach(json_decode($order->details)->services as $service)
+                            <tr>
+                                <td> </td>
+                                <td>{{$service->name}}</td>
+                                <td></td>
+                                <td></td>
+                                <td>${{$service->price}}</td>
+                            </tr>
+                            @endforeach
+                            @else
                             @foreach(json_decode($order->details)->services as $service)
                             <tr>
                                 <td>{{$service->quantity}}</td>
@@ -86,6 +109,7 @@
                                 <td>${{$service->price}}</td>
                             </tr>
                             @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>

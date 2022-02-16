@@ -295,8 +295,10 @@
         jQuery('.mainmenu a').on('click', function () {
             var $this = jQuery(this);
             //If this is a local link or item with sumbenu - not toggling menu
-            if (($this.hasClass('sf-with-ul')) || !($this.attr('href').charAt(0) === '#')) {
-                return;
+            if (!$this.hasClass('close-menu-link')) {
+                if (($this.hasClass('sf-with-ul')) || !($this.attr('href').charAt(0) === '#')) {
+                    return;
+                }
             }
             $this
                 .closest('.page_header')
@@ -551,7 +553,12 @@
             var request = $form.serialize();
             var ajax = jQuery.post("/contact", request)
                 .done(function (data) {
-                    jQuery($form).find('[type="submit"]').attr('disabled', false).parent().append('<span class="contact-form-respond highlight">' + data + '</span>');
+                    // jQuery($form).find('[type="submit"]').attr('disabled', false).parent().append('<span class="contact-form-respond highlight">' + data + 'ыыыы</span>');
+                    Swal.fire(
+                        'Thank you!',
+                        data,
+                        'success'
+                    )
                     //cleaning form
                     var $formErrors = $form.find('.form-errors');
                     if (!$formErrors.length) {
@@ -1042,13 +1049,12 @@
                     });
 
                 } //filters
-
                 $carousel.owlCarousel({
-                    loop: loop,
                     margin: margin,
                     nav: nav,
                     navText: ['<span>prev</span>', '<span>next</span>'],
-                    autoplay: autoplay,
+                    autoplay: true,
+                    loop: true,
                     dots: dots,
                     dotsContainer: dotsContainer,
                     themeClass: themeClass,
@@ -1503,11 +1509,56 @@
 
     });
     //end of IIFE function
-
 })();
+
+function inputToggler() {
+    const inputs = document.querySelectorAll('.with-input-changer');
+
+    inputs.forEach(elm => {
+        elm.addEventListener('click', e => {
+            if (e.target.tagName != 'ION-ICON') return;
+            const togledInputsContainer = elm.querySelector('.toggled-inputs');
+
+
+            if (e.target.getAttribute('name') === 'call-outline') {
+                e.target.setAttribute('name', 'mail-outline');
+                togledInputsContainer.innerHTML = '<input type="text" aria-required="true" size="30" value="" name="phone" id="email" class="form-control" placeholder="Phone">'
+            } else {
+                e.target.setAttribute('name', 'call-outline');
+                togledInputsContainer.innerHTML = '<input type="email" aria-required="true" size="30" value="" name="email" id="email" class="form-control" placeholder="Email">';
+            }
+
+
+            console.log();
+
+        })
+    });
+}
+
+inputToggler();
 
 const token = localStorage.getItem('token');
 const needLogin = document.querySelector('.need_log_in');
+
+const cart = localStorage.getItem('shoping-cart');
+const cartIndicator = document.querySelector('#c-id');
+
+try {
+    if (cart) {
+        const cartP = JSON.parse(cart);
+        if (cartP.services.length > 0) {
+            cartIndicator.style.display = 'block';
+        } else {
+            cartIndicator.style.display = 'none';
+        }
+    } else {
+        cartIndicator.style.display = 'none';
+    }
+} catch (error) {
+    cartIndicator.style.display = 'none';
+
+}
+
 if (!token) {
     needLogin.innerHTML = `
         <a href="/cabinet/login" className="sf-with-ul"><span>Sign In</span></a>
@@ -1519,17 +1570,27 @@ if (!token) {
     }).then((data) => {
         return data.json();
     }).then(user => {
+        if (user === 'Unauthorized') {
+            localStorage.removeItem('token');
+            needLogin.innerHTML = `
+            <a href="/cabinet/login" className="sf-with-ul"><span>Sign In</span></a>
+        `
+            return;
+        }
+
         if (needLogin) {
             needLogin.innerHTML = `
             <a href="/cabinet/dashboard" className="sf-with-ul">
                 <span style="display: flex; align-items: center">
-                    <ion-icon name="person-circle-outline" style="font-size: 35px"></ion-icon>
+                    <img style="width: 30px; height: 30px; border-radius: 50%; margin-right: 5px;" src="${user.avatar ? '/storage/' + user.avatar : '/frontend/avatar.png'}" />
                     ${user.name}
                 </span>
             </a>
             <span className="sf-menu-item-mobile-toggler"></span>
             <ul>
+                <li> <a href="/cabinet/dashboard/saved"><span>Saved for later</span></a> </li>
                 <li> <a href="/cabinet/dashboard"><span>My profile</span></a> </li>
+                <li> <a href="/cabinet/dashboard/update-profile"><span>Update my profile</span></a> </li>
                 <li id="logout"> <a id="logout" style="cursor: pointer"><span id="logout">Log out</span></a> </li>
             </ul>
         `;

@@ -15,14 +15,16 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
     use Queueable;
 
     private $order;
+    private $status;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($order)
+    public function __construct($order, $status)
     {
         $this->order = $order;
+        $this->status = $status;
     }
 
     /**
@@ -45,18 +47,14 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $mail = (new MailMessage)
-            ->greeting(new HtmlString('<h1 style="font-size: 30px;">Order update</h1>'))
-            ->line("Dear **{$this->order->user->name}**,")
-            ->line("Order id: **{$this->order->id}**")
-            ->line(new HtmlString("Order status: <span style='color: #ec0798;text-transform: capitalize'>**{$this->order->status}**</span>"))
-            ->line("The status of your order has been updated, as shown above.")
-            ->line("You can check on the status of your order at any time, by goig **My orders** in your account.")
-            ->line('### Thank you for using services!');
+            ->view('emails.orderUpdated', ['order' => $this->order, 'status' => $this->status]);
 
         if ($this->order->status == 'completed') {
-            $mail->attach(public_path('uploads/' . $this->order->image), [
-                'as' => $this->order->image,
-            ]);
+            foreach ($this->order->images as $image) {
+                $mail->attach(public_path('storage/' . $image->path), [
+                    'as' => $image->path,
+                ]);
+            }
         }
 
         return $mail;

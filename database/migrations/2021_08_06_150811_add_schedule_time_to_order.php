@@ -14,7 +14,7 @@ class AddScheduleTimeToOrder extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->date('date')->nullable();
+            $table->date('timestamp')->nullable();
         });
     }
 

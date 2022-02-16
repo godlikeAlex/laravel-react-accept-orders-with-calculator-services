@@ -5,12 +5,15 @@ import EmptyDashboard from './EmptyDashboard';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns/esm';
-import { initCart } from '../../redux/cartSlice';
+import { extendCart, initCart } from '../../redux/cartSlice';
 import { useHistory } from 'react-router-dom';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 function Saved() {
     const [savedForLater, setSavedForLetter] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [showModalOrders, setShowModalOrders] = useState(false);
+    const [ordersModal, setOrdersModal] = useState([]);
     const history = useHistory();
     const dispatch = useDispatch();
     const { token } = useSelector(state => state.auth);
@@ -38,7 +41,7 @@ function Saved() {
     }
 
     const addToCart = wish => {
-        dispatch(initCart(wish.details));
+        dispatch(extendCart(wish.details));
         history.push('/cart');
     }
 
@@ -59,7 +62,7 @@ function Saved() {
                                             <h3 class="entry-title"> {wish.name} </h3>
                                         </header>
                                         <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-                                            {wish.details.services.map((service) => (
+                                            {new Array(1).fill(wish.details.services[0]).map((service) => (
                                                 <li style={{ borderTop: '1px solid #e8e8e8', padding: '10px 15px' }}>
                                                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                         <h5 style={{ fontWeight: 'normal', margin: 0 }}>{service.currentService.label}</h5>
@@ -67,12 +70,17 @@ function Saved() {
                                                     </div>
                                                     <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase', marginTop: 5 }}>Width: {service.width};  Height: {service.height};</div>
                                                     <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Foot Height: {service.ftHeight.title};</div>
-
                                                 </li>
                                             ))}
+                                            <li style={{ textAlign: 'center' }}>
+                                                <a class="theme_button color1" style={{ cursor: 'pointer' }} onClick={() => {
+                                                    setShowModalOrders(true);
+                                                    setOrdersModal(wish.details.services);
+                                                }}>See more</a>
+                                            </li>
                                         </ul>
-                                        <div className="row" style={{ flexDirection: 'column' }}>
-                                            <hr />
+                                        <hr />
+                                        <div className="row" style={{ flexDirection: 'column', minHeight: '215px' }}>
                                             {wish.details.prices.installation > 0 && (
                                                 <div className="col-md-12">
                                                     <h6 style={{ color: 'black' }}>Instalation price: <strong>${wish.details.prices.installation.toLocaleString()}</strong></h6>
@@ -98,20 +106,21 @@ function Saved() {
                                             )}
 
                                             <div className="col-md-12">
-                                                <h6>Subtotal: ${wish.details.total}</h6>
+                                                <h6>Subtotal: ${wish.details.total.toLocaleString()}</h6>
                                             </div>
                                         </div>
-                                        <div className="row">
-
-                                            <div className="col-sm-6">
-                                                <a className="theme_button bg_button color1 min_width_button" onClick={() => { addToCart(wish) }} style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Add to cart</a>
+                                        <div className="row" style={{ flexWrap: 'wrap' }}>
+                                            <div className="col-md-12">
+                                                <div className="theme_button bg_button color1 min_width_button" onClick={() => { addToCart(wish) }} style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Add to cart</div>
                                             </div>
 
-                                            <div className="col-sm-6">
-                                                <a className="theme_button bg_button color1 min_width_button" onClick={() => { removeItem(wish.id) }} style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Delete</a>
+                                            <div className="col-md-12">
+                                                <div className="theme_button bg_button color1 min_width_button" onClick={() => { removeItem(wish.id) }} style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Delete</div>
                                             </div>
                                         </div>
                                     </div>
+
+
                                 </div>
                             </div>
                         </article>
@@ -129,12 +138,39 @@ function Saved() {
 
     return (
         <>
-            <HeadSection title={'Saved for letter'} image={2} />
+            <HeadSection title={'Saved for later'} image={'saved'} />
             <div className="container">
                 <div className="row">
                     {isLoading ? loadingContainer() : content()}
                 </div>
             </div>
+
+            {showModalOrders && (
+                <SweetAlert
+                    title="All items"
+                    onCancel={() => {
+                        setShowModalOrders(false)
+                    }}
+                    showConfirm={false}
+                    showCloseButton={true}
+                    onConfirm={() => {
+                        // setSuceess(false);
+                    }}
+                >
+                    {ordersModal.map((service, key) => (
+                        <ul style={{ listStyle: 'none', paddingLeft: 0, textAlign: 'left' }}>
+                            <li key={`order-${key}`} style={{ borderTop: '1px solid #e8e8e8', padding: '10px 15px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <h5 style={{ fontWeight: 'normal', margin: 0 }}>{service.currentService.label}</h5>
+                                    <span style={{ color: 'black', fontWeight: 'bold' }}>{service.price} $</span>
+                                </div>
+                                <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase', marginTop: 5 }}>Width: {service.width};  Height: {service.height};</div>
+                                <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Foot Height: {service.ftHeight.title};</div>
+                            </li>
+                        </ul>
+                    ))}
+                </SweetAlert>
+            )}
         </>
     )
 }

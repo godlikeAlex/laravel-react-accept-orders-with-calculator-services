@@ -1,20 +1,31 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 import { logout } from '../Auth/authSlice';
 
 const Header = () => {
     const auth = useSelector(state => state.auth);
+    const cart = useSelector(state => state.cart);
+    const [mobile, setMobile] = useState(false);
+    const { user } = useSelector(state => state.auth);
     const dispatch = useDispatch();
-
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+        
     const handleLogout = () => {
         dispatch(logout());
         localStorage.removeItem('token');
         window.location.reload(false);
     }
 
+    const toogleMenu = () => {
+        if (isMobile) {
+            setMobile(!mobile);
+        }
+    };
+
     return (
-        <header className="page_header header_v2 header_white toggler_xxs_right affix-top">
+        <header className={mobile && isMobile ? `header_v2 header_white toggler_xxs_right affix-top  mobile-active` : `header_v2 header_white toggler_xxs_right affix-top`}>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-sm-12 display-flex v-center">
@@ -36,38 +47,40 @@ const Header = () => {
                                         <a href="/#contacts" ><span>Contact</span></a><span className="sf-menu-item-mobile-toggler"></span></li>
                                     {auth.isAuth ? (
                                         <li>
-                                            <Link to="/cabinet/dashboard" className="sf-with-ul">
+                                            <Link onClick={toogleMenu} to="/cabinet/dashboard" className="sf-with-ul">
                                                 <span style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <ion-icon name="person-circle-outline" style={{ fontSize: '35px', color: '#333' }}></ion-icon>
+                                                    <img style={{ width: 30, height: 30, borderRadius: '50%', marginRight: 5 }} src={user.avatar ? `/storage/${user.avatar}` : '/frontend/avatar.png'} alt="Profile picture" />
                                                     {auth.user.name}
                                                 </span>
                                             </Link>
                                             <span className="sf-menu-item-mobile-toggler"></span>
                                             <ul>
-                                                <li> <Link to="/cabinet/dashboard"><span>My profile</span></Link> </li>
-                                                <li> <Link to="/cabinet/dashboard/update-profile"><span>Update my profile</span></Link> </li>
-                                                <li> <Link to="/cabinet/dashboard/saved"><span>My saved</span></Link> </li>
+                                                <li> <Link onClick={toogleMenu} to="/cabinet/dashboard/saved"><span>Saved for later</span></Link> </li>
+                                                <li> <Link onClick={toogleMenu} to="/cabinet/dashboard"><span>My profile</span></Link> </li>
+                                                <li> <Link onClick={toogleMenu} to="/cabinet/dashboard/update-profile"><span>Update my profile</span></Link> </li>
                                                 <li> <a onClick={handleLogout} style={{ cursor: 'pointer' }}><span>Log out</span></a> </li>
                                             </ul>
                                         </li>
                                     ) : (
-                                        <li> <Link to="/cabinet/login" className="sf-with-ul"><span>Sign In</span></Link></li>
+                                        <li> <Link to="/cabinet/login" onClick={() => { toogleMenu() }} className="sf-with-ul"><span>Sign In</span></Link></li>
                                     )}
                                     <li>
-                                        <Link to="/cart">
-                                            <span style={{ display: 'flex' }}>
-                                                <ion-icon style={{ fontSize: '35px', color: '#333' }} name="cart-outline"></ion-icon>
+                                        <Link to="/cart" onClick={toogleMenu} >
+                                            <span className='cart-container-menu'>
+                                                <ion-icon style={{ fontSize: '35px' }} name="cart-outline"></ion-icon>
+                                                {cart.services.length > 0 && (
+                                                    <div className="cart-indicator">
+                                                    </div>
+                                                )}
                                             </span>
+
                                         </Link>
                                     </li>
                                     <li className="only-mobile-menu">
                                         <p style={{ color: 'white' }}>
-                                            <a href="mailto:info@easywayinstall.com">info@easywayinstall.com</a>
+                                            <a href="tel:(949) 942-1363">(949) 942-1363</a>
                                         </p>
-                                        <p style={{ color: 'white' }}>
-                                            <a href="tel:+1 201 855 63 45">+1 201 855 63 45</a>
-                                        </p>
-                                        <p className="page_social bottommargin_20">
+                                        <p className="page_social bottommargin_20 header-social">
                                             <a href="https://www.facebook.com/easywayinstall" target="_blank" className="social-icon light-bg-icon color-icon rounded-icon socicon-facebook"></a>
                                             <a href="https://www.instagram.com/easywayinstall/" target="_blank" className="social-icon light-bg-icon color-icon rounded-icon socicon-instagram"></a>
                                             <a href="https://t.me/EasyWayInstall_Bot" target="_blank" className="social-icon light-bg-icon color-icon rounded-icon socicon-telegram"></a>
@@ -76,11 +89,17 @@ const Header = () => {
                                     </li>
                                 </ul>
                             </nav>
-                            <span className="toggle_menu"><span></span></span>
+                            <span className={isMobile && mobile ? 'toggle_menu mobile-active' : 'toggle_menu'} onClick={toogleMenu}><span></span></span>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <Link to="/cart" class="cart-circle">
+                <div class="cart-cont">
+                    <ion-icon class="cart-circle-icon" name="cart-outline"></ion-icon>
+                </div>
+            </Link>
         </header>
     )
 };

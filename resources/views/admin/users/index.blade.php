@@ -8,7 +8,7 @@
                 <input name="query" id="query" class="form-control mr-sm-2" style="height: unset !important" type="text" placeholder="Search" aria-label="Search">
                 <button class="btn btn-primary " type=" submit">Search</button>
             </form>
-
+            <a href="{{route('add.new.customer')}}" class="btn btn-primary" style="margin-bottom: 25px" type=" submit">Create new customer</a>
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -16,6 +16,7 @@
                         <th>Photo</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Address</th>
                         <th>Phone</th>
                         <th>Actions</th>
                     </tr>
@@ -33,6 +34,7 @@
                         </td>
                         <td>{{$user->name}}</td>
                         <td>{{$user->email}}</td>
+                        <td>{{$user->address}}</td>
                         <td>{{$user->phone}}</td>
                         <td>
                             <div class="btn-group">
@@ -58,6 +60,8 @@
                         <th>Status</th>
                         <th>Amount</th>
                         <th>Created Date</th>
+                        <th>Address</th>
+                        <th>Phone</th>
                         <th>Actions</th>
                     </tr>
                 </tfoot>
