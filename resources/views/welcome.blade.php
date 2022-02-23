@@ -49,7 +49,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <div class="file-upload-wrapper cs main_color1 with_padding big-padding " style="background: #fcfcfc; box-shadow: rgba(0, 0, 0, 0.15) -0.0px 1.95px 1.6px">
+                <div class="file-upload-wrapper cs main_color1 with_padding big-padding " style="background: #f4f4f4; box-shadow: rgba(0, 0, 0, 0.15) -0.0px 1.95px 1.6px">
                     {{-- <div class="file-upload-wrapper cs main_color1 with_padding big-padding " style="background: whitesmoke; box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;"> --}}
                     <div id="react-frontend-calculator"></div>
                 </div>
