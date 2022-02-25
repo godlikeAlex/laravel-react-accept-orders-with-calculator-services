@@ -6,10 +6,12 @@ use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\InstallerLoginController;
 use App\Http\Controllers\Contacts;
+use App\Http\Controllers\DocuSignController;
 use App\Http\Controllers\InstallerController;
 use App\Http\Controllers\InstallerManagmentController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\StuffManagmentController;
+use App\Http\Controllers\WidgetController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -111,4 +113,13 @@ Auth::routes([
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [LoginController::class, 'userLogout'])->name('user.logout');
 
+
 Route::post('/webhook-stripe', [StripeWebhookController::class, 'handle']);
+
+Route::get('/widget/{id}', [WidgetController::class, 'renderWidget']);
+
+Route::get('/test-widget', function() {
+    return view('test-widget');
+});
+
+Route::get('/test-docu', [DocuSignController::class, 'sendMail']);
