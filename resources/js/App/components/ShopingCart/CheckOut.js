@@ -13,6 +13,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { addDays, format } from 'date-fns';
+import ApplePayButton from './ApplePayButton';
 
 function checkIfFilesAreCorrectType(files) {
     let valid = true
@@ -403,6 +404,8 @@ function CheckOut() {
                                                     id="place_order" disabled={isSubmitting || (isAuth && !currentPaymentMethod)}
                                                     onClick={handleSubmit}
                                                 >Place orders</button>
+
+                                                <ApplePayButton />
                                             </div>
                                         </div>
                                     </div>
