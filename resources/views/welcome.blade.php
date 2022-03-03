@@ -381,8 +381,13 @@
         height: 100%;
         z-index: 0;
         ">
-        <source src="./frontend/video.mp4" type="video/mp4">
+        <source src="./video.mp4" type="video/mp4">
     </video>
+
+    <div class="mute">
+        <ion-icon name="volume-high-outline" class="unmuted" style="display: none"></ion-icon>
+        <ion-icon name="volume-mute-outline" class="muted"></ion-icon>
+    </div>
 </section>
 
 @include('components.contact-form', ['section' => ''])
@@ -666,6 +671,28 @@
         </div>
     </div>
 </section>
+
+<script>
+    const video = document.querySelector('#bgvid');
+    const muteBtn = document.querySelector('.mute');
+    const muted = document.querySelector('.muted');
+    const unmuted = document.querySelector('.unmuted');
+
+    muteBtn.addEventListener('click', e => {
+
+        video.muted = !video.muted;
+
+        if (video.muted) {
+            unmuted.style.display = 'none';
+            muted.style.display = 'block';
+        } else {
+            muted.style.display = 'none';
+            unmuted.style.display = 'block';
+        }
+    })
+
+    console.log(video);
+</script>
 
 @include('components.footer')
 @endsection

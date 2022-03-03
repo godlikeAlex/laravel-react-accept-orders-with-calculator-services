@@ -21095,3 +21095,33 @@ a.color-icon.socicon-telegram {
     display: flex;
     width: fit-content;
 }
+
+.mute {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    background: red;
+    border-radius: 50%;
+
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 35px;
+    background: #484848ba;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .mute {
+        bottom: 20px;
+        right: 20px;
+        font-size: 25px;
+        width: 40px;
+        height: 40px;
+        left: unset;
+    }
+
+}
