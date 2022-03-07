@@ -26,7 +26,10 @@
                     <a href="https://t.me/EasyWayInstall_Bot" target="_blank" class="social-icon light-bg-icon color-icon rounded-icon socicon-telegram"></a>
                     <a href="https://www.youtube.com/channel/UCkpNohngt4YIwZnj1a6YDvQ" target="_blank" class="social-icon light-bg-icon color-icon rounded-icon socicon-youtube"></a>
                 </p>
-                <p class=" black" style="margin-top: 50px; font-size: 16px">&copy; Copyright 2021 All Rights Reserved</p>
+                <p class=" black" style="margin-top: 50px; font-size: 16px">&copy; Copyright 2021 All Rights Reserved.</p>
+                <p>
+                    <a href="{{route('terms')}}" style="font-size: 16px;">Terms and Conditions.</a>
+                </p>
             </div>
         </div>
     </div>

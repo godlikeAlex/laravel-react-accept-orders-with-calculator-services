@@ -111,4 +111,8 @@ Auth::routes([
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [LoginController::class, 'userLogout'])->name('user.logout');
 
+Route::get('/terms', function() {
+    return view('terms');
+})->name('terms');
+
 Route::post('/webhook-stripe', [StripeWebhookController::class, 'handle']);

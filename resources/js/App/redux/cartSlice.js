@@ -29,7 +29,6 @@ export const cartSlice = createSlice({
             state.delivery = payload.delivery;
             state.loading = false;
             state.additional = payload.additional || {installation: false, removal: false};
-            console.log('hello blad')
         },
         extendCart: (state, { payload }) => {
             const { services, totalServices, prices, total } = state;

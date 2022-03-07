@@ -63,7 +63,7 @@ const Cart = () => {
             <h2>Shopping cart</h2>
             <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
                 {items.map((item, index) => (
-                    <li style={{ borderTop: '1px solid #e8e8e8', padding: '50px 15px' }}>
+                    <li key={index} style={{ borderTop: '1px solid #e8e8e8', padding: '50px 15px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <h3 style={{ fontWeight: 'normal', margin: 0 }}>{item.currentService.label}</h3>
                             <span style={{ color: 'black', fontWeight: 'bold' }}>{item.price.toLocaleString()} $</span>

@@ -32,6 +32,9 @@ export const OrderSchema = Yup.object().shape({
     phone: Yup.string().required('Required'),
     date: Yup.string().required('Required'),
     address: Yup.string().required('Required'),
+    terms: Yup.boolean()
+    .required("The terms and conditions must be accepted.")
+    .oneOf([true], "The terms and conditions must be accepted."),
     imagesValidate: Yup.array().min(1, 'Images field must have at least 1 items')
         .required('Upload images')
         .test(
@@ -61,7 +64,8 @@ function CheckOut() {
             'date': addDays(Date.now(), prices.urgencyInstsllstion > 0 ? 0 : 2),
             'notes': '',
             'images': [],
-            'imagesValidate': []
+            'imagesValidate': [],
+            'terms': false,
         },
         validationSchema: OrderSchema,
         onSubmit: async (values) => {
@@ -395,6 +399,17 @@ function CheckOut() {
                                                     </div>
                                                 )}
                                             </div>
+
+                                            <input
+                                                type="checkbox"
+                                                onClick={() => setFieldValue('terms', !values.terms)}
+                                                checked={values.terms}
+                                            /> I agree to the <a href="/terms" target='_blank'>EasyWayInstall Terms</a>
+
+                                            {errors.terms && touched.terms ? (
+                                                <div className="error">{errors.terms}</div>
+                                            ) : null}
+
                                             <div className="place-order topmargin_30">
                                                 <button type="submit"
                                                     className="theme_button color1 min_width_button"
