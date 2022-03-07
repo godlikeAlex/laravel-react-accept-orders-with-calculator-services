@@ -1538,70 +1538,80 @@ function inputToggler() {
 inputToggler();
 
 const token = localStorage.getItem('token');
-const needLogin = document.querySelector('.need_log_in');
 
-const cart = localStorage.getItem('shoping-cart');
-const cartIndicator = document.querySelector('#c-id');
+function showBadge() {
+    const cart = localStorage.getItem('shoping-cart');
+    const cartIndicator = document.querySelector('#c-id');
 
-try {
-    if (cart) {
-        const cartP = JSON.parse(cart);
-        if (cartP.services.length > 0) {
-            cartIndicator.style.display = 'block';
+    if (!cartIndicator) return;
+
+    try {
+        if (cart) {
+            const cartP = JSON.parse(cart);
+            if (cartP.services.length > 0) {
+                cartIndicator.style.display = 'block';
+            } else {
+                cartIndicator.style.display = 'none';
+            }
         } else {
             cartIndicator.style.display = 'none';
         }
-    } else {
+    } catch (error) {
         cartIndicator.style.display = 'none';
     }
-} catch (error) {
-    cartIndicator.style.display = 'none';
-
 }
 
-if (!token) {
-    needLogin.innerHTML = `
-        <a href="/cabinet/login" className="sf-with-ul"><span>Sign In</span></a>
-    `
-} else {
-    const user = fetch('/api/user', {
-        method: 'GET',
-        headers: { "Authorization": `Bearer ${token}` }
-    }).then((data) => {
-        return data.json();
-    }).then(user => {
-        if (user === 'Unauthorized') {
-            localStorage.removeItem('token');
-            needLogin.innerHTML = `
+function toggleLoginButtons() {
+    const needLogin = document.querySelector('.need_log_in');
+    if (!needLogin) return;
+
+    if (!token) {
+        needLogin.innerHTML = `
             <a href="/cabinet/login" className="sf-with-ul"><span>Sign In</span></a>
         `
-            return;
-        }
+    } else {
+        const user = fetch('/api/user', {
+            method: 'GET',
+            headers: { "Authorization": `Bearer ${token}` }
+        }).then((data) => {
+            return data.json();
+        }).then(user => {
+            if (user === 'Unauthorized') {
+                localStorage.removeItem('token');
+                needLogin.innerHTML = `
+                <a href="/cabinet/login" className="sf-with-ul"><span>Sign In</span></a>
+            `
+                return;
+            }
 
-        if (needLogin) {
-            needLogin.innerHTML = `
-            <a href="/cabinet/dashboard" className="sf-with-ul">
-                <span style="display: flex; align-items: center">
-                    <img style="width: 30px; height: 30px; border-radius: 50%; margin-right: 5px;" src="${user.avatar ? '/storage/' + user.avatar : '/frontend/avatar.png'}" />
-                    ${user.name}
-                </span>
-            </a>
-            <span className="sf-menu-item-mobile-toggler"></span>
-            <ul>
-                <li> <a href="/cabinet/dashboard/saved"><span>Saved for later</span></a> </li>
-                <li> <a href="/cabinet/dashboard"><span>My profile</span></a> </li>
-                <li> <a href="/cabinet/dashboard/update-profile"><span>Update my profile</span></a> </li>
-                <li id="logout"> <a id="logout" style="cursor: pointer"><span id="logout">Log out</span></a> </li>
-            </ul>
-        `;
+            if (needLogin) {
+                needLogin.innerHTML = `
+                <a href="/cabinet/dashboard" className="sf-with-ul">
+                    <span style="display: flex; align-items: center">
+                        <img style="width: 30px; height: 30px; border-radius: 50%; margin-right: 5px;" src="${user.avatar ? '/storage/' + user.avatar : '/frontend/avatar.png'}" />
+                        ${user.name}
+                    </span>
+                </a>
+                <span className="sf-menu-item-mobile-toggler"></span>
+                <ul>
+                    <li> <a href="/cabinet/dashboard/saved"><span>Saved for later</span></a> </li>
+                    <li> <a href="/cabinet/dashboard"><span>My profile</span></a> </li>
+                    <li> <a href="/cabinet/dashboard/update-profile"><span>Update my profile</span></a> </li>
+                    <li id="logout"> <a id="logout" style="cursor: pointer"><span id="logout">Log out</span></a> </li>
+                </ul>
+            `;
 
-            needLogin.addEventListener('click', (e) => {
-                if (e.target.getAttribute('id') === 'logout') {
-                    e.preventDefault();
-                    localStorage.removeItem('token');
-                    window.location.reload(false);
-                }
-            })
-        }
-    })
+                needLogin.addEventListener('click', (e) => {
+                    if (e.target.getAttribute('id') === 'logout') {
+                        e.preventDefault();
+                        localStorage.removeItem('token');
+                        window.location.reload(false);
+                    }
+                })
+            }
+        })
+    }
 }
+
+showBadge();
+toggleLoginButtons();
