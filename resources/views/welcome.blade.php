@@ -690,8 +690,6 @@
             unmuted.style.display = 'block';
         }
     })
-
-    console.log(video);
 </script>
 
 @include('components.footer')
