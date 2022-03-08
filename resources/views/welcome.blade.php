@@ -550,6 +550,7 @@
                             <div class="media-left"> <i style="color: #ED0598;" class="social-icon socicon-whatsapp"></i> </div>
                             <div class="media-body">
                                 <h6 class="media-heading grey">GET IN TOUCH:</h6>
+         
                                 <a href="https://t.me/ViktorHnativ" target="_blank" rel="noopener noreferrer">
                                     <img src="/frontend/telegram.svg" style="width: 30px" alt="" srcset="">
                                 </a>
@@ -560,6 +561,10 @@
 
                                 <a href="https://www.facebook.com/easywayinstall" target="_blank" style="padding-left: 10px" rel="noopener noreferrer">
                                     <img src="/frontend/facebook.svg" style="width: 30px" alt="" srcset="">
+                                </a>
+
+                                <a href="https://www.instagram.com/easywayinstall/" target="_blank" style="padding-left: 10px" rel="noopener noreferrer">
+                                    <img src="/frontend/instagram.png" style="width: 30px" alt="" srcset="">
                                 </a>
                             </div>
                         </div>
