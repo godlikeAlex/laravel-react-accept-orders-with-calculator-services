@@ -4,8 +4,6 @@ import { serviceTypeOptions } from '../Calculator/Calculator';
 import { frontendCalculatorValues } from "./FrontendCalculatorValues.js";
 import { useHistory } from "react-router-dom";
 
-console.log(frontendCalculatorValues);
-
 const services = Object.keys(calculatorValues.services).reduce((accum, service) => {
     accum.push({ name: service });
     return accum;

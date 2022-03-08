@@ -100,7 +100,7 @@ function Calculator() {
                     classNames="page"
                     unmountOnExit
                   >
-                    <div className="page" style={{marginBottom: match != null && path === '/' ? 0 : '80px'}}>
+                    <div className="page" style={{marginBottom: match != null && path === '/' ? 0 : '110px'}}>
                       <Component {...props} />
                     </div>
                   </CSSTransition>
