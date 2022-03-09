@@ -16,7 +16,9 @@ mix.minify(`${publicCssPath}/app.css`);
 mix.minify('public/frontend/js/main.js');
 mix.js('resources/js/app.js', 'public/js')
     .react()
-    .sass('resources/sass/app.scss', 'public/css');
+    .sass('resources/sass/app.scss', 'public/css')
+    .sass('resources/sass/widget.scss', 'public/css')
 mix.js('resources/js/calculator.js', 'public/js')
     .react()
+mix.js('resources/js/widget.js', 'public/js');
 mix.minify('public/js/app.js');
