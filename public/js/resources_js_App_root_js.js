@@ -4053,7 +4053,6 @@ var cartSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.createSlice)({
         installation: false,
         removal: false
       };
-      console.log('hello blad');
     },
     extendCart: function extendCart(state, _ref2) {
       var payload = _ref2.payload;
@@ -4281,7 +4280,6 @@ store.subscribe(function () {
 
   if (!cart.loading) {
     localStorage.setItem('shoping-cart', JSON.stringify(cart));
-    console.log(cart.total);
 
     if (cart.services.length == 0) {
       localStorage.removeItem('shoping-cart');
