@@ -14,7 +14,7 @@ const csrfToken = document.head.querySelector("[name~=csrf-token][content]").con
 
 export const orderStatusList = [
     { value: 'pending', label: 'Pending ⏳' },
-    { value: 'paid', label: 'Approved ⏳' },
+    { value: 'paid', label: 'Paid ⏳' },
     { value: 'cancled', label: 'Cancled ❌' },
     { value: 'on the way', label: 'On the way ✅' },
     { value: 'in process', label: 'In process ✅' },
@@ -114,7 +114,6 @@ function UpdateOrderBackend({ order, installers }) {
             const users = data.map((user) => ({ value: user.id, label: user.name }));
             setListInstallers(users);
             const currentInstallers =  JSON.parse(installers);
-
 
             if (currentInstallers.length > 0) {
                 const currentInstallersForSelect = currentInstallers.map(currentInstaller => {
