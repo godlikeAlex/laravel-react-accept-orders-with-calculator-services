@@ -91,7 +91,7 @@ class AdminOrderController extends Controller
             'date' => 'required',
             'installer_notes' => 'nullable',
             'notes' => 'nullable',
-            'installer_id' => 'nullable',
+            'installers' => 'nullable',
             'address' => 'nullable',
             'notify' => 'required',
             'images' => 'nullable',
@@ -109,7 +109,6 @@ class AdminOrderController extends Controller
             $order->details = $request->input('details');
             $order->amount = $request->input('total');
             $order->user_id = $request->input('user_id');
-            $order->installer_id = $request->input('installer_id');
             $order->notes = $request->input('notes');
             $order->address = $request->input('address');
             $order->custom = true;
@@ -117,6 +116,12 @@ class AdminOrderController extends Controller
             $order->uuid = Str::random(8);
 
             $order->save();
+
+            if ($request->has('installers')) {
+                $order->installers()->sync(json_decode($request->installers)); // replace relation
+            } else {
+                $order->installers()->sync([]); // Remov all relation 
+            }
 
             if ($request->has('images')) {
                 foreach ($request->images as $image) {
@@ -177,7 +182,7 @@ class AdminOrderController extends Controller
             'date' => 'required',
             'notes' => 'nullable',
             'installer_notes' => 'nullable',
-            'installer_id' => 'nullable',
+            'installers' => 'nullable|json',
             'address' => 'nullable'
         ]);
 
@@ -202,6 +207,12 @@ class AdminOrderController extends Controller
             $order->email = $order->user->email;
 
             $order->save();
+            
+            if ($request->has('installers')) {
+                $order->installers()->sync(json_decode($request->installers)); // replace relation
+            } else {
+                $order->installers()->sync([]); // Remov all relation 
+            }
 
             $order->user->notify(new OrderAccepted($order, $order));
 
@@ -285,7 +296,7 @@ class AdminOrderController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'mimes:jpg,jpeg,png,webp',
             'notes' => 'nullable',
-            'installer_id' => 'nullable',
+            'installers' => 'nullable',
             'address' => 'nullable',
             'uuid' => 'required',
             'installer_notes' => 'nullable',
@@ -302,7 +313,6 @@ class AdminOrderController extends Controller
             'details' => json_encode($calculatedServices),
             'amount' => $calculatedServices->total,
             'notes' => $request->notes,
-            'installer_id' => $request->installer_id,
             'address' => $request->address,
             'uuid' => $request->uuid,
             'installer_notes' => $request->installer_notes,
@@ -319,6 +329,12 @@ class AdminOrderController extends Controller
                 ];
             }
             $order->images()->createMany($images);
+        }
+
+        if ($request->has('installers')) {
+            $order->installers()->sync(json_decode($request->installers)); // replace relation
+        } else {
+            $order->installers()->sync([]); // Remov all relation 
         }
 
         $order->update($data);
@@ -354,7 +370,7 @@ class AdminOrderController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'mimes:jpeg,png,jpg,gif,svg',
             'notify' => 'required',
-            'installer_id' => 'nullable',
+            'installers' => 'nullable',
             'phone' => 'nullable',
             'notes' => 'nullable',
             'address' => 'nullable',
@@ -400,6 +416,12 @@ class AdminOrderController extends Controller
                 ];
             }
             $order->placeImages()->createMany($imagesLocation);
+        }
+
+        if ($request->has('installers')) {
+            $order->installers()->sync(json_decode($request->installers)); // replace relation
+        } else {
+            $order->installers()->sync([]); // Remov all relation 
         }
 
         $order->update($data);

@@ -46,6 +46,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function installers()
+    {
+        return $this->belongsToMany(Installer::class, 'order_installer');
+    }
+
     public function images()
     {
         return $this->hasMany(OrderImage::class);

@@ -4,10 +4,11 @@ import CustomFormBackend from '../CustomFormBackend';
 import { format } from 'date-fns';
 
 const CreateCustomOrder = () => {
-    const handleSubmit = async function ({ user, images_location, status, services, total, date, notes, installer_notes, address, installer, images, sendNotification }) {
+    const handleSubmit = async function ({ user, installers, images_location, status, services, total, date, notes, installer_notes, address, installer, images, sendNotification }) {
         try {
             const formData = new FormData();
             formData.delete('images[]');
+            formData.delete('installers');
             formData.delete('images_location[]');
             formData.append('status', status.value);
             formData.append('user_id', user.value);
@@ -19,10 +20,12 @@ const CreateCustomOrder = () => {
             formData.append('address', address);
             formData.append('notify', sendNotification);
 
-            if (installer) {
-                formData.append('installer_id', installer.value);
+            if (installers.length > 0) {
+                const formatedInstallers = installers.map(installer => {
+                    return installer.value;
+                });
+                formData.append('installers', JSON.stringify(formatedInstallers));
             }
-
 
             if (images) {
                 Array.from(images).forEach(img => {
@@ -41,6 +44,7 @@ const CreateCustomOrder = () => {
 
             return { success: data.ok }
         } catch (error) {
+            console.log(error);
             return { success: false }
         }
     };

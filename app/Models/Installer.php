@@ -23,8 +23,8 @@ class Installer extends Authenticatable
         'password',
     ];
 
-    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsToMany(Order::class, 'order_installer');
     }
 }

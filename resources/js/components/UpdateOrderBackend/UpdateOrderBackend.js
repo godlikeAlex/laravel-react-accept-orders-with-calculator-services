@@ -14,7 +14,7 @@ const csrfToken = document.head.querySelector("[name~=csrf-token][content]").con
 
 export const orderStatusList = [
     { value: 'pending', label: 'Pending ⏳' },
-    { value: 'paid', label: 'Paid ⏳' },
+    { value: 'paid', label: 'Approved ⏳' },
     { value: 'cancled', label: 'Cancled ❌' },
     { value: 'on the way', label: 'On the way ✅' },
     { value: 'in process', label: 'In process ✅' },
@@ -27,7 +27,7 @@ export const orderStatusList = [
     { value: 'refunded', label: 'Refunded 🔁' }
 ];
 
-function UpdateOrderBackend({ order }) {
+function UpdateOrderBackend({ order, installers }) {
     const [error, setError] = useState(false);
     const [success, setSucess] = useState(false);
     const [resetCalculator, setResetCalculator] = useState(false);
@@ -41,7 +41,7 @@ function UpdateOrderBackend({ order }) {
             date: new Date(currentOrder.date),
             notes: currentOrder.notes,
             address: currentOrder.address,
-            installer: null,
+            installers: null,
             installer_notes: currentOrder.installer_notes,
             uuid: currentOrder.uuid,
             sendNotification: true,
@@ -50,6 +50,7 @@ function UpdateOrderBackend({ order }) {
         onSubmit: async values => {
             const formData = new FormData();
             formData.delete('images[]');
+            formData.delete('installers');
             formData.append('details', JSON.stringify({
                 ...values.calculatedData,
                 delivery: JSON.parse(currentOrder.details).delivery,
@@ -69,8 +70,11 @@ function UpdateOrderBackend({ order }) {
             formData.append('date', (new Date(values.date)).toUTCString());
             formData.append('_method', 'put');
 
-            if (values.installer) {
-                formData.append('installer_id', values.installer.value);
+            if (values.installers.length > 0) {
+                const formatedInstallers = values.installers.map(installer => {
+                    return installer.value;
+                });
+                formData.append('installers', JSON.stringify(formatedInstallers));
             }
 
             if (values.images) {
@@ -109,11 +113,23 @@ function UpdateOrderBackend({ order }) {
         axios.get('/admin/installers').then(({ data }) => {
             const users = data.map((user) => ({ value: user.id, label: user.name }));
             setListInstallers(users);
+            const currentInstallers =  JSON.parse(installers);
 
-            if (currentOrder.installer_id) {
-                const user = users.find(user => user.value === currentOrder.installer_id);
-                setFieldValue('installer', user);
-                setFieldValue('installer_id', user.value);
+
+            if (currentInstallers.length > 0) {
+                const currentInstallersForSelect = currentInstallers.map(currentInstaller => {
+                    const installer = data.find(installer => installer.id === currentInstaller.id);
+                    if (installer) {
+                        return {
+                            value: installer.id,
+                            label: installer.name
+                        }
+                    }
+
+                });
+
+                console.log(currentInstallersForSelect)
+                setFieldValue('installers', currentInstallersForSelect);
             }
         });
 
@@ -219,14 +235,15 @@ function UpdateOrderBackend({ order }) {
 
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label>Installer</label>
+                                <label>Installers</label>
                                 <Select
                                     styles={customStyles}
+                                    isMulti
                                     options={listInstallers}
-                                    onChange={installer => {
-                                        setFieldValue('installer', installer)
+                                    onChange={installers => {
+                                        setFieldValue('installers', installers)
                                     }}
-                                    value={values.installer}
+                                    value={values.installers}
                                 />
                             </div>
                         </div>

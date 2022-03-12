@@ -5,14 +5,16 @@ import { format } from 'date-fns';
 import CustomFormBackend from '../CustomFormBackend';
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
-function CustomOrderBackend({ order }) {
+function CustomOrderBackend({ order, installers }) {
     const currentOrder = JSON.parse(order);
+    const currentInstallers = JSON.parse(installers);
 
-    const handleSubmit = async function ({ user_id, status, images_location, services, total, date, installer_notes, images, notes, uuid, address, installer, sendNotification }) {
+    const handleSubmit = async function ({ user_id, status, installers, images_location, services, total, date, installer_notes, images, notes, uuid, address, installer, sendNotification }) {
 
         try {
             const formData = new FormData();
             formData.delete('images[]');
+            formData.delete('installers');
             formData.delete('images_location[]');
             formData.append('status', status.value);
             formData.append('uuid', uuid);
@@ -25,8 +27,11 @@ function CustomOrderBackend({ order }) {
             formData.append('address', address);
             formData.append('date', (new Date(date)).toUTCString());
 
-            if (installer) {
-                formData.append('installer_id', installer.value);
+            if (installers.length > 0) {
+                const formatedInstallers = installers.map(installer => {
+                    return installer.value;
+                });
+                formData.append('installers', JSON.stringify(formatedInstallers));
             }
 
             if (images) {
@@ -67,7 +72,9 @@ function CustomOrderBackend({ order }) {
                 date: new Date(currentOrder.date),
                 address: currentOrder.address,
                 notes: currentOrder.notes,
+                installers: currentOrder.installers,
                 uuid: currentOrder.uuid,
+                currentInstallers: currentInstallers,
                 status: orderStatusList.find(status => status.value === currentOrder.status),
                 services: JSON.parse(currentOrder.details).services,
                 installer_id: currentOrder.installer_id,

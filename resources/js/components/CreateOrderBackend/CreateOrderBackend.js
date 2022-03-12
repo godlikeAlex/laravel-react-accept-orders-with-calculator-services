@@ -30,7 +30,7 @@ function CreateOrderBackend() {
                     urgencyInstsllstion: 0,
                 }
             },
-            installer: null,
+            installers: null,
             status: orderStatusList[0],
             notes: '',
             installer_notes: '',
@@ -68,6 +68,7 @@ function CreateOrderBackend() {
             },
         }));
         formData.delete('images[]');
+        formData.delete('installers');
         formData.append('status', values.status.value);
         formData.append('user_id', values.user.value);
         formData.append('notes', values.notes);
@@ -81,8 +82,11 @@ function CreateOrderBackend() {
             })
         }
 
-        if (values.installer) {
-            formData.append('installer_id', values.installer.value);
+        if (values.installers) {
+            const formatedInstallers = values.installers.map(installer => {
+                return installer.value;
+            });
+            formData.append('installers', JSON.stringify(formatedInstallers));
         }
 
         const data = await axios.post('/admin/orders', formData);
@@ -224,10 +228,11 @@ function CreateOrderBackend() {
                             <div className="form-group">
                                 <label>Installer</label>
                                 <Select
+                                    isMulti
                                     styles={customStyles}
                                     options={listInstallers}
-                                    onChange={installer => {
-                                        setFieldValue('installer', installer)
+                                    onChange={installers => {
+                                        setFieldValue('installers', installers)
                                     }}
                                     value={values.installer}
                                 />

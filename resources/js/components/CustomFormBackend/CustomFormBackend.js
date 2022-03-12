@@ -43,7 +43,7 @@ const CustomOrderBackend = ({ initialData, submit }) => {
             sendNotification: true,
             phone: '',
             address: '',
-            installer: null,
+            installers: [],
             images: [],
             images_location: [],
             services: [
@@ -77,10 +77,21 @@ const CustomOrderBackend = ({ initialData, submit }) => {
         axios.get('/admin/installers').then(({ data }) => {
             const users = data.map((user) => ({ value: user.id, label: user.name }));
             setListInstallers(users);
+           
             if (initialData) {
-                const user = users.find(user => user.value === initialData.installer_id);
-                setFieldValue('installer', user);
-                setFieldValue('installer_id', user.value);
+                if (initialData.currentInstallers.length > 0) {
+                    const currentInstallersForSelect = initialData.currentInstallers.map(currentInstaller => {
+                        const installer = data.find(installer => installer.id === currentInstaller.id);
+                        if (installer) {
+                            return {
+                                value: installer.id,
+                                label: installer.name
+                            }
+                        }
+                    });
+
+                    setFieldValue('installers', currentInstallersForSelect);
+                }
             }
         });
     }, []);
@@ -235,14 +246,15 @@ const CustomOrderBackend = ({ initialData, submit }) => {
 
                     <div className="col-md-6">
                         <div className="form-group">
-                            <label>Installer</label>
+                            <label>Installers</label>
                             <Select
+                                isMulti
+                                value={values.installers}
                                 styles={customStyles}
                                 options={listInstallers}
-                                onChange={installer => {
-                                    setFieldValue('installer', installer)
+                                onChange={installers => {
+                                    setFieldValue('installers', installers)
                                 }}
-                                value={values.installer}
                             />
                         </div>
                     </div>

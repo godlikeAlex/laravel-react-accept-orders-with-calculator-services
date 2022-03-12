@@ -18,7 +18,7 @@ class InstallerController extends Controller
 
     public function index()
     {
-        $orders = Order::where('installer_id', Auth::user()->id)->latest()->where('status', '!=', 'completed')->take(20)->get();
+        $orders = Auth::user()->orders()->latest()->where('status', '!=', 'completed')->take(20)->get();
         return view('installer.dashboard', compact('orders'));
     }
 
@@ -27,12 +27,12 @@ class InstallerController extends Controller
         $q = $request->input('uuid');
 
         if ($q) {
-            $orders = Order::where('installer_id', Auth::user()->id)->where('uuid', 'like', '%' . $q . '%')->orderBy("date", "DESC")->paginate(50);
+            $orders =  Auth::user()->orders()->where('uuid', 'like', '%' . $q . '%')->orderBy("date", "DESC")->paginate(50);
         } else {
             if (request()->query('status')) {
-                $orders = Order::where('installer_id', Auth::user()->id)->where('status', request()->query('status'))->orderBy("date", "DESC")->paginate(50);
+                $orders =  Auth::user()->orders()->where('status', request()->query('status'))->orderBy("date", "DESC")->paginate(50);
             } else {
-                $orders = Order::where('installer_id', Auth::user()->id)->where('status', '!=', 'completed')->orderBy("date", "DESC")->paginate(50);
+                $orders =  Auth::user()->orders()->where('status', '!=', 'completed')->orderBy("date", "DESC")->paginate(50);
             }
         }
 
@@ -41,7 +41,11 @@ class InstallerController extends Controller
 
     public function editOrder(Request $request, $id)
     {
-        $order = Order::where('id', $id)->first();
+        $order =  Auth::user()->orders->where('id', $id)->first();
+
+        if (!$order) {
+            return redirect()->back();
+        }
 
         return view('installer.update-order', compact('order'));
     }

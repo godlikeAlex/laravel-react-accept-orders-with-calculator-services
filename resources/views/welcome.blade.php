@@ -372,7 +372,7 @@
 </section>
 
 <section id="featured-video" style="height: 80vh;" class="">
-    <video playsinline="" autoplay="" muted="" loop="" id="bgvid" style="
+    <video  playsinline autoplay muted loop id="bgvid" style="
         object-fit: cover;
         position: absolute;
         top: 0;
@@ -574,7 +574,7 @@
                             <div class="media-left"> <i style="color: #ED0598;" class="rt-icon2-shop highlight fontsize_18"></i> </div>
                             <div class="media-body">
                                 <h6 class="media-heading grey">POSTAL ADDRESS:</h6>
-                                <span style="color: #808080;">591 MARCY AVE APT 2, STATEN ISLAND 10309 NEW YORK</span>
+                                <span style="color: #808080;">8 Signs Rd, Staten Island, NY 10314</span>
                             </div>
                         </div>
                     </li>
