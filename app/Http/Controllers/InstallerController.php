@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderUpdated;
 use App\Models\Order;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -90,6 +91,8 @@ class InstallerController extends Controller
         if ($order->status === 'completed') {
             $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
         }
+
+        event(new OrderUpdated($order));
 
         return response()->json(['ok' => true]);
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderUpdated;
+use App\Listeners\SendNotificationToOffice;
 use App\Models\Installer;
 use App\Models\Order;
 use App\Models\User;
@@ -349,6 +351,8 @@ class AdminOrderController extends Controller
             }
         }
 
+        event(new OrderUpdated($order));
+
         return response()->json(['ok' => true]);
     }
 
@@ -426,7 +430,6 @@ class AdminOrderController extends Controller
 
         $order->update($data);
 
-
         if (filter_var($request->input('notify'), FILTER_VALIDATE_BOOLEAN)) {
             if (!in_array($data['status'], $excludedStatuses)) {
                 $order->user->notify(new OrderStatusUpdated($order, $data['status']));
@@ -436,6 +439,8 @@ class AdminOrderController extends Controller
                 $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
             }
         }
+
+        event(new OrderUpdated($order));
 
         return response()->json(['ok' => true]);
     }

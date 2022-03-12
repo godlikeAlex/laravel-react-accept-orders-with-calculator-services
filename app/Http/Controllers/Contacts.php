@@ -11,6 +11,7 @@ class Contacts extends Controller
     public function send()
     {
         $to_email = 'info@easywayinstall.com';
+        
         $data = array(
             'name' => request()->name,
             'email' => request()->email,
