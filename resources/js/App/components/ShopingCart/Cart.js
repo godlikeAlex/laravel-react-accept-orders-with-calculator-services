@@ -163,7 +163,7 @@ const Cart = () => {
                                     <p style={{ color: 'black' }}>Subtotal ({services.length} items): <strong>$ {(total * 1.0875).toFixed(2).toLocaleString()}</strong></p>
                                     
                                     {delivery && (
-                                        <p style={{ color: 'black' }}>Material pickup: <strong>We will contact with for pricing</strong></p>
+                                        <p style={{ color: 'black' }}>Material pickup: <strong>We will contact you with pricing</strong></p>
                                     )}
                                     
                                     {user ? (
