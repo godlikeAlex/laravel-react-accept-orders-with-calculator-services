@@ -121,7 +121,7 @@ function Navigation({goBackCallBack, addToCartCallBack, formik}) {
           success
           showCancel
           title="Add another item to cart?"
-          confirmBtnText={'Yes, add more'}
+          confirmBtnText={'Yes, add one more'}
           cancelBtnText={'Go to cart'}
           confirmBtnCssClass={"theme_button bg_button color1 min_width_button custom-btn"}
           cancelBtnCssClass={"theme_button bg_button color1 min_width_button custom-btn"}
