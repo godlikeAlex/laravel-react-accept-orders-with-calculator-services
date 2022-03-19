@@ -28,11 +28,10 @@
                         From
                         <address>
                             <strong>Easy Way Install NYC Inc.</strong><br>
-                            795 Folsom Ave, Suite 600<br>
+                            8 Signs Rd, 10314<br>
+                            Staten Island<br>
                             New York, NY<br>
-                            Boston, MA<br>
-                            Dalas, TX<br>
-                            Phone: +12018556345<br>
+                            Phone: (949) 942-1363<br>
                             Email: info@easywayinstall.com
                         </address>
                     </div>
