@@ -14,7 +14,7 @@ const csrfToken = document.head.querySelector("[name~=csrf-token][content]").con
 
 export const orderStatusList = [
     { value: 'pending', label: 'Pending ⏳' },
-    { value: 'paid', label: 'Paid ⏳' },
+    { value: 'paid', label: 'Paid 👍🏻' },
     { value: 'cancled', label: 'Cancled ❌' },
     { value: 'on the way', label: 'On the way ✅' },
     { value: 'in process', label: 'In process ✅' },

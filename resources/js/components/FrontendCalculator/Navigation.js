@@ -3,8 +3,9 @@ import { useHistory, useLocation } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { calculatePrice } from '../Calculator/utils';
 import { generateTemplate, MIN_PRICE } from '../Calculator/Calculator';
+import {countAllCart, countService} from '../../common/cart';
 
-function Navigation({goBackCallBack, addToCartCallBack, formik}) {
+function Navigation({goBackCallBack, addToCartCallBack, resetCalculator}) {
   const history = useHistory();
   const location = useLocation();
   const [showAddedToCart, setShowAddedToCart] = React.useState(false);
@@ -15,6 +16,7 @@ function Navigation({goBackCallBack, addToCartCallBack, formik}) {
     addToCartCallBack((data) => {
       setShowAddedToCart(true);
       const shopingCart = localStorage.getItem('shoping-cart');
+
       const {
         currentService,
         currentServiceType,
@@ -26,23 +28,22 @@ function Navigation({goBackCallBack, addToCartCallBack, formik}) {
         totalPerSqFt,
         width,
         prices,
-        installation,
-        removal,
-        // delivery
       } = data;
 
-      const service = {
+      const service = countService({
         currentService,
         currentServiceType,
         ftHeight,
-        height,
-        price,
-        quantity,
+        height: Number(height),
+        width: Number(width),
+        price: Number(price),
+        quantity: Number(quantity),
         totalPerItem,
         totalPerSqFt,
-        width,
-      }
-      
+        prices
+      });
+
+           
       if (shopingCart) {
           let parsedShopingCart = JSON.parse(shopingCart);
 
@@ -52,43 +53,21 @@ function Navigation({goBackCallBack, addToCartCallBack, formik}) {
               service
           ];
 
-          const totalServices = parsedShopingCart.services.reduce((total, service) => {
-              const { total: currentPrice } = calculatePrice(service);
-              return total + currentPrice;
-          }, 0);
+          const countedCart = countAllCart(parsedShopingCart);
+          
 
-          parsedShopingCart.totalServices = totalServices;
-
-          parsedShopingCart.prices = {
-              ...parsedShopingCart.prices,
-              removal: data.prices.removal > 0 ? totalServices * 0.5 : 0,
-              installation: data.prices.installation > 0 ? totalServices : 0,
-              urgencyInstsllstion: parsedShopingCart.prices.urgencyInstsllstion > 0 ? totalServices * 0.2 : 0
-          }
-
-          const total = Object.keys(parsedShopingCart.prices).reduce((total, item) => {
-              return total + parsedShopingCart.prices[item];
-          }, 0);
-
-          parsedShopingCart.total = total;
-          parsedShopingCart.delivery = false;
-
-          localStorage.setItem('shoping-cart', JSON.stringify(parsedShopingCart));
+          localStorage.setItem('shoping-cart', JSON.stringify(countedCart));
 
           return false;
       }
 
-      localStorage.setItem('shoping-cart', JSON.stringify({
+      const countedCart = countAllCart({
         services: [service],
-        prices,
-        delivery: false,
-        additional: {
-          installation,
-          removal,
-        },
+        additional: {survey: 0, urgencyInstsllstion: 0},
         total: data.total,
-        totalServices: price,
-      }));
+      });
+
+      localStorage.setItem('shoping-cart', JSON.stringify(countedCart));
  
     });
   }
@@ -128,13 +107,13 @@ function Navigation({goBackCallBack, addToCartCallBack, formik}) {
           confirmBtnStyle={{ boxShadow: 'unset', padding: '15px ​20px' }}
           cancelBtnStyle={{ boxShadow: 'unset', padding: '15px ​20px' }}
           onConfirm={() => {
-              formik.resetForm();
+              resetCalculator();
               setShowAddedToCart(false);
               history.push('/');
           }}
           onCancel={() => {
             setShowAddedToCart(false);
-            formik.resetForm();
+            resetCalculator();
             window.location.href = "/cart";
           }}
       >

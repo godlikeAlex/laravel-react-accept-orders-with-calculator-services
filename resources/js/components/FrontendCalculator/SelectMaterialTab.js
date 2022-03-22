@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 
 function SelectMaterialTab ({materials, selectMaterial, selectedMaterial}) {
   const history = useHistory();
-
+  console.log(selectedMaterial);
   const handleClick = (id) => {
       history.push('/form-tab');
       selectMaterial(id);

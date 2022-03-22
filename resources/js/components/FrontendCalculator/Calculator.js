@@ -1,7 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import { MemoryRouter, Route, useHistory, useLocation } from "react-router-dom";
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import Typewriter from 'typewriter-effect';
 
 import { generateTemplate, MIN_PRICE } from '../Calculator/Calculator';
@@ -13,50 +11,52 @@ import './style.css';
 import { CSSTransition } from "react-transition-group";
 import Navigation from "./Navigation";
 
-const FormSchema = Yup.object().shape({
-  width: Yup.string().required('Width required'),
-  height: Yup.string().required('Width required'),
-  ftHeight: Yup.string().required('Height required'),
-  quantity: Yup.string().required()
-});
-
 function Calculator() {
-  const topBlockRef = React.useRef(null);
-  // const [currentTab, setCurrentTab] = useState(1); 
-  const [selectedService, setSelectedService] = useState(null); 
-  const [selectedMaterial, setSelectedMaterial] = useState(null);
+  const topBlockRef = useRef(null);
   const [materials, setMaterials] = useState(frontendCalculatorValues.services[1]);
-
-  const formik = useFormik({
-    validationSchema: FormSchema,
-    initialValues: {
+  const [values, setValues] = useState({
+    selectedService: null,
+    selectedMaterial: null,
+    calculator: {
       ...generateTemplate(),
-      currentService: {price: 0},
+      currentService: null,
       prices:  {
-        installation: MIN_PRICE,
-        urgencyInstsllstion: 0,
+        installation: 0,
         removal: 0,
-        survey: 0,
       },
       removal: false,
       installation: true,
       urgencyInstsllstion: false,
-      survey: false,
-      delivery: false,
-      total: MIN_PRICE
+      total: 0
     }
   });
 
+  useEffect(() => {
+    setMaterials(
+      frontendCalculatorValues.services.find(service => service.id === values.selectedService)?.services || []
+    )
+  }, [values.selectedService]);
+
   const selectService = service => {
-    setSelectedService(service);
-    setSelectedMaterial(null);
+    setValues({
+      ...values,
+      selectedService: service,
+      selectedMaterial: null
+    });
     topBlockRef.current.scrollIntoView();
   }
 
   const selectMaterial = material => {
     const currentMaterial = materials.find(m => m.id == material);
-    setSelectedMaterial(currentMaterial);
-    formik.setFieldValue('currentService', {...currentMaterial, value: currentMaterial.name, label: currentMaterial.name, })
+    setValues({
+      ...values,
+      selectedMaterial: currentMaterial,
+      calculator: {
+        ...values.calculator,
+        currentService: {...currentMaterial, value: currentMaterial.name, label: currentMaterial.name, }
+      }
+    });
+
     topBlockRef.current.scrollIntoView();
   }
 
@@ -66,20 +66,64 @@ function Calculator() {
   }
 
   const addToCartCallBack = (cb) => {
-    cb(formik.values);
+    cb(values.calculator);
   }
 
-  const routes = [
-    { path: '/', name: 'Main', Component: SelectServiceTab, props: {selectService, selectedService} },
-    { path: '/select-material', name: 'Select material', Component: SelectMaterialTab, props: {selectMaterial, selectedMaterial, materials} },
-    { path: '/form-tab', name: 'Check out', Component: FormTab, props: {selectedMaterial, formik} },
-  ]  
+  const resetCalculator = () => {
+    setValues({
+      ...values,
+      calculator: {
+        ...generateTemplate(),
+        prices:  {
+          installation: MIN_PRICE,
+          urgencyInstsllstion: 0,
+          removal: 0,
+          survey: 0,
+        },
+        removal: false,
+        installation: true,
+        urgencyInstsllstion: false,
+        survey: false,
+        delivery: false,
+        total: MIN_PRICE
+      }
+    })
+  }
 
-  useEffect(() => {
-    setMaterials(
-      frontendCalculatorValues.services.find(service => service.id === selectedService)?.services || []
-    )
-  }, [selectedService]);
+  const setFieldValue = (field, value) => {
+    setValues(values => {
+      return {
+        ...values,
+        calculator: {
+          ...values.calculator,
+          [field]: value
+        }
+      }
+    });
+  }
+
+  const setValuesCalculator = (newValues) => {
+    setValues(values => {
+      return {
+        ...values,
+        calculator: {
+          ...values.calculator,
+          ...newValues
+        }
+      }
+    })
+  }
+
+
+  const routes = [
+    { path: '/', name: 'Main', Component: SelectServiceTab, props: {selectService, selectedService: values.selectedService} },
+    { path: '/select-material', name: 'Select material', Component: SelectMaterialTab, props: {selectMaterial, selectedMaterial: values.selectedMaterial, materials} },
+    { 
+      path: '/form-tab', 
+      name: 'Check out', 
+      Component: FormTab, 
+      props: {values: values.calculator, resetCalculator, setValues: setValuesCalculator, setFieldValue} },
+  ]
  
   return (
     <div className="container">
@@ -107,7 +151,7 @@ function Calculator() {
                 )}
               </Route>
             ))}
-            <Navigation {...{goBackCallBack, addToCartCallBack, formik}} />
+            <Navigation {...{goBackCallBack, addToCartCallBack, resetCalculator}} />
         </MemoryRouter>
 
       </div>
@@ -121,7 +165,7 @@ function CalculatorTitle() {
   const location = useLocation();
 
   return (
-    <h2 class="section_header text-center section-header-calc" style={{display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <h2 className="section_header text-center section-header-calc" style={{display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       {location.pathname !== '/' && (<ion-icon name="chevron-back-outline"
         style={{
           cursor: 'pointer',

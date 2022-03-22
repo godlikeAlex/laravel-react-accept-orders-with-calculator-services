@@ -42,7 +42,7 @@ let TEMPLATE_CALCULATOR = {
     width: 1,
     height: 1,
     ftHeight: calculatorValues.height[1],
-    price: 5,
+    price: 0,
     quantity: 1,
     currentServiceType: serviceTypeOptions[0],
     currentService: servicesForOptions['Adhesive Vinyl'][0],

@@ -10,7 +10,8 @@ export const calculatePrice = (service) => {
     if (currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT') {
         const price = currentService.price + ftHeight.price;
         return {
-            total: countTotal(price),
+            // total: countTotal(price),
+            total: price,
             totalPerSqFt: +(currentService.price).toFixed(2),
             totalPerItem: +(currentService.price).toFixed(2)
         };

@@ -30,6 +30,7 @@ function SelectServiceTab({ selectService, selectedService }) {
                         className={selectedService === id ? 'active-calculator-item  text-center calc-item' : ' text-center calc-item'}
                         style={{ marginBottom: 50, cursor: 'pointer' }}
                         onClick={() => handleClick(id)}
+                        key={`selected-service-${id}`}
                     >
                         <img src={image} className="rounded-image-calc" />
                         <h6 style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>

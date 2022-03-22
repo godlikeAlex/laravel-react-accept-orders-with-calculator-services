@@ -2,50 +2,35 @@ import React, { useEffect } from 'react';
 import { calculatorValues } from '../Calculator/calculator-values';
 import { calculatePrice, countTotal } from '../Calculator/utils';
 
-function FormTab({selectedMaterial, formik}) {
-  const {setFieldValue, setValues, values} = formik;
+function FormTab({values, setValues, setFieldValue, resetCalculator}) {
 
-  useEffect(() => {
-    const {total, totalPerItem, totalPerSqFt} = calculatePrice(values);
+    useEffect(() => {
+        const {total, totalPerItem, totalPerSqFt} = calculatePrice(values);
 
-    let prices = {
-        ...values.prices,
-        installation: values.installation ? total : 0,
-        removal: values.removal ? total * 0.5 : 0,
-        survey: values.survey ? 250 : 0,
-    }
+        let prices = {
+            ...values.prices,
+            installation: values.installation ? total : 0,
+            removal: values.removal ? total * 0.5 : 0,
+        }
 
-    if (values.urgencyInstsllstion) {
-        const totalForUrgency = prices.installation + prices.removal + prices.survey;
-        prices.urgencyInstsllstion = totalForUrgency * 0.20;
-    }
-
-    setValues({
-      ...values,
-      price: countTotal(total),
-      prices,
-      totalPerItem,
-      totalPerSqFt
-    });
+        setValues({
+            price: total,
+            prices,
+            totalPerItem,
+            totalPerSqFt
+        })
   }, [values.width, values.height, values.quantity, values.ftHeight]);
 
   useEffect(() => {
     const { removal, total, prices, totalServices, installation, price, survey, urgencyInstsllstion } = values;
 
     const removalPrice = price * 0.5;
-    const totalForUrgency = prices.installation + prices.removal + prices.survey;
-    const urgencyInstsllstionPrice = totalForUrgency * 0.20;
-    
     
     setValues({
-        ...values,
         prices: {
             ...prices,
             removal: removal ? removalPrice : 0,
             installation: installation ? price : 0,
-            survey: survey ? 250 : 0,
-            installation: installation ? price : 0,
-            urgencyInstsllstion: urgencyInstsllstion ? urgencyInstsllstionPrice : 0,
         }
     });
 
@@ -56,8 +41,7 @@ function FormTab({selectedMaterial, formik}) {
       const total = Object.keys(prices).reduce((total, item) => {
           return total + prices[item];
       }, 0);
-
-      setFieldValue('total', countTotal(total));
+      setFieldValue('total', total);
   }, [values.prices]);
 
 
@@ -182,37 +166,6 @@ function FormTab({selectedMaterial, formik}) {
                       checked={values.installation}
                   />
                   <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('installation', !values.installation)}>Installation</label>
-              </div>
-{/* 
-              
-              <div className="form-group"
-              >
-                  <input
-                      onClick={() => setFieldValue('installation', !values.installation)}
-                      type="checkbox"
-                      checked={values.installation}
-                  />
-                  <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('installation', !values.installation)}>Material pickup/delivery</label>
-              </div> */}
-
-              <div className="form-group"
-              >
-                  <input
-                    onClick={() => setFieldValue('survey', !values.survey)}
-                      type="checkbox"
-                      checked={values.survey}
-                  />
-                  <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('survey', !values.survey)}>Survey</label>
-              </div>
-
-              <div className="form-group"
-              >
-                  <input
-                      onClick={() => setFieldValue('urgencyInstsllstion', !values.urgencyInstsllstion)}
-                      type="checkbox"
-                      checked={values.urgencyInstsllstion}
-                  />
-                  <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('urgencyInstsllstion', !values.urgencyInstsllstion)}>Urgency Installation ⚡</label>
               </div>
           </div>
 
