@@ -1,0 +1,41 @@
+.cart-item-title {
+  font-weight: normal;
+  margin: 0
+}
+
+.cart-item-price {
+  color: black;
+  font-weight: bold
+}
+
+@media (max-width: 768px) {
+  .cart-item-price {
+    margin-top: 15px;
+    font-size: 22px;
+    width:100%;
+  }
+}
+
+.additional-service-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.additional-service-group:first-child {
+  margin-top: 0px;
+}
+
+.additional-service-group input {
+  margin-top: 0px;
+}
+
+.additional-service-group label {
+  margin-bottom: 0px;
+  margin-left: 12px;
+}
+
+.color-black {
+  color: black
+}

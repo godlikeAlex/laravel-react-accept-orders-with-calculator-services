@@ -95,9 +95,9 @@ const Header = () => {
                 </div>
             </div>
 
-            <Link to="/cart" class="cart-circle">
-                <div class="cart-cont">
-                    <ion-icon class="cart-circle-icon" name="cart-outline"></ion-icon>
+            <Link to="/cart" className="cart-circle">
+                <div className="cart-cont">
+                    <ion-icon className="cart-circle-icon" name="cart-outline"></ion-icon>
                 </div>
             </Link>
         </header>

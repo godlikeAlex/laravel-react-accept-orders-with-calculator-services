@@ -122,7 +122,7 @@ function FormTab({values, setValues, setFieldValue, resetCalculator}) {
             <div className="form-group">
                 <label>Total Elevation</label>
                 {calculatorValues.height.map(({ title, price, img, width }, idx) => (
-                    <div className="form-check" key={title} style={{ display: 'flex', marginBottom: 15 }} onClick={e => setFieldValue('ftHeight', { title, price })}>
+                    <div className="form-check display-flex v-center" key={title} style={{ marginBottom: 15 }} onClick={e => setFieldValue('ftHeight', { title, price })}>
                         <input
                             className="form-check-input"
                             type="radio"
@@ -130,7 +130,7 @@ function FormTab({values, setValues, setFieldValue, resetCalculator}) {
                             checked={values.ftHeight.title === title}
                             style={{marginTop: 0}}
                         />
-                        <label className="form-check-label" style={{ marginLeft: 15, display: 'flex', alignItems: 'center', minWidth: '255px', justifyContent: 'space-between' }}>
+                        <label className="form-check-label" style={{ marginLeft: 15, display: 'flex', alignItems: 'center', minWidth: '255px', justifyContent: 'space-between', marginBottom:0 }}>
                             {title}
                             <img
                                 src={img}
@@ -146,28 +146,28 @@ function FormTab({values, setValues, setFieldValue, resetCalculator}) {
         </div>
 
         <div className="col-md-4">
-              <label style={{color: '#ED0598'}}>Additional services</label>
-              <div
-                  className="form-group"
-              >
-                  <input
-                      type="checkbox"
-                      onClick={() => setFieldValue('removal', !values.removal)}
-                      checked={values.removal}
-                  />
-                  <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('removal', !values.removal)}>Removal</label>
-              </div>
+            <label style={{color: '#ED0598'}}>Additional services</label>
+            <div
+                className="form-group"
+            >
+                <input
+                    type="checkbox"
+                    onClick={() => setFieldValue('removal', !values.removal)}
+                    checked={values.removal}
+                />
+                <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('removal', !values.removal)}>Removal</label>
+            </div>
 
-              <div className="form-group"
-              >
-                  <input
-                      onClick={() => setFieldValue('installation', !values.installation)}
-                      type="checkbox"
-                      checked={values.installation}
-                  />
-                  <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('installation', !values.installation)}>Installation</label>
-              </div>
-          </div>
+            <div className="form-group"
+            >
+                <input
+                    onClick={() => setFieldValue('installation', !values.installation)}
+                    type="checkbox"
+                    checked={values.installation}
+                />
+                <label style={{ marginLeft: 15 }} onClick={() => setFieldValue('installation', !values.installation)}>Installation</label>
+            </div>
+        </div>
 
         <div className='col-md-4'>
           <h2>Your price</h2>

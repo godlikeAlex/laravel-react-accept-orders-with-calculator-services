@@ -41,7 +41,7 @@ function UpdateOrderBackend({ order, installers }) {
             date: new Date(currentOrder.date),
             notes: currentOrder.notes,
             address: currentOrder.address,
-            installers: null,
+            installers: [],
             installer_notes: currentOrder.installer_notes,
             uuid: currentOrder.uuid,
             sendNotification: true,
@@ -49,18 +49,17 @@ function UpdateOrderBackend({ order, installers }) {
         },
         onSubmit: async values => {
             const formData = new FormData();
+
+            const {services, additional} = values.calculatedData;
+
+            formData.append('details', JSON.stringify({
+                services,
+                additional,
+            }));
+
             formData.delete('images[]');
             formData.delete('installers');
-            formData.append('details', JSON.stringify({
-                ...values.calculatedData,
-                delivery: JSON.parse(currentOrder.details).delivery,
-                acceptedServices: {
-                    installation: values.calculatedData.prices.installation > 0,
-                    removal: values.calculatedData.prices.removal > 0,
-                    survey: values.calculatedData.prices.survey > 0,
-                    urgencyInstsllstion: values.calculatedData.prices.urgencyInstsllstion > 0,
-                },
-            }));
+
             formData.append('status', values.status.value);
             formData.append('notes', values.notes);
             formData.append('notify', values.sendNotification);
@@ -127,40 +126,11 @@ function UpdateOrderBackend({ order, installers }) {
 
                 });
 
-                console.log(currentInstallersForSelect)
                 setFieldValue('installers', currentInstallersForSelect);
             }
         });
 
     }, []);
-
-    const onUpdateAddationServices = type => {
-        const { calculatedData } = values;
-        let data = { ...calculatedData.prices };
-        switch (type) {
-            case 'installation':
-                data.installation = calculatedData.prices.installation > 0 ? 0 : calculatedData.totalServices
-                break;
-            case 'removal':
-                data.removal = calculatedData.prices.removal > 0 ? 0 : calculatedData.totalServices * 0.5
-                break;
-            case 'survey':
-                data.survey = calculatedData.prices.survey > 0 ? 0 : 250
-                break;
-            case 'urgencyInstsllstion':
-                data.urgencyInstsllstion = calculatedData.prices.urgencyInstsllstion > 0 ? 0 : calculatedData.totalServices * 0.20
-                break;
-        }
-        if (data.urgencyInstsllstion != 0) {
-            const total = data.installation + data.removal + data.survey;
-            data.urgencyInstsllstion = total * 0.20
-        }
-
-        setFieldValue('calculatedData', {
-            ...values.calculatedData,
-            prices: data
-        })
-    }
 
     const refundOrder = () => {
         axios.post(`/admin/dashboard/orders/refund/${currentOrder.id}`).then(({ data }) => {
@@ -254,53 +224,6 @@ function UpdateOrderBackend({ order, installers }) {
                             </div>
                         </div>
 
-                        <div className="form-group col-md-12">
-                            <h4>Additional services</h4>
-                        </div>
-                        <div
-                            className="form-group col-md-12"
-                        >
-                            <input
-                                type="checkbox"
-                                onClick={() => onUpdateAddationServices('installation')}
-                                checked={values.calculatedData.prices.installation > 0}
-                            />
-                            <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('installation')}>Installation</label>
-                        </div>
-
-                        <div
-                            className="form-group col-md-12"
-                        >
-                            <input
-                                type="checkbox"
-                                onClick={() => onUpdateAddationServices('removal')}
-                                checked={values.calculatedData.prices.removal > 0}
-                            />
-                            <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('removal')}>Removal</label>
-                        </div>
-
-                        <div
-                            className="form-group col-md-12"
-                        >
-                            <input
-                                type="checkbox"
-                                onClick={() => onUpdateAddationServices('survey')}
-                                checked={values.calculatedData.prices.survey > 0}
-                            />
-                            <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('survey')}>Survey</label>
-                        </div>
-
-                        <div
-                            className="form-group col-md-12"
-                        >
-                            <input
-                                type="checkbox"
-                                onClick={() => onUpdateAddationServices('urgencyInstsllstion')}
-                                checked={values.calculatedData.prices.urgencyInstsllstion > 0}
-                            />
-                            <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('urgencyInstsllstion')}>Urgency Instsllstion ⚡</label>
-                        </div>
-
                         {values.status.value === 'completed' && (
                             <div className="col-md-12">
                                 <div class="form-group">
@@ -330,7 +253,10 @@ function UpdateOrderBackend({ order, installers }) {
                     </div>
 
                     <h3 style={{ marginBottom: '25' }} className={"col-md-12"}>
-                        Sub total: {values.calculatedData?.total} $
+                        Sub total: {(+values.calculatedData?.total).toFixed(2).toLocaleString()} $
+                        <br />
+                        <br />
+                        Sub total (with tax): {(+values.calculatedData?.total * 1.0875).toFixed(2).toLocaleString()} $
                     </h3>
 
                     <div className="col-md-12">

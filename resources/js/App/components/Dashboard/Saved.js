@@ -68,8 +68,9 @@ function Saved() {
                                                         <h5 style={{ fontWeight: 'normal', margin: 0 }}>{service.currentService.label}</h5>
                                                         <span style={{ color: 'black', fontWeight: 'bold' }}>{service.price} $</span>
                                                     </div>
-                                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase', marginTop: 5 }}>Width: {service.width};  Height: {service.height};</div>
-                                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Foot Height: {service.ftHeight.title};</div>
+                                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase', marginTop: 15 }}>Width: {service.width};  Height: {service.height}; Total Per Item: $ {service.totalPerItem};</div>
+                                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase', marginTop: 15  }}>Foot Height: {service.ftHeight.title} - $ {service.ftHeight.price};</div>
+                                                    <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase', marginTop: 15 }}>Installation: $ {service.prices.installation};  Remopval: $ {service.prices.removal};</div>
                                                 </li>
                                             ))}
                                             <li style={{ textAlign: 'center' }}>
@@ -81,27 +82,27 @@ function Saved() {
                                         </ul>
                                         <hr />
                                         <div className="row" style={{ flexDirection: 'column', minHeight: '215px' }}>
-                                            {wish.details.prices.installation > 0 && (
+                                            {/* {wish.details.prices.installation > 0 && (
                                                 <div className="col-md-12">
                                                     <h6 style={{ color: 'black' }}>Instalation price: <strong>${wish.details.prices.installation.toLocaleString()}</strong></h6>
                                                 </div>
-                                            )}
+                                            )} */}
 
-                                            {wish.details.prices.removal > 0 && (
+                                            {/* {wish.details.prices.removal > 0 && (
                                                 <div className="col-md-12">
                                                     <h6 style={{ color: 'black' }}>Removal price: <strong>$ {wish.details.prices.removal.toLocaleString()}</strong></h6>
                                                 </div>
-                                            )}
+                                            )} */}
 
-                                            {wish.details.prices.survey > 0 && (
+                                            {wish.details.additional.survey > 0 && (
                                                 <div className="col-md-12">
-                                                    <h6 style={{ color: 'black' }}>Site survey: <strong>$ {wish.details.prices.survey.toLocaleString()}</strong></h6>
+                                                    <h6 style={{ color: 'black' }}>Site survey: <strong>$ {wish.details.additional.survey.toLocaleString()}</strong></h6>
                                                 </div>
                                             )}
 
-                                            {wish.details.prices.urgencyInstsllstion > 0 && (
+                                            {wish.details.additional.urgencyInstsllstion > 0 && (
                                                 <div className="col-md-12">
-                                                    <h6 style={{ color: 'black' }}>Urgency installation: <strong>$ {wish.details.prices.urgencyInstsllstion.toLocaleString()}</strong></h6>
+                                                    <h6 style={{ color: 'black' }}>Urgency installation: <strong>$ {wish.details.additional.urgencyInstsllstion.toLocaleString()}</strong></h6>
                                                 </div>
                                             )}
 
@@ -164,8 +165,9 @@ function Saved() {
                                     <h5 style={{ fontWeight: 'normal', margin: 0 }}>{service.currentService.label}</h5>
                                     <span style={{ color: 'black', fontWeight: 'bold' }}>{service.price} $</span>
                                 </div>
-                                <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase', marginTop: 5 }}>Width: {service.width};  Height: {service.height};</div>
-                                <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Foot Height: {service.ftHeight.title};</div>
+                                <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase', marginTop: 5 }}>Width: {service.width};  Height: {service.height}; Total Per Item: $ {service.totalPerItem};</div>
+                                <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Foot Height: {service.ftHeight.title} - $ {service.ftHeight.price};</div>
+                                <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Installation: $ {service.prices.installation};  Remopval: $ {service.prices.removal};</div>
                             </li>
                         </ul>
                     ))}

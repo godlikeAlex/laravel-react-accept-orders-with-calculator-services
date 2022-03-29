@@ -22,14 +22,7 @@ function CreateOrderBackend() {
 
     const { values, setFieldValue, initialValues, handleChange } = useFormik({
         initialValues: {
-            calculatedData: {
-                prices: {
-                    installation: MIN_PRICE,
-                    removal: 0,
-                    survey: 0,
-                    urgencyInstsllstion: 0,
-                }
-            },
+            calculatedData: {},
             installers: null,
             status: orderStatusList[0],
             notes: '',
@@ -58,15 +51,13 @@ function CreateOrderBackend() {
 
     const onSubmit = async () => {
         const formData = new FormData();
+        const {services, additional} = values.calculatedData;
+
         formData.append('details', JSON.stringify({
-            ...values.calculatedData,
-            acceptedServices: {
-                installation: values.calculatedData.prices.installation > 0,
-                removal: values.calculatedData.prices.removal > 0,
-                survey: values.calculatedData.prices.survey > 0,
-                urgencyInstsllstion: values.calculatedData.prices.urgencyInstsllstion > 0,
-            },
+            services,
+            additional,
         }));
+
         formData.delete('images[]');
         formData.delete('installers');
         formData.append('status', values.status.value);
@@ -96,35 +87,6 @@ function CreateOrderBackend() {
         } else {
             setError(true);
         }
-    }
-
-
-    const onUpdateAddationServices = type => {
-        const { calculatedData } = values;
-        let data = { ...calculatedData.prices };
-        switch (type) {
-            case 'installation':
-                data.installation = calculatedData.prices.installation > 0 ? 0 : calculatedData.totalServices
-                break;
-            case 'removal':
-                data.removal = calculatedData.prices.removal > 0 ? 0 : calculatedData.totalServices * 0.5
-                break;
-            case 'survey':
-                data.survey = calculatedData.prices.survey > 0 ? 0 : 250
-                break;
-            case 'urgencyInstsllstion':
-                data.urgencyInstsllstion = calculatedData.prices.urgencyInstsllstion > 0 ? 0 : calculatedData.totalServices * 0.20
-                break;
-        }
-        if (data.urgencyInstsllstion != 0) {
-            const total = data.installation + data.removal + data.survey;
-            data.urgencyInstsllstion = total * 0.20
-        }
-
-        setFieldValue('calculatedData', {
-            ...values.calculatedData,
-            prices: data
-        })
     }
 
     return (
@@ -240,55 +202,6 @@ function CreateOrderBackend() {
                         </div>
                     </div>
 
-                    <div className="form-group col-md-12">
-                        <h4>Additional services</h4>
-                    </div>
-                    <div
-                        className="form-group col-md-12"
-                    >
-                        <input
-                            type="checkbox"
-                            onClick={() => onUpdateAddationServices('installation')}
-                            checked={values.calculatedData.prices.installation > 0}
-                        />
-                        <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('installation')}>Installation</label>
-                    </div>
-
-                    <div
-                        className="form-group col-md-12"
-                    >
-                        <input
-                            type="checkbox"
-                            onClick={() => onUpdateAddationServices('removal')}
-                            checked={values.calculatedData.prices.removal > 0}
-                        />
-                        <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('removal')}>Removal</label>
-                    </div>
-
-                    <div
-                        className="form-group col-md-12"
-                    >
-                        <input
-                            type="checkbox"
-                            onClick={() => onUpdateAddationServices('survey')}
-                            checked={values.calculatedData.prices.survey > 0}
-                        />
-                        <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('survey')}>Survey</label>
-                    </div>
-
-                    <div
-                        className="form-group col-md-12"
-                    >
-                        <input
-                            type="checkbox"
-                            onClick={() => onUpdateAddationServices('urgencyInstsllstion')}
-                            checked={values.calculatedData.prices.urgencyInstsllstion > 0}
-                        />
-                        <label style={{ marginLeft: 15 }} onClick={() => onUpdateAddationServices('urgencyInstsllstion')}>Urgency Instsllstion ⚡</label>
-                    </div>
-
-
-                    <hr />
                     <div className="col-md-12">
                         <Calculator
                             calculateOptionalPrices={true}
@@ -298,7 +211,10 @@ function CreateOrderBackend() {
                         />
                     </div>
                     <h3 style={{ marginBottom: '25' }} className={"col-md-12"}>
-                        Sub total: {values.calculatedData?.total} $
+                        Sub total: {(+values.calculatedData?.total).toFixed(2).toLocaleString()} $
+                        <br />
+                        <br />
+                        Sub total (with tax): {(values.calculatedData?.total * 1.0875).toFixed(2).toLocaleString()} $
                     </h3>
                 </div>
             </form>

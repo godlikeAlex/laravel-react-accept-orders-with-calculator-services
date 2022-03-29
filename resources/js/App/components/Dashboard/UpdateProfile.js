@@ -138,7 +138,7 @@ function UpdateProfile() {
                                             hidden={true}
                                             style={{ display: 'none' }}
                                         />
-                                        <label for="upload" style={{ cursor: 'pointer' }}>Choose file</label>
+                                        <label htmlFor="upload" style={{ cursor: 'pointer' }}>Choose file</label>
                                     </div>
                                 </div>
                                 <div className="form-group validate-required" id="billing_last_name_field">

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -79,6 +80,18 @@ class User extends Authenticatable
         $this->save();
     }
 
+    public function retriveCustomerAndUpdate() {
+        if ($this->stripe_id) {
+            $customerExists = $this->stripe()->customers->retrieve($this->stripe_id);
+
+            if (!$customerExists) {
+                $this->saveAsCustomer();
+            }
+        } else {
+            $this->saveAsCustomer();
+        }
+    }
+
     public function createPayment($amount, $payment_method)
     {
         return $this->stripe()->paymentIntents->create([
@@ -93,9 +106,7 @@ class User extends Authenticatable
 
     public function createIntent()
     {
-        if (!$this->stripe_id) {
-            $this->saveAsCustomer();
-        }
+        $this->retriveCustomerAndUpdate();
 
         return $this->stripe()->setupIntents->create([
             'customer' => $this->stripe_id,
@@ -105,10 +116,14 @@ class User extends Authenticatable
 
     public function listPaymentMethods()
     {
-        return $this->stripe()->paymentMethods->all([
-            'customer' => $this->stripe_id,
-            'type' => 'card'
-        ]);
+        try {
+            return $this->stripe()->paymentMethods->all([
+                'customer' => $this->stripe_id,
+                'type' => 'card'
+            ])->data;
+        } catch (Exception $e) {
+            return [];
+        }
     }
 
     public function updatePaymentMethod($id, $data)

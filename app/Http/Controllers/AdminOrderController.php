@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Classes\Cart;
 
 class AdminOrderController extends Controller
 {
@@ -192,8 +193,10 @@ class AdminOrderController extends Controller
             'pending', 'cancled', 'paid'
         ];
 
+
         try {
-            $calculatedServices = calculateServicePrice($request->details);
+            $calculatedServices = new Cart($request->input('details'));
+
             $order = new Order();
             $order->date = Carbon::parse($request->input('date'));
             $order->status = $request->status;
@@ -202,8 +205,13 @@ class AdminOrderController extends Controller
             $order->notes = $request->notes;
             $order->installer_notes = $request->installer_notes;
             $order->address = $request->address;
-            $order->details = json_encode($calculatedServices);
-            $order->urgencyInstsllstion = $calculatedServices->acceptedServices->urgencyInstsllstion;
+            $order->details = json_encode([
+                'services' => $calculatedServices->services,
+                'total' => $calculatedServices->total,
+                'additional' => $calculatedServices->additional
+            ]);
+
+            $order->urgencyInstsllstion = $calculatedServices->additional->urgencyInstsllstion > 0;
             $order->amount = $calculatedServices->total;
             $order->uuid = Str::random(8);
             $order->email = $order->user->email;
@@ -308,17 +316,21 @@ class AdminOrderController extends Controller
             'pending', 'cancled', 'paid'
         ];
 
-        $calculatedServices = calculateServicePrice($request->details);
+        $calculatedServices = new Cart($request->input('details'));
 
         $data = [
             'status' => $request->status,
-            'details' => json_encode($calculatedServices),
+            'details' => json_encode([
+                'services' => $calculatedServices->services,
+                'total' => $calculatedServices->total,
+                'additional' => $calculatedServices->additional
+            ]),
             'amount' => $calculatedServices->total,
             'notes' => $request->notes,
             'address' => $request->address,
             'uuid' => $request->uuid,
             'installer_notes' => $request->installer_notes,
-            'urgencyInstsllstion' => $calculatedServices->acceptedServices->urgencyInstsllstion,
+            'urgencyInstsllstion' => $calculatedServices->additional->urgencyInstsllstion > 0,
             'date' => Carbon::parse($request->input('date')),
         ];
 
@@ -336,7 +348,7 @@ class AdminOrderController extends Controller
         if ($request->has('installers')) {
             $order->installers()->sync(json_decode($request->installers)); // replace relation
         } else {
-            $order->installers()->sync([]); // Remov all relation 
+            $order->installers()->sync([]); // Remove all relation 
         }
 
         $order->update($data);

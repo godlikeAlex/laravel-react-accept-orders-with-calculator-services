@@ -6,7 +6,7 @@ import InputMask from 'react-input-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { clearCart, setTotalTo, updatePrices } from '../../redux/cartSlice';
+import { clearCart, updateCartPrice, toggleAditional } from '../../redux/cartSlice';
 import HeadSection from '../HeadSection';
 import SelectPaymentMethod from './SelectPaymentMethod';
 import DatePicker from "react-datepicker";
@@ -49,7 +49,7 @@ function CheckOut() {
     const elements = useElements();
     const history = useHistory();
     const [currentPaymentMethod, setCurrentPaymentMethod] = useState();
-    const { services, total, prices, delivery } = useSelector(state => state.cart);
+    const { services, total, additional, delivery } = useSelector(state => state.cart);
     const { user, isAuth } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const token = localStorage.getItem('token');
@@ -61,7 +61,7 @@ function CheckOut() {
             'email': isAuth ? user.email : '',
             'phone': isAuth ? user.phone : '',
             'address': '',
-            'date': addDays(Date.now(), prices.urgencyInstsllstion > 0 ? 0 : 2),
+            'date': addDays(Date.now(), additional.urgencyInstsllstion > 0 ? 0 : 2),
             'notes': '',
             'images': [],
             'imagesValidate': [],
@@ -74,16 +74,7 @@ function CheckOut() {
             const submitPayment = async (paymentMethod) => {
                 const formData = new FormData();
                 formData.append('cart', JSON.stringify({
-                    services,
-                    total,
-                    prices,
-                    delivery,
-                    acceptedServices: {
-                        installation: prices.installation > 0,
-                        removal: prices.removal > 0,
-                        survey: prices.survey > 0,
-                        urgencyInstsllstion: prices.urgencyInstsllstion > 0,
-                    },
+                    services, additional, delivery
                 }));
                 formData.append('name', values.name);
                 formData.append('email', values.email);
@@ -149,12 +140,9 @@ function CheckOut() {
     });
 
     React.useEffect(() => {
-        const total = Object.keys(prices).reduce((total, item) => {
-            return total + prices[item];
-        }, 0);
-        dispatch(setTotalTo(total));
-        setFieldValue('date', addDays(Date.now(), prices.urgencyInstsllstion > 0 ? 0 : 2));
-    }, [prices]);
+        dispatch(updateCartPrice());
+        setFieldValue('date', addDays(Date.now(), additional.urgencyInstsllstion > 0 ? 0 : 2));
+    }, [additional]);
 
     // If cart is empty redirect to cart page.
     if (services.length <= 0) {
@@ -272,7 +260,7 @@ function CheckOut() {
                                             <DatePicker
                                                 selected={values.date}
                                                 showTimeSelect
-                                                minDate={addDays(Date.now(), prices.urgencyInstsllstion > 0 ? 0 : 2)}
+                                                minDate={addDays(Date.now(), additional.urgencyInstsllstion > 0 ? 0 : 2)}
                                                 onChange={(date) => setFieldValue('date', date)}
                                                 timeFormat="HH:mm"
                                                 dateFormat="dd/MM/yyyy HH:mm"
@@ -289,8 +277,8 @@ function CheckOut() {
 
                                             <input
                                                 type="checkbox"
-                                                onClick={() => dispatch(updatePrices({ type: 'urgencyInstsllstion' }))}
-                                                checked={prices.urgencyInstsllstion > 0}
+                                                onChange={() => dispatch(toggleAditional('urgencyInstsllstion'))}
+                                                checked={additional.urgencyInstsllstion > 0}
                                             /> Urgent installation ⚡
                                         </div>
                                     </div>
@@ -328,7 +316,7 @@ function CheckOut() {
                                             <span className="grey">Where to install? <span style={{color: "red"}}>*</span>:</span>
                                         </label>
                                         <div className="col-sm-9">
-                                            <div class="inputfile">
+                                            <div className="inputfile">
                                                 <input
                                                     type="file"
                                                     size="30"
@@ -344,7 +332,7 @@ function CheckOut() {
                                                         setFieldValue('imagesValidate', imgs);
                                                     }}
                                                 />
-                                                <label style={{ marginRight: '0px' }} for="file" class="theme_button bg_button color1"><span>Add Your File</span></label>
+                                                <label style={{ marginRight: '0px' }} htmlFor="file" className="theme_button bg_button color1"><span>Add Your File</span></label>
                                                 {errors.imagesValidate && touched.imagesValidate ? (
                                                     <div className="error">{errors.imagesValidate}</div>
                                                 ) : null}
@@ -402,7 +390,7 @@ function CheckOut() {
 
                                             <input
                                                 type="checkbox"
-                                                onClick={() => setFieldValue('terms', !values.terms)}
+                                                onChange={() => setFieldValue('terms', !values.terms)}
                                                 checked={values.terms}
                                             /> I agree to the <a href="/terms" target='_blank'>EasyWayInstall Terms</a>
 

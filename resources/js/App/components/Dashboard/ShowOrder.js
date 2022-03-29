@@ -122,7 +122,7 @@ function ShowOrder() {
                                     <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Height: {service.height};</div>
                                     <div className="grey" style={{ fontSize: '13px', textTransform: 'uppercase' }}>Foot Height: {service.ftHeight.title};</div>
                                 </th>
-                                <td> <span>${service.price}</span> </td>
+                                <td> <span>${+service.total.toFixed(2)}</span> </td>
                             </tr>
                         ) : (
                             <tr>
@@ -253,7 +253,7 @@ function ShowOrder() {
                                 <h3>Details</h3>
 
                                 <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Tax (8.75%): <span style={{ textTransform: 'capitalize' }}>$ {(order.amount * 0.0875).toLocaleString()}</span> </h6>
-                                <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Amount: <span style={{ textTransform: 'capitalize' }}>$ {(order.amount * 1.0875).toLocaleString()}</span> </h6>
+                                <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Amount: <span style={{ textTransform: 'capitalize' }}>$ {(order.amount).toLocaleString()}</span> </h6>
                                 <h6 style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>Order status: <span style={{ textTransform: 'capitalize' }}>{order.status}</span> </h6>
                             </div>
                             {order.custom !== 1 && (

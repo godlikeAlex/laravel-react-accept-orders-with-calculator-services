@@ -59,7 +59,7 @@ export const customStyles = {
     }),
 }
 
-function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, values }) {
+function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, values, updateNesterPrices }) {
     const setOnlyPassitiveValue = (e, field, index) => {
         e.preventDefault();
         const { value } = e.target;
@@ -73,17 +73,6 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
             setFieldValueNested(field, value, index);
         }
     }
-
-    // const updateTypeMaterial = () => {
-    //     const services
-    //     const updateServiceByIndex = (services, field, value, index) => {
-    //         services[index] = {
-    //             ...services[index],
-    //             [field]: value
-    //         };
-    //         return services;
-    //     }
-    // }
 
     const onChangeMaterialType = (serviceType, index) => {
         const services = [...values.services];
@@ -138,7 +127,7 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
             <div className="col-md-6">
                 <div className="form-group">
                     <label>Height (inches)</label>
-                    <input type="text"
+                    <input
                         className="form-control"
                         disabled={service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT'}
                         placeholder="Height"
@@ -154,7 +143,7 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
             <div className="col-md-6">
                 <div className="form-group">
                     <label>Width (inches)</label>
-                    <input type="text"
+                    <input
                         disabled={service.currentService.disable === 'WIDTH:HEIGHT:HEIGHT-FOOT'}
                         className="form-control"
                         type="number"
@@ -177,7 +166,6 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
                                 className="form-check-input"
                                 type="radio"
                                 value={service.ftHeight.price}
-
                                 checked={service.ftHeight.title === title}
                             />
                             <label className="form-check-label" style={{ marginLeft: 15, display: 'flex', alignItems: 'center', width: '130px', justifyContent: 'space-between' }}>
@@ -198,7 +186,8 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
             <div className="col-md-6">
                 <div className="form-group">
                     <label>Quantity</label>
-                    <input type="text"
+                    <input 
+                        type="number"
                         className="form-control"
                         placeholder="Quantity"
                         name="quantity"
@@ -207,10 +196,32 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
                     />
                 </div>
 
+                <label style={{color: '#ED0598'}}>Additional services</label>
+                <div
+                    className="form-group"
+                >
+                    <input
+                        type="checkbox"
+                        onClick={() => updateNesterPrices('removal', index)}
+                        checked={service.prices.removal > 0}
+                    />
+                    <label style={{ marginLeft: 15 }} onClick={() => updateNesterPrices('removal', index)}>Removal</label>
+                </div>
+
+                <div className="form-group"
+                >
+                    <input
+                        onClick={() => updateNesterPrices('installation', index)}
+                        type="checkbox"
+                        checked={service.prices.installation > 0}
+                    />
+                    <label style={{ marginLeft: 15 }} onClick={() => updateNesterPrices('installation', index)}>Installation</label>
+                </div>
+
 
                 <h6>Total Per Item - ${service.totalPerItem || 0}</h6>
                 <h6>Total Per SqFt - ${service.totalPerSqFt || 0}</h6>
-                <h6>Price for current service - $ {service.price.toLocaleString()}</h6>
+                <h6>Price for current service - $ {service.total.toLocaleString()}</h6>
             </div>
         </React.Fragment>
     )

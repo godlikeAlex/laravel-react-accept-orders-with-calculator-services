@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
+use App\Classes\Cart;
+
 class PaymentController extends Controller
 {
     public function purchase(PaymentRequest $request)
@@ -38,17 +40,18 @@ class PaymentController extends Controller
         }
 
         try {
-            $calculatedOrder = calculateServicePrice($request->input('cart'));
-            $price = round($calculatedOrder->total * 1.0875, 2) * 100;
+            // dd(json_decode($request->input('cart')));
+            $calculatedOrder = new Cart($request->input('cart'));
+            $price = round($calculatedOrder->total, 2) * 100;
             $payment = $user->createPayment($price, $request->input('payment_method_id'));
             $order = $user->orders()->create([
-                'amount' => $calculatedOrder->total,
+                'amount' => $calculatedOrder->total, // Tax included
                 'notes' => $request->input('notes'),
                 'address' => $request->input('address'),
                 'details' => json_encode($calculatedOrder),
                 'status' => 'pending',
                 'uuid' => Str::random(8),
-                'urgencyInstsllstion' => $calculatedOrder->acceptedServices->urgencyInstsllstion,
+                'urgencyInstsllstion' => $calculatedOrder->additional->urgencyInstsllstion > 0,
                 'stripe_payment_id' => $payment->id,
                 'transaction_id' => $payment->charges->data[0]->id,
                 'date' => Carbon::parse($request->input('date')),
@@ -88,8 +91,7 @@ class PaymentController extends Controller
         try {
             $newOrder = $order->replicate();
 
-            // $user->notify((new OrderStatusUpdated(true))->delay(now()->addMinutes(2)));
-            $price = round($newOrder->amount * 1.0875, 2) * 100;
+            $price = round($newOrder->amount) * 100;
             $payment = $user->createPayment($price, $request->input('payment_method_id'));
             $newOrder->status = 'pending';
             $newOrder->uuid = Str::random(8);
@@ -112,7 +114,9 @@ class PaymentController extends Controller
     {
         $user = $request->user();
         if ($user->stripe_id) {
-            return $user->listPaymentMethods();
+            $pm = $user->listPaymentMethods();
+
+            return response(['ok' => true, 'data' => $pm]);
         } else {
             return response(['ok' => false, 'data' => []]);
         }
