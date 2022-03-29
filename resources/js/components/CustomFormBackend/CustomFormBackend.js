@@ -330,6 +330,7 @@ const CustomOrderBackend = ({ initialData, submit }) => {
             </div>
 
             <h3 className="col-md-12">Subtotal: {values.total.toLocaleString()} $</h3>
+            <h3 className="col-md-12">Subtotal (With tax): {(+values.total * 1.0875).toLocaleString()} $</h3>
 
             <div className="col-md-12">
                 <div class="form-check" onClick={handleNotification}>

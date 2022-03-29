@@ -885,33 +885,18 @@
                                             @endphp
 
                                             @if(!$order->custom)
-                                            @if ($details->prices->installation)
+                                            @if ($details->additional->urgencyInstsllstion)
                                             <tr>
                                                 <td style="font-family:'Roboto', Helvetica, Arial, sans-serif; color: #010101; font-size: 14px; mso-line-height-rule: exactly; line-height: 24px; " class="copy">
-                                                    Installation: {{$details->prices->installation}} $
-                                                </td>
-                                            </tr>
-                                            @endif
-                                            @if ($details->prices->removal)
-                                            <tr>
-                                                <td style="font-family:'Roboto', Helvetica, Arial, sans-serif; color: #010101; font-size: 14px; mso-line-height-rule: exactly; line-height: 24px; " class="copy">
-                                                    Removal: {{$details->prices->removal}} $
+                                                    Urgency Instsllstion: {{$details->additional->urgencyInstsllstion}} $
                                                 </td>
                                             </tr>
                                             @endif
 
-                                            @if ($details->prices->urgencyInstsllstion)
+                                            @if ($details->additional->survey)
                                             <tr>
                                                 <td style="font-family:'Roboto', Helvetica, Arial, sans-serif; color: #010101; font-size: 14px; mso-line-height-rule: exactly; line-height: 24px; " class="copy">
-                                                    UrgencyInstsllstion: {{$details->prices->urgencyInstsllstion}} $
-                                                </td>
-                                            </tr>
-                                            @endif
-
-                                            @if ($details->prices->survey)
-                                            <tr>
-                                                <td style="font-family:'Roboto', Helvetica, Arial, sans-serif; color: #010101; font-size: 14px; mso-line-height-rule: exactly; line-height: 24px; " class="copy">
-                                                    Survey: {{$details->prices->survey}} $
+                                                    Survey: {{$details->additional->survey}} $
                                                 </td>
                                             </tr>
                                             @endif
@@ -922,13 +907,13 @@
 
                                             <tr>
                                                 <td style="font-family:'Roboto', Helvetica, Arial, sans-serif; color: #010101; font-size: 14px; mso-line-height-rule: exactly; line-height: 24px; " class="copy">
-                                                    Tax (8.75%): {{$order->amount * 0.0875}} $
+                                                    Tax (8.75%): {{$order->taxPrice}} $
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td style="font-family:'Roboto', Helvetica, Arial, sans-serif; color: #010101; font-size: 14px; mso-line-height-rule: exactly; line-height: 24px; " class="copy">
-                                                    Subtotal: {{$order->amount  * 1.0875}} $
+                                                    Subtotal: {{$order->amount}} $
                                                 </td>
                                             </tr>
                                             <tr>

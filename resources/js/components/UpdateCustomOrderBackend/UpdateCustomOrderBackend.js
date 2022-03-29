@@ -27,7 +27,7 @@ function CustomOrderBackend({ order, installers }) {
             formData.append('address', address);
             formData.append('date', (new Date(date)).toUTCString());
 
-            if (installers.length > 0) {
+            if (installers && installers.length > 0) {
                 const formatedInstallers = installers.map(installer => {
                     return installer.value;
                 });
