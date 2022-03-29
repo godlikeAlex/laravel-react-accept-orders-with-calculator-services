@@ -10,8 +10,9 @@ class Cart {
   public $total = 0;
 
   // 8,75% - tax
-  // 1.0875 => 108,75%
-  private $tax = 1.0875;
+  // 0.0875 => 8,75%
+  private $tax = 0.0875;
+  public $taxPrice;
 
   function __construct($cart) {
     $decodedCart = json_decode($cart);
@@ -45,7 +46,8 @@ class Cart {
     $this->additional->urgencyInstsllstion = $this->cart->additional->urgencyInstsllstion > 0 ? $this->totalServices * 0.20 : 0;
     $total = $this->additional->survey + $this->additional->urgencyInstsllstion + $this->totalServices;
 
-    $this->total = $total * $this->tax;
+    $this->taxPrice = $total * $this->tax;
+    $this->total = $total + $this->taxPrice;
   }
 
   private function calculateService($service) {

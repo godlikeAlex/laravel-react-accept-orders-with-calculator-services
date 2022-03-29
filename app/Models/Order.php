@@ -20,6 +20,7 @@ class Order extends Model
         'user_id',
         'details',
         'amount',
+        'taxPrice',
         'uuid',
         'installer_id',
         'installer_notes',

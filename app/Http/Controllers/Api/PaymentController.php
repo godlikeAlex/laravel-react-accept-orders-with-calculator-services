@@ -46,6 +46,7 @@ class PaymentController extends Controller
             $payment = $user->createPayment($price, $request->input('payment_method_id'));
             $order = $user->orders()->create([
                 'amount' => $calculatedOrder->total, // Tax included
+                'taxPrice' => $calculatedOrder->taxPrice,
                 'notes' => $request->input('notes'),
                 'address' => $request->input('address'),
                 'details' => json_encode($calculatedOrder),

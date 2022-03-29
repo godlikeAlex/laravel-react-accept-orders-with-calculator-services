@@ -105,12 +105,15 @@ class AdminOrderController extends Controller
             'pending', 'cancled', 'paid'
         ];
 
+        $tax = $request->input('total') * 0.0875;
+
         try {
             $order = new Order();
             $order->date = Carbon::parse($request->input('date'));
             $order->status = $request->input('status');
             $order->details = $request->input('details');
-            $order->amount = $request->input('total');
+            $order->amount = $request->input('total') + $tax;
+            $order->taxPrice = $tax;
             $order->user_id = $request->input('user_id');
             $order->notes = $request->input('notes');
             $order->address = $request->input('address');
@@ -213,6 +216,7 @@ class AdminOrderController extends Controller
 
             $order->urgencyInstsllstion = $calculatedServices->additional->urgencyInstsllstion > 0;
             $order->amount = $calculatedServices->total;
+            $order->taxPrice = $calculatedServices->taxPrice;
             $order->uuid = Str::random(8);
             $order->email = $order->user->email;
 
@@ -326,6 +330,7 @@ class AdminOrderController extends Controller
                 'additional' => $calculatedServices->additional
             ]),
             'amount' => $calculatedServices->total,
+            'taxPrice' => $calculatedServices->taxPrice,
             'notes' => $request->notes,
             'address' => $request->address,
             'uuid' => $request->uuid,
@@ -398,11 +403,14 @@ class AdminOrderController extends Controller
             'pending', 'cancled', 'paid'
         ];
 
+        $tax = $request->input('total') * 0.0875;
+
         $data = [
             'status' => $request->input('status'),
             'user_id' => $request->input('user_id'),
             'details' => $request->input('details'),
-            'amount' => $request->input('total'),
+            'amount' => $request->input('total') + $tax,
+            'taxPrice' => $tax,
             'date' => Carbon::parse($request->input('date')),
             'installer_id' => $request->input('installer_id'),
             'phone' => $request->input('phone'),
