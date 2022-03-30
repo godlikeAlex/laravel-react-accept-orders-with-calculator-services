@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 class Order extends Model
 {
     use HasFactory, Notifiable;
+    protected $casts = ['recive_notifaction' => 'boolean'];
 
     static function stripe()
     {
@@ -25,6 +26,7 @@ class Order extends Model
         'installer_id',
         'installer_notes',
         'transaction_id',
+        'recive_notifaction',
         'notes',
         'stripe_payment_id',
         'image',

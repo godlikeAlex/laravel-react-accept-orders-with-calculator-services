@@ -14,7 +14,7 @@ const csrfToken = document.head.querySelector("[name~=csrf-token][content]").con
 
 export const orderStatusList = [
     { value: 'pending', label: 'Pending ⏳' },
-    { value: 'paid', label: 'Paid 👍🏻' },
+    { value: 'approved', label: 'Approved 👍🏻' },
     { value: 'cancled', label: 'Cancled ❌' },
     { value: 'on the way', label: 'On the way ✅' },
     { value: 'in process', label: 'In process ✅' },
@@ -44,7 +44,7 @@ function UpdateOrderBackend({ order, installers }) {
             installers: [],
             installer_notes: currentOrder.installer_notes,
             uuid: currentOrder.uuid,
-            sendNotification: true,
+            sendNotification: currentOrder.recive_notifaction,
             images: [],
         },
         onSubmit: async values => {
@@ -66,6 +66,7 @@ function UpdateOrderBackend({ order, installers }) {
             formData.append('installer_notes', values.installer_notes);
             formData.append('uuid', values.uuid);
             formData.append('address', values.address);
+            formData.append('notify', Number(values.sendNotification));
             formData.append('date', (new Date(values.date)).toUTCString());
             formData.append('_method', 'put');
 

@@ -14,6 +14,7 @@ function CustomOrderBackend({ order, installers }) {
         try {
             const formData = new FormData();
             formData.delete('images[]');
+            formData.append('notify', Number(sendNotification));
             formData.delete('installers');
             formData.delete('images_location[]');
             formData.append('status', status.value);
@@ -21,7 +22,6 @@ function CustomOrderBackend({ order, installers }) {
             formData.append('installer_notes', installer_notes);
             formData.append('user_id', user_id);
             formData.append('details', JSON.stringify({ services: services }));
-            formData.append('notify', sendNotification);
             formData.append('total', total);
             formData.append('notes', notes);
             formData.append('address', address);
@@ -74,6 +74,7 @@ function CustomOrderBackend({ order, installers }) {
                 notes: currentOrder.notes,
                 installers: currentOrder.installers,
                 uuid: currentOrder.uuid,
+                sendNotification: currentOrder.recive_notifaction,
                 currentInstallers: currentInstallers,
                 status: orderStatusList.find(status => status.value === currentOrder.status),
                 services: JSON.parse(currentOrder.details).services,

@@ -32,7 +32,7 @@ const CustomOrderBackend = ({ initialData, submit }) => {
 
     const { values, setFieldValue, handleChange, handleSubmit, errors, touched } = useFormik({
         validationSchema: CustomOrderSchema,
-        initialValues: initialData ? { ...initialData, sendNotification: true } : {
+        initialValues: initialData ? { ...initialData } : {
             total: 0,
             date: new Date(),
             user: null,

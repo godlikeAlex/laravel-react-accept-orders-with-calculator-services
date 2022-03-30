@@ -59,7 +59,7 @@ class InstallerController extends Controller
             'images.*' => 'mimes:jpg,jpeg,png,webp',
         ]);
         $excludedStatuses = [
-            'pending', 'cancled', 'paid'
+            'pending', 'cancled'
         ];
 
         $data = [

@@ -11,6 +11,8 @@ import './style.css';
 import { CSSTransition } from "react-transition-group";
 import Navigation from "./Navigation";
 
+import { calculatorValues } from "../Calculator/calculator-values";
+
 function Calculator() {
   const topBlockRef = useRef(null);
   const [materials, setMaterials] = useState(frontendCalculatorValues.services[1]);
@@ -30,6 +32,8 @@ function Calculator() {
       total: 0
     }
   });
+
+  console.log(values.calculator);
 
   useEffect(() => {
     setMaterials(
@@ -73,21 +77,21 @@ function Calculator() {
     setValues({
       ...values,
       calculator: {
-        ...generateTemplate(),
-        prices:  {
-          installation: MIN_PRICE,
-          urgencyInstsllstion: 0,
-          removal: 0,
-          survey: 0,
+        ...values.calculator,
+        width: 1,
+        height: 1,
+        ftHeight: calculatorValues.height[0],
+        price: 0,
+        quantity: 1,
+        prices: {
+            installation: 1,
+            removal: 0
         },
-        removal: false,
-        installation: true,
-        urgencyInstsllstion: false,
-        survey: false,
-        delivery: false,
-        total: MIN_PRICE
+        totalPerItem: 0,
+        totalPerSqFt: 0,
+        total: 0,
       }
-    })
+    });
   }
 
   const setFieldValue = (field, value) => {
@@ -103,6 +107,7 @@ function Calculator() {
   }
 
   const setValuesCalculator = (newValues) => {
+    console.log('hh', newValues);
     setValues(values => {
       return {
         ...values,
@@ -144,7 +149,7 @@ function Calculator() {
                     classNames="page"
                     unmountOnExit
                   >
-                    <div className="page" style={{marginBottom: match != null && path === '/' ? 0 : '110px'}}>
+                    <div className="page" style={{marginBottom: '110px'}}>
                       <Component {...props} />
                     </div>
                   </CSSTransition>

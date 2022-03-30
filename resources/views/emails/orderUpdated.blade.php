@@ -853,6 +853,11 @@
                                                 <tr>
                                                     <td align="center" style="font-family:'RobotoBold', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 50px; mso-line-height-rule: exactly; color: black; text-align:center; line-height: 50px; padding: 0px 10px 25px 10px;" class="headline">
                                                         @switch($status)
+
+                                                        @case('approved')
+                                                        Your job is approved
+                                                        @break
+
                                                         @case('completed')
                                                         Your job successfully completed!
                                                         @break
@@ -893,36 +898,40 @@
                                                         <p style="text-align: center;">
                                                             @switch($status)
 
+                                                            @case('approved')
+                                                            <img style="margin: auto; width: 250px;" src="{{asset('email-assets/approved.png')}}" border="0">
+                                                            @break
+
                                                             @case('on the way')
-                                                            <img style="margin: auto; width: 125px;" src="{{asset('email-assets/on-the-way.png')}}" border="0">
+                                                            <img style="margin: auto; width: 250px;" src="{{asset('email-assets/on-the-way.png')}}" border="0">
                                                             @break
 
                                                             @case('completed')
-                                                            <img style="margin: auto; width: 125px;" src="{{asset('email-assets/completed.png')}}" border="0">
+                                                            <img style="margin: auto; width: 250px;" src="{{asset('email-assets/completed.png')}}" border="0">
                                                             @break
 
                                                             @case('in process')
-                                                            <img style="margin: auto; width: 125px;" src="{{asset('email-assets/proccess.png')}}" border="0">
+                                                            <img style="margin: auto; width: 250px;" src="{{asset('email-assets/proccess.png')}}" border="0">
                                                             @break
 
                                                             @case('last step to complete')
-                                                            <img style="margin: auto; width: 125px;" src="{{asset('email-assets/proccess.png')}}" border="0">
+                                                            <img style="margin: auto; width: 250px;" src="{{asset('email-assets/last-step.png')}}" border="0">
                                                             @break
 
                                                             @case('material is not there')
-                                                            <img style="margin: auto; width: 125px;" src="{{asset('email-assets/warning.png')}}" border="0">
+                                                            <img style="margin: auto; width: 250px;" src="{{asset('email-assets/warning.png')}}" border="0">
                                                             @break
 
                                                             @case('we are hit a traffic on the way')
-                                                            <img style="margin: auto; width: 125px;" src="{{asset('email-assets/traffic-light.png')}}" border="0">
+                                                            <img style="margin: auto; width: 250px;" src="{{asset('email-assets/traffic-light.png')}}" border="0">
                                                             @break
 
                                                             @case('can not access to start a job')
-                                                            <img style="margin: auto; width: 125px;" src="{{asset('email-assets/padlock.png')}}" border="0">
+                                                            <img style="margin: auto; width: 250px;" src="{{asset('email-assets/padlock.png')}}" border="0">
                                                             @break
 
                                                             @case('we received wrong job information')
-                                                            <img style="margin: auto; width: 125px;" src="{{asset('email-assets/warning.png')}}" border="0">
+                                                            <img style="margin: auto; width: 250px;" src="{{asset('email-assets/warning.png')}}" border="0">
                                                             @break
 
                                                             @endswitch
@@ -953,8 +962,12 @@
                                                 </tr>
 
                                                 <tr>
-                                                    <td style="font-family:'Roboto', Helvetica, Arial, sans-serif; color:#c8c8c8; font-size: 14px; mso-line-height-rule: exactly; line-height: 14px; padding: 0px 50px 25px 50px; text-align: center;" class="copy">
+                                                    <td style="font-family:'Roboto', Helvetica, Arial, sans-serif; color:black; font-size: 14px; mso-line-height-rule: exactly; line-height: 14px; padding: 0px 50px 25px 50px; text-align: center; font-weight: bold;" class="copy">
                                                         @switch($status)
+
+                                                        @case('approved')
+                                                        Your job is approved and all set in schedule
+                                                        @break
 
                                                         @case('on the way')
                                                         Our PRO is on the way to install your sign!

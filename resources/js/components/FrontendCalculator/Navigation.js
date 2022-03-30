@@ -74,14 +74,14 @@ function Navigation({goBackCallBack, addToCartCallBack, resetCalculator}) {
   
   return (
     <>      
-      <div style={{position: 'absolute', bottom: 0, justifyContent: 'space-between', display: 'flex', width: '100%', flexWrap: 'wrap'}}>
+      <div style={{position: 'absolute', bottom: 0, justifyContent: location.pathname == '/' ? 'flex-end' : 'space-between', display: 'flex', width: '100%', flexWrap: 'wrap'}}>
       {location.pathname !== '/' && (
         <button onClick={backHandler} className='theme_button bg_button color1 btn-calc'>
             BACK
         </button>
       )}
 
-      {location.pathname == '/select-material' && (
+      {location.pathname != '/form-tab' && (
         <a href="#contact" className='theme_button bg_button color1 btn-calc'>
           Other
         </a>
@@ -107,13 +107,13 @@ function Navigation({goBackCallBack, addToCartCallBack, resetCalculator}) {
           confirmBtnStyle={{ boxShadow: 'unset', padding: '15px ​20px' }}
           cancelBtnStyle={{ boxShadow: 'unset', padding: '15px ​20px' }}
           onConfirm={() => {
-              resetCalculator();
+              // resetCalculator();
               setShowAddedToCart(false);
               history.push('/');
           }}
           onCancel={() => {
             setShowAddedToCart(false);
-            resetCalculator();
+            // resetCalculator();
             window.location.href = "/cart";
           }}
       >

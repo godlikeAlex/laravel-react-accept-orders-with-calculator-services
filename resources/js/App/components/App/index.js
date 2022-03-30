@@ -35,7 +35,7 @@ function App() {
                     }
                 }
             } catch (error) {
-                console.log('Error', error);
+                localStorage.removeItem('shoping-cart');
             }
         }
     }, []);

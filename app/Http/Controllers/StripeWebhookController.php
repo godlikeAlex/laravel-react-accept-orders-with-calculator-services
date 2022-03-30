@@ -35,7 +35,7 @@ class StripeWebhookController extends Controller
                 // $transactionId = $event->data->object->id;
                 // $order = Order::where('stripe_payment_id', $transactionId)->first();
                 // $order->update([
-                //     'status' => 'paid'
+                //     'status' => 'approved'
                 // ]);
                 // return 'payment_intent.succeeded';
                 // break;

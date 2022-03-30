@@ -23,6 +23,7 @@ function CreateOrderBackend() {
     const { values, setFieldValue, initialValues, handleChange } = useFormik({
         initialValues: {
             calculatedData: {},
+            sendNotification: true,
             installers: null,
             status: orderStatusList[0],
             notes: '',
@@ -65,6 +66,7 @@ function CreateOrderBackend() {
         formData.append('notes', values.notes);
         formData.append('installer_notes', values.installer_notes);
         formData.append('address', values.address);
+        formData.append('notify', Number(values.sendNotification));
         formData.append('date', (new Date(values.date)).toUTCString());
 
         if (values.images) {
@@ -216,6 +218,15 @@ function CreateOrderBackend() {
                         <br />
                         Sub total (with tax): {(values.calculatedData?.total * 1.0875).toFixed(2).toLocaleString()} $
                     </h3>
+
+                    <div className="col-md-12">
+                        <div class="form-check" onClick={() => setFieldValue('sendNotification', !values.sendNotification)}>
+                            <input class="form-check-input" type="checkbox" checked={values.sendNotification} id="flexCheckDefault" />
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Send notification 🔔
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </form>
             <div className="card-footer">

@@ -96,13 +96,13 @@ class AdminOrderController extends Controller
             'notes' => 'nullable',
             'installers' => 'nullable',
             'address' => 'nullable',
-            'notify' => 'required',
+            'notify' => 'required|boolean',
             'images' => 'nullable',
             'images_location' => 'nullable',
         ]);
 
         $excludedStatuses = [
-            'pending', 'cancled', 'paid'
+            'pending', 'cancled'
         ];
 
         $tax = $request->input('total') * 0.0875;
@@ -120,6 +120,7 @@ class AdminOrderController extends Controller
             $order->custom = true;
             $order->installer_notes = $request->input('installer_notes');
             $order->uuid = Str::random(8);
+            $order->recive_notifaction = $request->input('notify');
 
             $order->save();
 
@@ -152,10 +153,10 @@ class AdminOrderController extends Controller
                 $order->placeImages()->createMany($imagesLocation);
             }
 
-            $order->user->notify(new OrderAccepted($order, $order));
-
-            if (filter_var($request->input('notify'), FILTER_VALIDATE_BOOLEAN)) {
-
+            
+            if ($order->recive_notifaction) {
+                $order->user->notify(new OrderAccepted($order, $order));
+                
                 if (!in_array($request->input('status'), $excludedStatuses)) {
                     $order->user->notify((new OrderStatusUpdated($order, $request->input('status')))->delay(now()->addMinute()));
                 }
@@ -189,11 +190,13 @@ class AdminOrderController extends Controller
             'notes' => 'nullable',
             'installer_notes' => 'nullable',
             'installers' => 'nullable|json',
+            'notify' => 'required|boolean',
             'address' => 'nullable'
         ]);
 
+
         $excludedStatuses = [
-            'pending', 'cancled', 'paid'
+            'pending', 'cancled'
         ];
 
 
@@ -220,7 +223,10 @@ class AdminOrderController extends Controller
             $order->uuid = Str::random(8);
             $order->email = $order->user->email;
 
+            $order->recive_notifaction = $request->input('notify');
+
             $order->save();
+
             
             if ($request->has('installers')) {
                 $order->installers()->sync(json_decode($request->installers)); // replace relation
@@ -228,7 +234,9 @@ class AdminOrderController extends Controller
                 $order->installers()->sync([]); // Remov all relation 
             }
 
-            $order->user->notify(new OrderAccepted($order, $order));
+            if($order->recive_notifaction) {
+                $order->user->notify(new OrderAccepted($order, $order));
+            }
 
             if ($request->has('images')) {
                 foreach ($request->images as $image) {
@@ -241,11 +249,11 @@ class AdminOrderController extends Controller
                 $order->images()->createMany($images);
             }
 
-            if (!in_array($request->input('status'), $excludedStatuses)) {
+            if (!in_array($request->input('status'), $excludedStatuses) && $order->recive_notifaction) {
                 $order->user->notify(new OrderStatusUpdated($order, $request->input('status')));
             }
 
-            if ($order->status === 'completed') {
+            if ($order->status === 'completed' && $order->recive_notifaction) {
                 $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
             }
 
@@ -314,10 +322,10 @@ class AdminOrderController extends Controller
             'address' => 'nullable',
             'uuid' => 'required',
             'installer_notes' => 'nullable',
-            'notify' => 'nullable'
+            'notify' => 'required|boolean'
         ]);
         $excludedStatuses = [
-            'pending', 'cancled', 'paid'
+            'pending', 'cancled'
         ];
 
         $calculatedServices = new Cart($request->input('details'));
@@ -329,6 +337,7 @@ class AdminOrderController extends Controller
                 'total' => $calculatedServices->total,
                 'additional' => $calculatedServices->additional
             ]),
+            'recive_notifaction' => $request->input('notify'),
             'amount' => $calculatedServices->total,
             'taxPrice' => $calculatedServices->taxPrice,
             'notes' => $request->notes,
@@ -358,7 +367,7 @@ class AdminOrderController extends Controller
 
         $order->update($data);
 
-        if (filter_var($request->input('notify'), FILTER_VALIDATE_BOOLEAN)) {
+        if ($order->recive_notifaction) {
             if (!in_array($data['status'], $excludedStatuses)) {
                 $order->user->notify((new OrderStatusUpdated($order, $data['status']))->delay(now()->addMinute()));
             }
@@ -396,11 +405,12 @@ class AdminOrderController extends Controller
             'notes' => 'nullable',
             'address' => 'nullable',
             'uuid' => 'required',
+            'notify' => 'required|boolean',
             'installer_notes' => 'nullable',
             'images_location' => 'nullable',
         ]);
         $excludedStatuses = [
-            'pending', 'cancled', 'paid'
+            'pending', 'cancled'
         ];
 
         $tax = $request->input('total') * 0.0875;
@@ -410,6 +420,7 @@ class AdminOrderController extends Controller
             'user_id' => $request->input('user_id'),
             'details' => $request->input('details'),
             'amount' => $request->input('total') + $tax,
+            'recive_notifaction' => $request->input('notify'),
             'taxPrice' => $tax,
             'date' => Carbon::parse($request->input('date')),
             'installer_id' => $request->input('installer_id'),
@@ -450,7 +461,7 @@ class AdminOrderController extends Controller
 
         $order->update($data);
 
-        if (filter_var($request->input('notify'), FILTER_VALIDATE_BOOLEAN)) {
+        if ($order->recive_notifaction) {
             if (!in_array($data['status'], $excludedStatuses)) {
                 $order->user->notify(new OrderStatusUpdated($order, $data['status']));
             }
