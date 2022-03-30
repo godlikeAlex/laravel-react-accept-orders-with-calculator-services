@@ -40,6 +40,7 @@ const CustomOrderBackend = ({ initialData, submit }) => {
             status: orderStatusList[0],
             notes: '',
             installer_notes: '',
+            uuid: '',
             sendNotification: true,
             phone: '',
             address: '',
@@ -259,14 +260,12 @@ const CustomOrderBackend = ({ initialData, submit }) => {
                         </div>
                     </div>
 
-                    {initialData && (
-                        <div className="col-md-6">
-                            <div className="form-group">
-                                <label>UUID</label>
-                                <input name="uuid" value={values.uuid} onChange={handleChange} className="form-control" rows="4" />
-                            </div>
+                    <div className="col-md-6">
+                        <div className="form-group">
+                            <label>UUID</label>
+                            <input name="uuid" value={values.uuid} onChange={handleChange} className="form-control" rows="4" />
                         </div>
-                    )}
+                    </div>
 
                     <div className="col-md-6">
                         <div className="form-group">

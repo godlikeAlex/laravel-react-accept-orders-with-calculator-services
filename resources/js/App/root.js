@@ -9,8 +9,6 @@ import loadable from '@loadable/component'
 const App = loadable(() => import('./components/App'));
 const stripePromise = loadStripe(process.env.MIX_STRIPE_KEY);
 
-console.log(process.env.MIX_STRIPE_KEY);
-
 function Root() {
     return (
         <Elements stripe={stripePromise}>

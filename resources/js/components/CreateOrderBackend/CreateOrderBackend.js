@@ -31,6 +31,7 @@ function CreateOrderBackend() {
             address: '',
             user: { label: 'User are null', value: null },
             date: new Date(),
+            uuid: '',
             images: []
         }
     });
@@ -64,6 +65,7 @@ function CreateOrderBackend() {
         formData.append('status', values.status.value);
         formData.append('user_id', values.user.value);
         formData.append('notes', values.notes);
+        formData.append('uuid', values.uuid);
         formData.append('installer_notes', values.installer_notes);
         formData.append('address', values.address);
         formData.append('notify', Number(values.sendNotification));
@@ -200,6 +202,13 @@ function CreateOrderBackend() {
                                     }}
                                     value={values.installer}
                                 />
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>UUID</label>
+                                <input name="uuid" value={values.uuid} onChange={handleChange} className="form-control" rows="4" />
                             </div>
                         </div>
                     </div>

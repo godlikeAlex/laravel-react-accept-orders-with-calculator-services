@@ -4,12 +4,13 @@ import CustomFormBackend from '../CustomFormBackend';
 import { format } from 'date-fns';
 
 const CreateCustomOrder = () => {
-    const handleSubmit = async function ({ user, installers, sendNotification, images_location, status, services, total, date, notes, installer_notes, address, installer, images }) {
+    const handleSubmit = async function ({ user, installers, uuid, sendNotification, images_location, status, services, total, date, notes, installer_notes, address, installer, images }) {
         try {
             const formData = new FormData();
             formData.delete('images[]');
             formData.append('notify', Number(sendNotification));
             formData.delete('installers');
+            formData.append('uuid', uuid);
             formData.delete('images_location[]');
             formData.append('status', status.value);
             formData.append('user_id', user.value);

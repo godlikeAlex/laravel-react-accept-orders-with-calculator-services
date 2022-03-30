@@ -98,6 +98,7 @@ class AdminOrderController extends Controller
             'address' => 'nullable',
             'notify' => 'required|boolean',
             'images' => 'nullable',
+            'uuid' => 'nullable',
             'images_location' => 'nullable',
         ]);
 
@@ -119,7 +120,7 @@ class AdminOrderController extends Controller
             $order->address = $request->input('address');
             $order->custom = true;
             $order->installer_notes = $request->input('installer_notes');
-            $order->uuid = Str::random(8);
+            $order->uuid = $request->input('uuid') ? $request->input('uuid') : Str::random(6);
             $order->recive_notifaction = $request->input('notify');
 
             $order->save();
@@ -191,9 +192,9 @@ class AdminOrderController extends Controller
             'installer_notes' => 'nullable',
             'installers' => 'nullable|json',
             'notify' => 'required|boolean',
-            'address' => 'nullable'
+            'address' => 'nullable',
+            'uuid' => 'nullable'
         ]);
-
 
         $excludedStatuses = [
             'pending', 'cancled'
@@ -220,13 +221,14 @@ class AdminOrderController extends Controller
             $order->urgencyInstsllstion = $calculatedServices->additional->urgencyInstsllstion > 0;
             $order->amount = $calculatedServices->total;
             $order->taxPrice = $calculatedServices->taxPrice;
-            $order->uuid = Str::random(8);
+
+            $order->uuid = $request->input('uuid') ? $request->input('uuid') : Str::random(6);
             $order->email = $order->user->email;
 
             $order->recive_notifaction = $request->input('notify');
 
+            
             $order->save();
-
             
             if ($request->has('installers')) {
                 $order->installers()->sync(json_decode($request->installers)); // replace relation
