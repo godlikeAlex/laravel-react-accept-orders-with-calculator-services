@@ -29,7 +29,21 @@
     </a>
 </section>
 @include('components.contact-form', ['section' => 'alt'])
-<section id="about-us" class="ls section_padding_top_75 section_padding_bottom_75 ">
+
+<section class="ls section_padding_top_75 section_padding_bottom_75" id="calculator" >
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="file-upload-wrapper cs main_color1 with_padding big-padding " style="background: #f4f4f4; box-shadow: rgba(0, 0, 0, 0.3) -1px 14.95px 35.6px">
+                    {{-- <div class="file-upload-wrapper cs main_color1 with_padding big-padding " style="background: whitesmoke; box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;"> --}}
+                    <div id="react-frontend-calculator"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about-us" class="ls section_padding_top_75 section_padding_bottom_75 alt-section">
     <div class="container">
         <div class="row flex-wrap">
             <div class="col-xs-12 col-md-6"> <img data-src="/frontend/images/about.webp" alt="" class="cover-image lazyload"> </div>
@@ -39,20 +53,6 @@
                     The Easy Way Install team handles any project with the highest level of skill and accountability. Our customers continue to rely on our ability to provide the highest quality of installations. Through our dedicated commitment to client satisfaction and knowledge of even the most critical details, we have cultivated long standing working relationships with top recognized organizations within our industry. We have coordinated on a wide variety of projects and would want nothing less than to provide you with a precise, stress-free installation experience. The “Easy Way Install” team is a fully insured company and can offer a guarantee on every installation that we complete for you.
                 </p>
                 <div class="toppadding_10 visible-md visible-lg"></div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section class="ls section_padding_top_75 section_padding_bottom_75" id="calculator" style="background: #fcfcfc">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="file-upload-wrapper cs main_color1 with_padding big-padding " style="background: #f4f4f4; box-shadow: rgba(0, 0, 0, 0.3) -1px 14.95px 35.6px">
-                    {{-- <div class="file-upload-wrapper cs main_color1 with_padding big-padding " style="background: whitesmoke; box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;"> --}}
-                    <div id="react-frontend-calculator"></div>
-                </div>
             </div>
         </div>
     </div>
