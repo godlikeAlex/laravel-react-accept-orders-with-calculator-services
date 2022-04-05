@@ -20,6 +20,7 @@ class Installer extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar',
         'password',
     ];
 
