@@ -13,6 +13,7 @@ import './style.css';
 import axios from 'axios';
 import { format } from 'date-fns';
 import UploadImages from '../UploadImages';
+import GooglePlaces from '../GooglePlaces';
 
 const CustomOrderSchema = Yup.object().shape({
     user_id: Yup.string().required('User is required.'),
@@ -30,6 +31,7 @@ const CustomOrderBackend = ({ initialData, submit }) => {
     const [success, setSucess] = useState(false);
     const [listUsers, setListUsers] = useState([]);
     const [listInstallers, setListInstallers] = useState([]);
+    const [address, setAddress] = useState(initialData ? {label: initialData.address} : '');
 
     const { values, setFieldValue, handleChange, handleSubmit, errors, touched } = useFormik({
         validationSchema: CustomOrderSchema,
@@ -53,11 +55,18 @@ const CustomOrderBackend = ({ initialData, submit }) => {
             ],
         },
         onSubmit: async values => {
-            const { success } = await submit({ ...values });
-
-            if (success) {
-                setSucess(true);
-            } else {
+            try {
+                const { success } = await submit({ 
+                    ...values,
+                    address: address.label ? address.label : '',
+                 });
+    
+                if (success) {
+                    setSucess(true);
+                } else {
+                    setError(true);
+                }
+            } catch (e) {
                 setError(true);
             }
         }
@@ -197,24 +206,6 @@ const CustomOrderBackend = ({ initialData, submit }) => {
                             />
                         </div>
                     </div>
-                    {/*
-                    <div className="col-md-6">
-                        <div className="form-group">
-                            <label>Phone number</label>
-                            <InputMask mask="(999) 999-9999" name="phone" value={values.phone} onChange={handleChange}>
-                                {(inputProps) => (
-                                    <input
-                                        {...inputProps}
-                                        type="text"
-                                        className="form-control"
-                                    />
-                                )}
-                            </InputMask>
-                            {errors.phone && touched.phone ? (
-                                <div className="error">{errors.phone}</div>
-                            ) : null}
-                        </div>
-                    </div> */}
 
                     <div className="col-md-6">
                         <div className="form-group">
@@ -242,7 +233,7 @@ const CustomOrderBackend = ({ initialData, submit }) => {
                     <div className="col-md-6">
                         <div className="form-group">
                             <label>Address *:</label>
-                            <textarea name="address" value={values.address} onChange={handleChange} className="form-control" rows="4"> </textarea>
+                            <GooglePlaces {...{address, setAddress}} />
                         </div>
                     </div>
 

@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { format } from 'date-fns';
 import { orderStatusList } from '../UpdateOrderBackend/UpdateOrderBackend';
 import { MIN_PRICE } from '../Calculator/Calculator';
+import GooglePlaces from '../GooglePlaces';
 
 const Calculator = loadable(() => import('../Calculator/Calculator'))
 
@@ -19,6 +20,8 @@ function CreateOrderBackend() {
     const [success, setSucess] = useState(false);
     const [listUsers, setListUsers] = useState([]);
     const [listInstallers, setListInstallers] = useState([]);
+
+    const [address, setAddress] = useState('');
 
     const { values, setFieldValue, initialValues, handleChange } = useFormik({
         initialValues: {
@@ -67,7 +70,7 @@ function CreateOrderBackend() {
         formData.append('notes', values.notes);
         formData.append('uuid', values.uuid);
         formData.append('installer_notes', values.installer_notes);
-        formData.append('address', values.address);
+        formData.append('address', address.label);
         formData.append('notify', Number(values.sendNotification));
         formData.append('date', (new Date(values.date)).toUTCString());
 
@@ -130,6 +133,19 @@ function CreateOrderBackend() {
                         </div>
                         <div className="col-md-6">
                             <div className="form-group">
+                                <label>Order Status *:</label>
+                                <Select
+                                    styles={customStyles}
+                                    options={orderStatusList}
+                                    onChange={status => {
+                                        setFieldValue('status', status)
+                                    }}
+                                    value={values.status}
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form-group">
                                 <label>User *:</label>
                                 <Select
                                     styles={customStyles}
@@ -178,7 +194,7 @@ function CreateOrderBackend() {
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label>Address *:</label>
-                                <textarea name="address" value={values.address} onChange={handleChange} className="form-control" rows="4"> </textarea>
+                                <GooglePlaces {...{address, setAddress}} />
                             </div>
                         </div>
 

@@ -109,7 +109,7 @@ function UpdateOrderBackend({ order, user, images }) {
 
                             <div>
                             <label style={{fontWeight: 'bold'}}>
-                                <i class="fa fa-map" aria-hidden="true"></i> <a href='#'>Directions</a>
+                                <i class="fa fa-map" aria-hidden="true"></i> <a target="_blank" href={`https://www.google.com/maps/search/${values.address}`}>Directions</a>
                             </label>
                             </div>
                         </div>

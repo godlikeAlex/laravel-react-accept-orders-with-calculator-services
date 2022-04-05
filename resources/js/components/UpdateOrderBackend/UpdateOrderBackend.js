@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { customStyles } from '../Calculator/CalculatorTabScreen';
 import { format } from 'date-fns';
 import UploadImages from '../UploadImages';
+import GooglePlaces from '../GooglePlaces';
 const Calculator = loadable(() => import('../Calculator/Calculator'))
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
@@ -35,6 +36,7 @@ function UpdateOrderBackend({ order, installers }) {
     const [resetCalculator, setResetCalculator] = useState(false);
     const currentOrder = JSON.parse(order);
     const [listInstallers, setListInstallers] = useState([]);
+    const [address, setAddress] = useState({label: currentOrder.address});
 
     const { values, setFieldValue, handleSubmit, handleChange } = useFormik({
         initialValues: {
@@ -67,7 +69,7 @@ function UpdateOrderBackend({ order, installers }) {
             formData.append('notify', values.sendNotification);
             formData.append('installer_notes', values.installer_notes);
             formData.append('uuid', values.uuid);
-            formData.append('address', values.address);
+            formData.append('address', address.label);
             formData.append('notify', Number(values.sendNotification));
             formData.append('date', (new Date(values.date)).toUTCString());
             formData.append('_method', 'put');
@@ -201,7 +203,7 @@ function UpdateOrderBackend({ order, installers }) {
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label>Address</label>
-                                <textarea name="address" value={values.address} onChange={handleChange} className="form-control" rows="4"> </textarea>
+                                <GooglePlaces {...{address, setAddress}} />
                             </div>
                         </div>
 
