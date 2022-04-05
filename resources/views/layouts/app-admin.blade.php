@@ -129,6 +129,10 @@
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>⚡ Urgency Instsllstion</p>
                                     </a>
+                                    <a href="{{route('orders.index')}}?status=done" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Need to approve('done')</p>
+                                    </a>
                                     <a href="{{route('orders.index')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>List of orders</p>

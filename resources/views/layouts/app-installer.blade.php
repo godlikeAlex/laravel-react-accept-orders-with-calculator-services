@@ -106,18 +106,6 @@
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>List of orders</p>
                                     </a>
-                                    <a href="{{route('installer.orders.index')}}?status=on the way" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>On the way</p>
-                                    </a>
-                                    <a href="{{route('installer.orders.index')}}?status=in process" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>In process</p>
-                                    </a>
-                                    <a href="{{route('installer.orders.index')}}?status=last step to complete" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Last step to complete</p>
-                                    </a>
                                     <a href="{{route('installer.orders.index')}}?status=completed" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Completed orders</p>
