@@ -55,11 +55,12 @@ class InstallerController extends Controller
     {
         $request->validate([
             'status' => 'required',
-            'images' => 'nullable|array',
-            'images.*' => 'mimes:jpg,jpeg,png,webp',
+            'installer_notes' => 'nullable',
+            'installerCustomNote' => 'nullable',
         ]);
+        
         $excludedStatuses = [
-            'pending', 'cancled'
+            'pending', 'cancled', 'completed', 'done'
         ];
 
         $data = [
@@ -71,25 +72,10 @@ class InstallerController extends Controller
             $order->cancelOrder();
         }
 
-        if ($request->has('images')) {
-            foreach ($request->images as $image) {
-                $filename = Str::random() . '.' . $image->extension();
-                $image->storeAs('orders', $filename, 'public');
-                $images[] = [
-                    'path' => "orders/$filename",
-                ];
-            }
-            $order->images()->createMany($images);
-        }
-
         $order->update($data);
 
-        if (!in_array($data['status'], $excludedStatuses)) {
-            $order->user->notify(new OrderStatusUpdated($order, $data['status']));
-        }
-
-        if ($order->status === 'completed') {
-            $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
+        if (!in_array($data['status'], $excludedStatuses) && $order->recive_notifaction) {
+            $order->user->notify(new OrderStatusUpdated($order, $data['status'], $request->input('installerCustomNote')));
         }
 
         event(new OrderUpdated($order));
