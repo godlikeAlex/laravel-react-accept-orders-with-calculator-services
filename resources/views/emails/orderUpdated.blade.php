@@ -980,6 +980,14 @@
                                                         @endswitch
                                                     </td>
                                                 </tr>
+
+                                                @if($installerCustomNote)
+                                                    <tr>
+                                                        <td style="font-family:'Roboto', Helvetica, Arial, sans-serif; color:#ed0598; font-size: 16px; mso-line-height-rule: exactly; line-height: 24px; padding: 0px 50px 25px 50px; text-align: center; font-weight: bold;" class="copy">
+                                                            💬 {{$installerCustomNote}}
+                                                        </td>
+                                                    </tr>
+                                                @endif
                                             </table>
 
                                         </td>
