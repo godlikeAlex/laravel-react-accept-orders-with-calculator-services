@@ -7,9 +7,26 @@ import DatePicker from "react-datepicker";
 import InputMask from 'react-input-mask';
 import "react-datepicker/dist/react-datepicker.css";
 import { customStyles } from '../Calculator/CalculatorTabScreen';
-import { orderStatusList } from '../UpdateOrderBackend/UpdateOrderBackend';
 import { SRLWrapper } from 'simple-react-lightbox';
+import UploadImages from '../UploadImages';
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+
+
+export const orderStatusList = [
+    { value: 'pending', label: 'Pending ⏳' },
+    { value: 'approved', label: 'Approved 👍🏻' },
+    { value: 'cancled', label: 'Cancled ❌' },
+    { value: 'on the way', label: 'On the way ✅' },
+    { value: 'in process', label: 'In process ✅' },
+    { value: 'last step to complete', label: 'Last step to complete ✅' },
+    { value: 'done', label: 'Done ✅' },
+    { value: 'completed', label: 'Completed ✅', isDisabled: true },
+    { value: 'we are hit a traffic on the way', label: 'We are hit a traffic on the way 🚥' },
+    { value: 'material is not there', label: 'Material is not there 🚫' },
+    { value: 'can not access to start a job', label: 'Can not access to start a job 🔒' },
+    { value: 'we received wrong job information', label: 'We received wrong job information 🚫' },
+    { value: 'refunded', label: 'Refunded 🔁' }
+];
 
 
 function UpdateOrderBackend({ order, user, images }) {
@@ -25,6 +42,7 @@ function UpdateOrderBackend({ order, user, images }) {
             notes: currentOrder.notes,
             address: currentOrder.address,
             installer_notes: currentOrder.installer_notes,
+            installerCustomNote: '',
             installer: null,
             uuid: currentOrder.uuid,
             images: [],
@@ -34,6 +52,10 @@ function UpdateOrderBackend({ order, user, images }) {
             formData.delete('images[]');
             formData.append('status', values.status.value);
             formData.append('_method', 'put');
+
+            if (values.installerCustomNote) {
+                formData.append('installerCustomNote', values.installerCustomNote);
+            }
 
             if (values.images) {
                 for (const image of values.images) {
@@ -58,7 +80,6 @@ function UpdateOrderBackend({ order, user, images }) {
                 }
             } catch (error) {
                 console.log('errorrrr');
-                // window.location.reload();
             }
         }
     });
@@ -68,59 +89,72 @@ function UpdateOrderBackend({ order, user, images }) {
         <>
             <form>
                 <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-md-6">
-                            <div className="form-group">
-                                <label>Order Status</label>
-                                <Select
-                                    isSearchable={false}
-                                    options={orderStatusList}
-                                    styles={customStyles}
-                                    className={'reselect2-order'}
-                                    onChange={status => {
-                                        setFieldValue('status', status)
-                                    }}
-                                    value={values.status}
-                                />
+                    <div className="row" style={{padding: '10px'}}>
+
+                        <div className="col-6">
+                            <div>
+                                <label><i class="fa fa-hashtag" aria-hidden="true"></i> UUID: {values.uuid}</label>
+                            </div>
+
+                            <div>
+                                <label>Address:</label>
+                                <p>{values.address}</p>
                             </div>
                         </div>
 
-                        <div className="col-md-6">
-                            <div className="form-group">
-                                <label>UUID</label>
-                                <input name="uuid" disabled value={values.uuid} onChange={handleChange} className="form-control" rows="4" />
+                        <div className="col-6">
+                            <label   style={{fontWeight: 'bold'}}>
+                                <i class="fa fa-phone" aria-hidden="true"></i> <a href={`tel:${orderUser.phone}`}>{orderUser.phone}</a>
+                            </label>
+
+                            <div>
+                            <label style={{fontWeight: 'bold'}}>
+                                <i class="fa fa-map" aria-hidden="true"></i> <a href='#'>Directions</a>
+                            </label>
                             </div>
                         </div>
 
-                        <div className="col-md-6">
-                            <div href={`tel:${orderUser.phone}`} className="form-group">
-                                <label>Phone</label>
-                                <a href={`tel:${orderUser.phone}`}>
-                                    <input name="uuid" disabled value={orderUser.phone} className="form-control" rows="4" />
-                                </a>
-                            </div>
-                        </div>
+                        <hr />
 
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label>Address</label>
-                                <input name="address" disabled value={values.address} className="form-control" rows="4" />
-                            </div>
-                        </div>
-
-                        <div className="col-md-6">
-                            <div className="form-group">
-                                <label>Order notes</label>
-                                <textarea name="notes" disabled className="form-control" rows="4">
+                                <label>Order notes:</label>
+                                <p>
                                     {values.notes}
-                                </textarea>
+                                </p>
                             </div>
                         </div>
 
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label>Notes for installer</label>
-                                <textarea name="installer_notes" disabled value={values?.installer_notes} className="form-control" rows="4"> </textarea>
+                                <label>Notes for installer:</label>
+                                <p>
+                                {values?.installer_notes}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>Order Status: {values.status.value === 'completed' && 'Completed ✅'}</label>
+                                {values.status.value !== 'completed' && (
+                                    <Select
+                                        isSearchable={false}
+                                        disabled
+                                        options={orderStatusList}
+                                        onChange={status => {
+                                            setFieldValue('status', status)
+                                        }}
+                                        value={values.status}
+                                    />
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label>Note from installer :</label>
+                                <textarea name="installerCustomNote" value={values.installerCustomNote} onChange={handleChange} className="form-control" rows="4"> </textarea>
                             </div>
                         </div>
 
@@ -151,38 +185,21 @@ function UpdateOrderBackend({ order, user, images }) {
                             </tbody>
                         </table>
 
-                        <SRLWrapper>
-                            <div className="row col-md-12">
-                                {JSON.parse(images).map(image => (
-                                    <a className="col-12 col-md-2" style={{ marginBottom: '20px' }} href={`/storage/${image.path}`}>
-                                        <img style={{ width: '100%' }} src={`/storage/${image.path}`} />
-                                    </a>
-                                ))}
-                            </div>
-                        </SRLWrapper>
 
-                        {values.status.value === 'completed' && (
+                        {['done', 'completed'].includes(values.status.value) && (
                             <div className="col-md-12">
-                                <div class="form-group">
-                                    <label >Result photo</label>
-                                    <input
-                                        type="file"
-                                        class="form-control-file"
-                                        multiple
-                                        onChange={e => {
-                                            setFieldValue('images', e.target.files)
-                                        }}
-                                    />
-                                </div>
+                                <UploadImages orderId={currentOrder.id} disableEditing={values.status.value === 'completed'} />
                             </div>
                         )}
                     </div>
                 </div>
             </form>
 
-            <div className="card-footer">
-                <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Update an order</button>
-            </div>
+            {values.status.value !== 'completed' && (
+                <div className="card-footer">
+                    <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Update an order</button>
+                </div>
+            )}
 
             {success && (
                 <SweetAlert

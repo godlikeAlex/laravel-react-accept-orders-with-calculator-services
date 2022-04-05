@@ -9,6 +9,7 @@ import InputMask from 'react-input-mask';
 import "react-datepicker/dist/react-datepicker.css";
 import { customStyles } from '../Calculator/CalculatorTabScreen';
 import { format } from 'date-fns';
+import UploadImages from '../UploadImages';
 const Calculator = loadable(() => import('../Calculator/Calculator'))
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
@@ -19,6 +20,7 @@ export const orderStatusList = [
     { value: 'on the way', label: 'On the way ✅' },
     { value: 'in process', label: 'In process ✅' },
     { value: 'last step to complete', label: 'Last step to complete ✅' },
+    { value: 'done', label: 'Done ⏳' },
     { value: 'completed', label: 'Completed ✅' },
     { value: 'we are hit a traffic on the way', label: 'We are hit a traffic on the way 🚥' },
     { value: 'material is not there', label: 'Material is not there 🚫' },
@@ -225,19 +227,12 @@ function UpdateOrderBackend({ order, installers }) {
                             </div>
                         </div>
 
-                        {values.status.value === 'completed' && (
+                        {['done', 'completed'].includes(values.status.value) && (
                             <div className="col-md-12">
-                                <div class="form-group">
-                                    <label >Result photo</label>
-                                    <input
-                                        type="file"
-                                        class="form-control-file"
-                                        multiple
-                                        onChange={e => {
-                                            setFieldValue('images', e.target.files)
-                                        }}
-                                    />
-                                </div>
+                                <UploadImages 
+                                    orderId={currentOrder.id} 
+                                    disableEditing={values.status.value === 'completed'}
+                                />
                             </div>
                         )}
                     </div>

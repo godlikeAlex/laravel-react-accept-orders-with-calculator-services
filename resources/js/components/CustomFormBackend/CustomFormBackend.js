@@ -12,6 +12,7 @@ import SweetAlert from 'react-bootstrap-sweetalert';
 import './style.css';
 import axios from 'axios';
 import { format } from 'date-fns';
+import UploadImages from '../UploadImages';
 
 const CustomOrderSchema = Yup.object().shape({
     user_id: Yup.string().required('User is required.'),
@@ -283,19 +284,12 @@ const CustomOrderBackend = ({ initialData, submit }) => {
                     </div>
 
 
-                    {values.status?.value === 'completed' && (
+                    {initialData && ['done', 'completed'].includes(values.status?.value) && (
                         <div className="col-md-12">
-                            <div class="form-group">
-                                <label >Result photo</label>
-                                <input
-                                    type="file"
-                                    class="form-control-file"
-                                    multiple
-                                    onChange={e => {
-                                        setFieldValue('images', e.target.files)
-                                    }}
-                                />
-                            </div>
+                            <UploadImages 
+                                orderId={initialData.orderId}
+                                disableEditing={values.status?.value === 'completed'}
+                            />
                         </div>
                     )}
 

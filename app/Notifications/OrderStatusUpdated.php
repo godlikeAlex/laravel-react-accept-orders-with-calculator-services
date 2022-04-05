@@ -16,15 +16,17 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
 
     private $order;
     private $status;
+    private $installerCustomNote;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($order, $status)
+    public function __construct($order, $status, $installerCustomNote = null)
     {
         $this->order = $order;
         $this->status = $status;
+        $this->installerCustomNote = $installerCustomNote;
     }
 
     /**
@@ -47,7 +49,7 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $mail = (new MailMessage)
-            ->view('emails.orderUpdated', ['order' => $this->order, 'status' => $this->status]);
+            ->view('emails.orderUpdated', ['order' => $this->order, 'status' => $this->status, 'installerCustomNote' => $this->installerCustomNote]);
 
         if ($this->order->status == 'completed') {
             foreach ($this->order->images as $image) {

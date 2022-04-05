@@ -103,7 +103,7 @@ class AdminOrderController extends Controller
         ]);
 
         $excludedStatuses = [
-            'pending', 'cancled'
+            'pending', 'cancled', 'done'
         ];
 
         $tax = $request->input('total') * 0.0875;
@@ -197,7 +197,7 @@ class AdminOrderController extends Controller
         ]);
 
         $excludedStatuses = [
-            'pending', 'cancled'
+            'pending', 'cancled', 'done'
         ];
 
 
@@ -327,7 +327,7 @@ class AdminOrderController extends Controller
             'notify' => 'required|boolean'
         ]);
         $excludedStatuses = [
-            'pending', 'cancled'
+            'pending', 'cancled', 'done'
         ];
 
         $calculatedServices = new Cart($request->input('details'));
@@ -412,7 +412,7 @@ class AdminOrderController extends Controller
             'images_location' => 'nullable',
         ]);
         $excludedStatuses = [
-            'pending', 'cancled'
+            'pending', 'cancled', 'done'
         ];
 
         $tax = $request->input('total') * 0.0875;
