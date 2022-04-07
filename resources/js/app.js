@@ -17,6 +17,7 @@ require('./components/UpdateOrderBackend');
 require('./components/CreateCustomOrder');
 require('./components/UpdateCustomOrderBackend');
 require('./components/UpdateInstallerOrderBackend');
+require('./components/UpdateInstallerProfile');
 
 // Frontend
 // require('./App/components/ShopingCart');

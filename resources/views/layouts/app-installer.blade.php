@@ -115,6 +115,14 @@
                             </ul>
                         </li>
                         <li class="nav-item">
+                            <a href="{{route('updateProfileInstaller')}}" class="nav-link">
+                                <i class="nav-icon fa fa-edit"></i>
+                                <p>
+                                    Edit profile
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{route('installer.logout')}}" class="nav-link">
                                 <i class="nav-icon fa fa-reply"></i>
                                 <p>

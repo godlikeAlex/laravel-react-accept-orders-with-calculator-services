@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Installer\InstallerUserController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\SendRequestController;

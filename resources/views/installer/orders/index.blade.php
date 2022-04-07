@@ -11,7 +11,7 @@
             <div class="card-tools">
                 <!-- Buttons, labels, and many other things can be placed here! -->
                 <!-- Here is a label for example -->
-                <span class="badge badge-primary">{{$order->status}}</span>
+                <span class="badge badge-primary" style="background: {{$order->status === 'approved' ? 'grey' : '#ed0598'}}">{{$order->status}}</span>
             </div>
             <!-- /.card-tools -->
         </div>
