@@ -1122,14 +1122,14 @@
                                                                         <tr>
                                                                             <td style="display: none; width: 0px; height: 0px; max-height: 0px; padding: 0px; overflow: hidden; font-size: 0px; line-height: 0px;" class="loopPRI">
                                                                                 <a style="text-decoration: none; color: #010101;">PRICE:</a>
-                                                                                <a style="text-decoration: none; font-weight: 700;">${{$service->price}}</a>
+                                                                                <a style="text-decoration: none; font-weight: 700;">${{$service->total}}</a>
                                                                             </td>
                                                                         </tr>
                                                                     </table>
 
                                                                 </td>
                                                                 <td width="16" style="font-family: 'RobotoBold', Helvetica, Arial, sans-serif; color: #bc0101!important; font-weight: 700; font-size: 18px; vertical-align: middle; text-align: center;" class="loop-col4">
-                                                                    <span style="color: #000000;">${{$service->price}}</span>
+                                                                    <span style="color: #000000;">${{$service->total}}</span>
                                                                 </td>
                                                             </tr>
                                                         </table>
