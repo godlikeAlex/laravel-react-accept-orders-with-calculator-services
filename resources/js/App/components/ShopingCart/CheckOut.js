@@ -11,8 +11,11 @@ import HeadSection from '../HeadSection';
 import SelectPaymentMethod from './SelectPaymentMethod';
 import DatePicker from "react-datepicker";
 
+import { customStyles } from '../../../components/Calculator/CalculatorTabScreen';
+
 import "react-datepicker/dist/react-datepicker.css";
 import { addDays, format } from 'date-fns';
+import GooglePlaces from '../../../components/GooglePlaces';
 
 function checkIfFilesAreCorrectType(files) {
     let valid = true
@@ -31,7 +34,7 @@ export const OrderSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Required'),
     phone: Yup.string().required('Required'),
     date: Yup.string().required('Required'),
-    address: Yup.string().required('Required'),
+    address: Yup.object().required('Required'),
     terms: Yup.boolean()
     .required("The terms and conditions must be accepted.")
     .oneOf([true], "The terms and conditions must be accepted."),
@@ -79,7 +82,7 @@ function CheckOut() {
                 formData.append('name', values.name);
                 formData.append('email', values.email);
                 formData.append('phone', values.phone);
-                formData.append('address', values.address);
+                formData.append('address', values.address.label);
                 formData.append('date', (new Date(values.date)).toUTCString());
                 formData.append('notes', values.notes);
                 formData.append('payment_method_id', paymentMethod);
@@ -138,6 +141,8 @@ function CheckOut() {
             }
         }
     });
+
+    console.log(values.address);
 
     React.useEffect(() => {
         dispatch(updateCartPrice());
@@ -223,14 +228,22 @@ function CheckOut() {
                                             <span className="grey">Job Site <span style={{color: "red"}}>*</span>:</span>
                                         </label>
                                         <div className="col-sm-9">
-                                            <input
-                                                type="text"
-                                                className="form-control "
-                                                name="address"
-                                                disabled={isSubmitting}
-                                                onChange={handleChange}
-                                                value={values.address}
+                                            <GooglePlaces
+                                                address={values.address}
+                                                setAddress={(e) => setFieldValue('address', e)}
+                                                styles={{
+                                                    ...customStyles,
+                                                    control: () => ({
+                                                        ...customStyles.control,
+                                                        padding: '0px 35px 0px',
+                                                        backgroundColor: '#f2f2f2'
+                                                    })
+                                                }}
                                             />
+                                            {/* {errors.address && touched.address ? (
+                                                <div className="error">{errors.address}</div>
+                                            ) : null} */}
+
                                             {errors.address && touched.address ? (
                                                 <div className="error">{errors.address}</div>
                                             ) : null}

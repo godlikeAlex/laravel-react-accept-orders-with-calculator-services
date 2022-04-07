@@ -49,7 +49,7 @@ export const customStyles = {
     control: (provided) => ({
         ...provided,
         padding: '24px 40px 21px',
-        border: 'none'
+        border: 'none',
     }),
     dropdownIndicator: () => ({
         color: 'white'
