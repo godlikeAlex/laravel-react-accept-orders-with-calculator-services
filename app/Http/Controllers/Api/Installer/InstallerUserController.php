@@ -24,13 +24,15 @@ class InstallerUserController extends Controller
     public function update(UpdateInstallerProfileRequest $request) {
         $user = Auth::user();
 
+        $data = $request->validated();
+
         if($request->has('avatar')) {
             $filename = $request->avatar->getClientOriginalName();
             $request->avatar->storeAs('users', $filename, 'public');
-            $user->update(['avatar' => "users/$filename"]);
+            $data = array_merge($request->validated(), ['avatar' => "users/$filename"]);
         }
 
-        $user->update($request->validated());
+        $user->update($data);
 
         return $user;
     }

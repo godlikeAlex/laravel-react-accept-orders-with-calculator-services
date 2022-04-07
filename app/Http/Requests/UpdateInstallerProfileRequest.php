@@ -26,7 +26,6 @@ class UpdateInstallerProfileRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required',
-            'avatar' => 'nullable'
         ];
     }
 }
