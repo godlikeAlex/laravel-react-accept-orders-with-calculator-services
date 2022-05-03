@@ -4,6 +4,17 @@
 <!-- template sections -->
 @include('components.header')
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/css/splide.min.css">
+
+<style>
+    .splide__slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 30px;
+    }
+</style>
+
 <section class="intro_section page_mainslider cs all-scr-cover image-dependant">
     <div class="container-fluid" style="width: 100%;    ">
         <div class="row">
@@ -415,11 +426,47 @@
                     </blockquote>
 
                     <blockquote>
+                        <footer><cite>Marilyn Khmura</cite></footer>
+                        <p>The wallpaper looks amazing! Viktor is so awesome! He was super accommodating and always checked up and asked for updates even after installing. Definitely recommend these guys :)</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <footer><cite>Izabela Rak</cite></footer>
+                        <p>Amazing experience with EasyWay! They did a great job installing signs around my business and kept me updated every step of the way! 5/5 would recommend.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <footer><cite>Robert Kuzmiak</cite></footer>
+                        <p>Always a pleasure to work with! Professional, friendly service that is top notch. Finish product never ceases to impress!</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <footer><cite>Ellis Roberts</cite></footer>
+                        <p>Professional, straightforward, easy, awesome.</p>
+                    </blockquote>
+                    
+                    <blockquote>
+                        <footer><cite>Divyang Patel</cite></footer>
+                        <p>Very professional and reliable service</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <footer><cite>Matthew Skakun</cite></footer>
+                        <p>After dealing with with many companies, Easyway was by far the best with their professionalism and experience. 100% will recommend for any type of wallpaper and vinyl services.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <footer><cite>Meshi Keren</cite></footer>
+                        <p>Great job, professional and fast! Highly recommend.</p>
+                    </blockquote>
+
+                    <blockquote>
                         <footer><cite>See more</cite></footer>
                         <p>
                             See more reviews at <a href="https://www.yelp.com/biz/easy-way-install-staten-island" target="_blank" class="theme_button color1">Yelp</a> and <a href="https://g.page/r/CaTHPPr_OoZ6EAE" target="_blank" class="theme_button color1">Google</a>
                         </p>
                     </blockquote>
+
                 </div>
             </div>
         </div>
@@ -461,33 +508,32 @@
     </div>
 </section>
 
-<section class="ls section_padding_top_75 section_padding_bottom_75 alt-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div id="row" style="display: flex; align-items: center;" class="partners">
-                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
-                        <img data-src="/frontend/images/partners/partner1.png" class="lazyload" alt="">
-                    </div>
-                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
-                        <img style="max-width: 75%" data-src="/frontend/images/partners/partner2.svg" class="lazyload" alt="">
-                    </div>
-                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
-                        <img data-src="/frontend/images/partners/partner3.svg" class="lazyload" alt="">
-                    </div>
-                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
-                        <img style="max-width: 75%" data-src="/frontend/images/partners/partner4.svg" class="lazyload" alt="">
-                    </div>
-                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
-                        <img data-src="/frontend/images/partners/partner5.png" class="lazyload" alt="">
-                    </div>
-                    <div class="vertical-item gallery-item col-xs-4 col-sm-4 col-md-2">
-                        <img data-src="/frontend/images/partners/partner6.png" class="lazyload" alt="">
-                    </div>
-                </div>
-            </div>
+<section class="ls section_padding_top_75 section_padding_bottom_75 alt-section" style="padding: 50px 0px">
+    <section class="splide" aria-label="Splide Basic HTML Example">
+        <div class="splide__track">
+              <ul class="splide__list">
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner1.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner2.svg"  style="max-width: 60%;"class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner3.svg" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner4.svg" style="max-width: 60%;" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner5.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner6.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner7.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner8.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner9.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner10.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner11.webp" style="max-width: 70%" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner12.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner13.png" style="max-width: 70%" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner14.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner15.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner16.png" style="max-width: 70%" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner17.png" class="lazyload" alt=""></li>
+                  <li class="splide__slide"><img data-src="/frontend/images/partners/partner18.webp" class="lazyload" alt=""></li>
+
+              </ul>
         </div>
-    </div>
+      </section>
 </section>
 
 <section id="contact" class="section_padding_top_150 section_padding_bottom_150">
@@ -531,7 +577,7 @@
                             <div class="media-left"> <i style="color: #ED0598;" class="rt-icon2-phone5 highlight fontsize_18"></i> </div>
                             <div class="media-body">
                                 <h6 class="media-heading grey">PHONE:</h6>
-                                <a href="tel:(949) 942-1363" style="color: #808080;">(949) 942-1363</a>
+                                <a href="tel:(201) 992-6346" style="color: #808080;">(201) 992-6346</a>
                             </div>
                         </div>
                     </li>
@@ -695,6 +741,26 @@
             unmuted.style.display = 'block';
         }
     })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.1/dist/js/splide.min.js">
+    
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.4.2/dist/js/splide-extension-auto-scroll.min.js"></script>
+
+<script>
+    new Splide( '.splide', {
+        type   : 'loop',
+        drag   : 'free',
+        focus  : 'center',
+        pagination: false,
+        arrows : false,
+        perPage: 9,
+        autoScroll: {
+            speed: 0.5,
+        },
+    } ).mount( window.splide.Extensions );
 </script>
 
 @include('components.footer')

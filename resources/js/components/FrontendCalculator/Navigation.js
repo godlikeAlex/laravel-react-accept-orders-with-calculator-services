@@ -76,7 +76,7 @@ function Navigation({goBackCallBack, addToCartCallBack, resetCalculator}) {
     <>      
       <div style={{position: 'absolute', bottom: 0, justifyContent: location.pathname == '/' ? 'flex-end' : 'space-between', display: 'flex', width: '100%', flexWrap: 'wrap'}}>
       {location.pathname !== '/' && (
-        <button onClick={backHandler} className='theme_button bg_button color1 btn-calc'>
+        <button onClick={backHandler} className='theme_button bg_button color1 btn-calc' style={{backgroundColor: 'black', color: 'white'}}>
             BACK
         </button>
       )}

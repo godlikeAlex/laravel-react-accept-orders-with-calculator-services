@@ -459,13 +459,13 @@ export const calculatorValues = {
     },
     height: [
         {
-            title: '0 to 15 FT (Small Ladder)',
+            title: '0 to 8 FT (Small Ladder)',
             img: '/frontend/icons/1.png',
             width: '25px',
             price: 0
         },
         {
-            title: '15 to 18 FT (Ladder)',
+            title: '8 to 18 FT (Ladder)',
             img: '/frontend/icons/2.png',
             width: '25px',
             price: 100

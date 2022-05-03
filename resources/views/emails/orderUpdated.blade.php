@@ -1181,11 +1181,11 @@
                                                     <td width="50%" align="center" style="padding: 25px">
                                                         <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                                             <tr>
-                                                                <td style="text-align: center; color:black!important; font-size:13px; font-family:'Roboto', Helvetica, Arial,sans-serif!important; padding: 5px 0px 0px 0px; mso-line-height-rule: exactly; line-height: 16px;" align="center" class="trust-text"><a href="tel:+(949) 942-1363 " target="_blank" style="color:black; text-decoration:none">
+                                                                <td style="text-align: center; color:black!important; font-size:13px; font-family:'Roboto', Helvetica, Arial,sans-serif!important; padding: 5px 0px 0px 0px; mso-line-height-rule: exactly; line-height: 16px;" align="center" class="trust-text"><a href="tel:+(201) 992-6346 " target="_blank" style="color:black; text-decoration:none">
 
                                                                         <img src="{{asset('email-assets/telephone.png')}}" alt="" style="padding-right: 5px; width: 20px; height: 20px; display: inline !important; vertical-align: middle;">
                                                                         <br />
-                                                                        (949) 942-1363</a></td>
+                                                                        (201) 992-6346</a></td>
                                                             </tr>
                                                         </table>
                                                     </td>

@@ -192,9 +192,9 @@ const Cart = () => {
                                     )}
                                     
                                     {user ? (
-                                        <a className="theme_button bg_button color1 min_width_button" to="/cart/check-out" onClick={() => setShowSavedModal(true)} style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Save for later</a>
+                                        <a className="theme_button bg_button color1 min_width_button" to="/cart/check-out" onClick={() => setShowSavedModal(true)} style={{ width: '100%', paddingTop: 15, paddingBottom: 15, backgroundColor: 'black' }}>Save for later</a>
                                     ) : (
-                                        <Link className="theme_button bg_button color1 min_width_button" to="/cabinet/login" style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Save for later</Link>
+                                        <Link className="theme_button bg_button color1 min_width_button" to="/cabinet/login" style={{ width: '100%', paddingTop: 15, paddingBottom: 15, backgroundColor: 'black' }}>Save for later</Link>
                                     )}
                                     <Link className="theme_button bg_button color1 min_width_button" to="/cart/check-out" style={{ width: '100%', paddingTop: 15, paddingBottom: 15 }}>Order now</Link>
                                 </div>

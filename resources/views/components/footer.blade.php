@@ -12,7 +12,7 @@
                 <div class="teaser text-center" style="z-index: 0;">
                     <div class="teaser_icon  highlight9"> <img style="width: 50px" src="/frontend/images/clr-phone-call-3.png" alt=""> </div>
                     <p> <span class=" highlight9">CALL US 24/7</span><br> <span class="small black">
-                            <a href="tel:(949) 942-1363" style="color: white;">(949) 942-1363</a>
+                            <a href="tel:(201) 992-6346" style="color: white;">(201) 992-6346</a>
                         </span>
                     </p>
                 </div>

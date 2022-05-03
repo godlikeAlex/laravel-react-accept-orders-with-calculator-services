@@ -10,6 +10,7 @@ import FormTab from "./FormTab";
 import './style.css';
 import { CSSTransition } from "react-transition-group";
 import Navigation from "./Navigation";
+import WelcomeScreen from './Welcome';
 
 import { calculatorValues } from "../Calculator/calculator-values";
 
@@ -32,8 +33,6 @@ function Calculator() {
       total: 0
     }
   });
-
-  console.log(values.calculator);
 
   useEffect(() => {
     setMaterials(
@@ -107,7 +106,6 @@ function Calculator() {
   }
 
   const setValuesCalculator = (newValues) => {
-    console.log('hh', newValues);
     setValues(values => {
       return {
         ...values,
@@ -121,7 +119,10 @@ function Calculator() {
 
 
   const routes = [
+    // Welcome
+    // { path: '/', name: 'Welcome', Component: WelcomeScreen, props: {selectService, selectedService: values.selectedService} },
     { path: '/', name: 'Main', Component: SelectServiceTab, props: {selectService, selectedService: values.selectedService} },
+    // { path: '/', name: 'Main', Component: SelectServiceTab, props: {selectService, selectedService: values.selectedService} },
     { path: '/select-material', name: 'Select material', Component: SelectMaterialTab, props: {selectMaterial, selectedMaterial: values.selectedMaterial, materials} },
     { 
       path: '/form-tab', 

@@ -1,0 +1,13 @@
+.content-installer {
+  padding: 20px;
+  position: absolute;
+  transition: all .5s ease;
+}
+
+.small-content-installer {
+  width: calc(100% - 150px);
+}
+
+.big-content-installer {
+  width: 100%;
+}

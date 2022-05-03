@@ -35,7 +35,7 @@
                                     </li>
                                     <li class="only-mobile-menu">
                                         <p style=" color: white;">
-                                            <a href="tel:(949) 942-1363">(949) 942-1363</a>
+                                            <a href="tel:(201) 992-6346">(201) 992-6346</a>
                                         </p>
                                         <p class="page_social bottommargin_20 header-social">
                                             <a href="https://www.facebook.com/easywayinstall" target="_blank" class="social-icon light-bg-icon color-icon rounded-icon socicon-facebook"></a>

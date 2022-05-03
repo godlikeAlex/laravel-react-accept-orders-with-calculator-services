@@ -53,7 +53,7 @@
                         <div class="media-left"> <i style="color: #ED0598;" class="rt-icon2-phone5 highlight fontsize_18"></i> </div>
                         <div class="media-body">
                             <h6 class="media-heading grey">Call us:</h6>
-                            <a href="tel:+1 201 855 63 45" style="color: #808080;">(949) 942-1363</a>
+                            <a href="tel:+1 201 855 63 45" style="color: #808080;">(201) 992-6346</a>
                         </div>
                     </div>
 

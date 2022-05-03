@@ -31,7 +31,7 @@
                             8 Signs Rd, 10314<br>
                             Staten Island<br>
                             New York, NY<br>
-                            Phone: (949) 942-1363<br>
+                            Phone: (201) 992-6346<br>
                             Email: info@easywayinstall.com
                         </address>
                     </div>
