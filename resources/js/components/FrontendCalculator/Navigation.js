@@ -82,7 +82,7 @@ function Navigation({goBackCallBack, addToCartCallBack, resetCalculator}) {
       )}
 
       {location.pathname != '/form-tab' && (
-        <a href="#contact" className='theme_button bg_button color1 btn-calc'>
+        <a target="_blank" href="https://clienthub.getjobber.com/client_hubs/e9064cfd-445f-4119-960c-6efecddd81f6/public/work_request/new?source=social_media" className='theme_button bg_button color1 btn-calc'>
           Other
         </a>
       )}
