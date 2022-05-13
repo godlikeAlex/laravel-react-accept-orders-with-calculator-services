@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\AdminOrderController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\Installer\InstallerUserController;
-use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\PaymentController;
-use App\Http\Controllers\Api\SendRequestController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\WishListController;
-use App\Http\Controllers\ForgotController;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ForgotController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\WishListController;
+use App\Http\Controllers\Api\SendRequestController;
+use App\Http\Controllers\Api\AuthInstallerController;
+use App\Http\Controllers\Api\Installer\InstallerUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,4 +59,8 @@ Route::prefix('wish')->group(function () {
     Route::get('list', [WishListController::class, 'list']);
     Route::get('remove/{id}', [WishListController::class, 'remove']);
     Route::post('store', [WishListController::class, 'store'])->middleware('auth:api');
+});
+
+Route::prefix('installer/dashboard')->group(function () {
+    Route::post('/login', [AuthInstallerController::class, 'login']);
 });

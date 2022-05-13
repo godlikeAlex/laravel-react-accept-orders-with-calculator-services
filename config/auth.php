@@ -47,7 +47,7 @@ return [
         ],
 
         'installer' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'installers'
         ],
 
