@@ -20,3 +20,7 @@ mix.js('resources/js/app.js', 'public/js')
 mix.js('resources/js/calculator.js', 'public/js')
     .react()
 mix.minify('public/js/app.js');
+
+//  Installers
+mix.js('resources/js/installer-app.js', 'public/js')
+    .react()

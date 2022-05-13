@@ -376,6 +376,7 @@ class AdminOrderController extends Controller
 
             if ($order->status === 'completed') {
                 $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
+                \App\Jobs\ProcessDocuSign::dispatch($order);
             }
         }
 
@@ -470,6 +471,7 @@ class AdminOrderController extends Controller
 
             if ($order->status === 'completed') {
                 $order->user->notify((new PleaseRateUs($order))->delay(now()->addDay()));
+                \App\Jobs\ProcessDocuSign::dispatch($order);
             }
         }
 

@@ -18,6 +18,7 @@ class Order extends Model
 
     protected $fillable = [
         'status',
+        'docusign_envelope_id',
         'user_id',
         'details',
         'amount',

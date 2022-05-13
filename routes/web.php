@@ -13,8 +13,12 @@ use App\Http\Controllers\InstallerManagmentController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\StuffManagmentController;
 use App\Models\User;
+use Carbon\Carbon;
+use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+use Spatie\GoogleCalendar\Event;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,11 +132,93 @@ Route::get('test-docusign', function() {
     // return App\Classes\DocuSignClient::sendEmail();
     $order = App\Models\Order::first();
     App\Jobs\ProcessDocuSign::dispatch($order);
-    return 1;
+    return $order->user->name;
 });
 
+Route::get('test-google-calendar', function() {
+    $events = Event::get();
+
+    dd($events[1]->location);
+});
+
+// Route::get('/test-pdf', function() {
+//     $fpdf = new Codedge\Fpdf\Fpdf\Fpdf;
+//     $fpdf->AddPage();
+//     $fpdf->SetFont('Arial', 'B', 18);
+//     $fpdf->Cell(0, 25, 'INSTALLATION COMPLETION FORM', '0', 1, 'C');
+//     // FULL WIDTH IS 130
+
+//     $fpdf->SetFont('Arial', 'B', 11);
+
+//     $fpdf->Cell(29, 5, 'Order number:', 0, 0);
+//     $fpdf->Cell(160, 5, '#1234567', 'B', 1);
+
+//     // 2
+
+//     $fpdf->cell(0, 5, '', 0, 1); // SPACING LINE
+
+//     $fpdf->Cell(24, 5, 'Install Date:', 0, 0);
+//     $fpdf->Cell(165, 5, '#1234567', 'B', 1);
+
+//     $fpdf->cell(0, 5, '', 0, 1); // SPACING LINE
+
+//     $fpdf->Cell(40, 5, 'Installation Address:', 0, 0);
+//     $fpdf->Cell(150, 5, '#1234567', 'B', 1);
+
+//     $fpdf->cell(0, 15, '', 0, 1); // SPACING LINE
+
+//     $fpdf->SetY(-120);
+//     $fpdf->SetFont('Arial', 'BI', 12);
+//     $fpdf->Cell(0, 5, 'By signing below, I certify that the job was done to my satisfaction.', 0, 0, 'C');
+
+
+//     $fpdf->SetY(-80);
+
+//     $fpdf->SetFont('Arial','B',11);
+//     $fpdf->Cell(55,5,'Approved by',0,0);
+
+//     $fpdf->Cell(80,5,'',0,0);
+
+//     $fpdf->Cell(55,5,'Project complete by',0, 1);
+
+//     $fpdf->Cell(55,10,'','B',0);
+
+//     $fpdf->Cell(80,10,'',0,0);
+
+//     $fpdf->Cell(55,10, 'Aleksandr Yurkovsiy','B', 1); // Installer name
+
+//     $fpdf->SetFont('Arial','B',11);
+//     $fpdf->Cell(55,10,'(Print name)',0,0, 'C');
+
+//     $fpdf->Cell(80,10,'',0,0);
+
+//     $fpdf->Cell(55,10,'',0,1, 'C');
+
+
+
+
+//     $fpdf->Cell(55,10,'','B',0);
+
+//     // $fpdf->Cell(80,10,'',0,0);
+
+//     $fpdf->Cell(2,10,' ','B',1);
+
+//     $fpdf->SetFont('Arial','B',11);
+//     $fpdf->Cell(55,10,'(Sign)',0,0, 'C');
+
+//     $fpdf->Cell(80,10,'',0,0);
+
+//     // $fpdf->Cell(55,10,'(Sign)',0,1, 'C');
+
+//     $fpdf->Output();
+//     exit;
+// });
+
 Route::get('/test-pdf', function() {
-    $fpdf = new Codedge\Fpdf\Fpdf\Fpdf;
+    $order = \App\Models\Order::first();
+    $fpdf = new Fpdf();
+    $carbon = new Carbon($order->date);
+
     $fpdf->AddPage();
     $fpdf->SetFont('Arial', 'B', 18);
     $fpdf->Cell(0, 25, 'INSTALLATION COMPLETION FORM', 0, 1, 'C');
@@ -140,61 +226,27 @@ Route::get('/test-pdf', function() {
 
     $fpdf->SetFont('Arial', 'B', 11);
 
+
     $fpdf->Cell(29, 5, 'Order number:', 0, 0);
-    $fpdf->Cell(30, 5, '#1234567', 'B', 0);
-
-    $fpdf->Cell(10, 5, '#PO:', 0, 0);
-    $fpdf->Cell(30, 5, '#1234567', 'B', 0);
-
-    $fpdf->Cell(23, 5, 'Order Date:', 0, 0);
-    $fpdf->Cell(68, 5, '#1234567', 'B', 1);
+    $fpdf->Cell(160, 5, $order->uuid, 'B', 1);
 
     // 2
 
     $fpdf->cell(0, 5, '', 0, 1); // SPACING LINE
 
-    $fpdf->Cell(23, 5, 'Install Date:', 0, 0);
-    $fpdf->Cell(45, 5, '#1234567', 'B', 0);
-
-    $fpdf->Cell(11, 5, 'Time:', 0, 0);
-    $fpdf->Cell(110, 5, '#1234567', 'B', 1);
-
-    $fpdf->cell(0, 5, '', 0, 1); // SPACING LINE
-
-    $fpdf->Cell(31, 5, 'On-site contact:', 0, 0);
-    $fpdf->Cell(38, 5, '#1234567', 'B', 0);
-
-    $fpdf->Cell(8, 5, 'Tel:', 0, 0);
-    $fpdf->Cell(112, 5, '#1234567', 'B', 1);
+    $fpdf->Cell(24, 5, 'Install Date:', 0, 0);
+    $fpdf->Cell(165, 5, $carbon->toFormattedDateString(), 'B', 1);
 
     $fpdf->cell(0, 5, '', 0, 1); // SPACING LINE
 
     $fpdf->Cell(40, 5, 'Installation Address:', 0, 0);
-    $fpdf->Cell(150, 5, '#1234567', 'B', 1);
-
-    $fpdf->cell(0, 5, '', 0, 1); // SPACING LINE
-
-    $fpdf->Cell(23, 5, 'Project title:', 0, 0);
-    $fpdf->Cell(168, 5, '#1234567', 'B', 1);
+    $fpdf->Cell(150, 5, $order->address, 'B', 1);
 
     $fpdf->cell(0, 15, '', 0, 1); // SPACING LINE
 
-    $fpdf->cell(0, 5, 'Labor Description:', 0, 1);
-
-    $fpdf->cell(0, 5, '', 0, 1); // SPACING LINE
-    $fpdf->SetFont('Arial', '', 10);
-
-    $fpdf->MultiCell(0, 6, "Lorem Ipsum is s of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
-
-    $fpdf->cell(0, 15, '', 0, 1); // SPACING LINE
-
-    $fpdf->SetFont('Arial', 'B', 12);
-    $fpdf->cell(0, 5, 'Equipment and Miscellaneous:', 0, 1);
-
-    $fpdf->cell(0, 5, '', 0, 1); // SPACING LINE
-    $fpdf->SetFont('Arial', '', 10);
-
-    $fpdf->MultiCell(0, 6, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
+    $fpdf->SetY(-120);
+    $fpdf->SetFont('Arial', 'BI', 12);
+    $fpdf->Cell(0, 5, 'By signing below, I certify that the job was done to my satisfaction.', 0, 0, 'C');
 
     $fpdf->SetY(-80);
 
@@ -209,36 +261,34 @@ Route::get('/test-pdf', function() {
 
     $fpdf->Cell(80,10,'',0,0);
 
-    $fpdf->Cell(55,10,' ','B',1);
+    $fpdf->Cell(55,10, $order->installers->first()->name ?? 'Viktor Hnativ','B', 1); // Installer name
 
     $fpdf->SetFont('Arial','B',11);
     $fpdf->Cell(55,10,'(Print name)',0,0, 'C');
 
     $fpdf->Cell(80,10,'',0,0);
 
-    $fpdf->Cell(55,10,'(Print name)',0,1, 'C');
+    $fpdf->Cell(55,10,'',0,1, 'C');
 
 
 
 
     $fpdf->Cell(55,10,'','B',0);
 
-    $fpdf->Cell(80,10,'',0,0);
+    // $fpdf->Cell(80,10,'',0,0);
 
-    $fpdf->Cell(55,10,' ','B',1);
+    $fpdf->Cell(2,10,' ','B',1);
 
     $fpdf->SetFont('Arial','B',11);
     $fpdf->Cell(55,10,'(Sign)',0,0, 'C');
 
     $fpdf->Cell(80,10,'',0,0);
 
-    $fpdf->Cell(55,10,'(Sign)',0,1, 'C');
+    // $fpdf->Cell(55,10,'(Sign)',0,1, 'C');
 
     $fpdf->Output();
     exit;
 });
-
-Route::get('/*');
 
 
 Route::get('/installer-new/{path?}', function () {
