@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\SendRequestController;
 use App\Http\Controllers\Api\Installer\InstallerUserController;
 use App\Http\Controllers\Api\Installer\AuthInstallerController;
 
+use App\Http\Controllers\Api\Installer\OrderController as InstallerOrderController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -63,4 +65,10 @@ Route::prefix('wish')->group(function () {
 
 Route::prefix('installer/dashboard')->group(function () {
     Route::post('/login', [AuthInstallerController::class, 'login']);
+    Route::get('/logout', [AuthInstallerController::class, 'logout']);
+
+    Route::get('/orders', [InstallerOrderController::class, 'orders']);
+    Route::post('/orders/edit/{order}', [InstallerOrderController::class, 'updateOrder']);
+    
+    Route::post('/user/edit', [InstallerUserController::class, 'update']);
 });
