@@ -11,8 +11,8 @@ use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\WishListController;
 use App\Http\Controllers\Api\SendRequestController;
-use App\Http\Controllers\Api\AuthInstallerController;
 use App\Http\Controllers\Api\Installer\InstallerUserController;
+use App\Http\Controllers\Api\Installer\AuthInstallerController;
 
 /*
 |--------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Installer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Installers\LoginRequest;
@@ -16,7 +16,7 @@ class AuthInstallerController extends Controller
     public function login(LoginRequest $request) {
         try {
             $token = auth('installer')->attempt($request->only('email', 'password'));
-            
+
             if(!$token) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
