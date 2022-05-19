@@ -16,6 +16,7 @@ import { customStyles } from '../../../components/Calculator/CalculatorTabScreen
 import "react-datepicker/dist/react-datepicker.css";
 import { addDays, format } from 'date-fns';
 import GooglePlaces from '../../../components/GooglePlaces';
+import gtag, { install } from 'ga-gtag';
 
 function checkIfFilesAreCorrectType(files) {
     let valid = true
@@ -104,6 +105,9 @@ function CheckOut() {
                             'Authorization': isAuth && token ? `Bearer ${token}` : undefined
                         }
                     });
+
+                    gtag('event', 'conversion', { 'send_to': 'AW-10866148222/8P3MCPzq6b4DEP6Gsb0o', 'transaction_id': data.uuid });
+
                     history.push('/cart/thank-you');
                     dispatch(clearCart());
                     localStorage.removeItem('shoping-cart');

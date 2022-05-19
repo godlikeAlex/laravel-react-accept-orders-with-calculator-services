@@ -76,6 +76,10 @@
     </noscript>
     <!-- /Yandex.Metrika counter -->
 
+    
+    <!-- Global site tag (gtag.js) - Google Ads: 10866148222 --> 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-10866148222"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-10866148222'); </script> 
+
 </head>
 
 <body>
