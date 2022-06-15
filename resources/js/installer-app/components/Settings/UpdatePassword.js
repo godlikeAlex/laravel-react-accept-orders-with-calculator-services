@@ -49,7 +49,6 @@ export const UpdatePassword = () => {
                     label="Old password"
                     name="oldPassword"
                     autoComplete="password"
-                    autoFocus
                     fullWidth
                     value={values.oldPassword}
                     onChange={handleChange}
@@ -63,7 +62,6 @@ export const UpdatePassword = () => {
                     label="New password"
                     name="newPassword"
                     autoComplete="password"
-                    autoFocus
                     fullWidth
                     value={values.newPassword}
                     onChange={handleChange}
@@ -77,7 +75,6 @@ export const UpdatePassword = () => {
                     label="Confirm password"
                     name="confirmPassword"
                     autoComplete="password"
-                    autoFocus
                     fullWidth
                     value={values.confirmPassword}
                     onChange={handleChange}

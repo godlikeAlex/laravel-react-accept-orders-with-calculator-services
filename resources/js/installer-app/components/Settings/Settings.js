@@ -81,7 +81,6 @@ const Settings = () => {
                         label="Email Addresses"
                         name="email"
                         autoComplete="email"
-                        autoFocus
                         fullWidth
                         value={values.email}
                         onChange={handleChange}
