@@ -51,6 +51,7 @@ const App = () => {
   return (
     <Router>
       <Switch>
+        <Route path={`${ROUTE_PREFIX}`} exact component={Login} />
         <Route path={`${ROUTE_PREFIX}/login`} exact component={Login} />
         <ProtectedRoute path={`${ROUTE_PREFIX}/dashboard`} exact component={Dashboard} />
         <ProtectedRoute path={`${ROUTE_PREFIX}/settings`} exact component={Settings} />
