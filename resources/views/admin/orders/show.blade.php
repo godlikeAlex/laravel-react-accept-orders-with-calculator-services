@@ -10,13 +10,8 @@
                     <div class="col-12">
                         <h4>
                             <i class="fas fa-globe"></i> Easy Way Install NYC Inc
-                            <small class="float-right">Date: <span id="date" data-date="{{$order->date->toW3cString()}}"></span>
-                                <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                                <script>
-                                    const date = document.querySelector('#date');
-                                    const d = moment(date.dataset['date']).format('lll')
-                                    date.innerHTML = d;
-                                </script>
+                            <small class="float-right">Date: {{$order->date->timezone('America/New_York')->format('Y/m/d H:i')}}
+                      
                             </small>
                         </h4>
                     </div>
