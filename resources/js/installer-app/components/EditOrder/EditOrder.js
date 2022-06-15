@@ -1,15 +1,17 @@
-import { Box, Button, Grid, TextareaAutosize, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, ImageList, ImageListItem, TextareaAutosize, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AuthLayout from '../Layouts/AuthLayout';
 import TagIcon from '@mui/icons-material/Tag';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Select from 'react-select';
-import { FormControl } from '@mui/material';
 import OrderService from '../../services/OrderService';
 import LoadingSpinner from '../LoadingSpinner';
 import UploadImages from '../../../components/UploadImages';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import './style.css'
 
 import { toast } from 'react-toastify';
@@ -151,6 +153,67 @@ const EditOrder = () => {
                         rows={5}
                         maxRows={6}
                     />
+                </Grid>
+
+                <Grid item xs={12}> 
+                    <Typography variant='h5' sx={{marginBottom: '10px'}}>Order Details</Typography>
+
+                    <Grid container spacing={3}>
+
+                    {JSON.parse(state.order.details).services.map((service, i) => (
+                        state.order.custom === 0 ? (
+                            <Grid item xs={12} md={4} key={i}>
+                                <Card>
+                                    <CardContent>
+                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                        Order detail
+                                    </Typography>
+                                    <Typography variant="h6" component="div">
+                                        {service.currentService.label} X {service.quantity}
+                                    </Typography>
+                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                        Width: {service.width}; Height: {service.height}; Foot Height: {service.ftHeight.title};
+                                    </Typography>
+
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ) : (
+                            <Grid item xs={12} md={4} key={i}>
+                                <Card>
+                                    <CardContent>
+                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                        Order detail
+                                    </Typography>
+
+                                    <Typography variant="h6" component="div">
+                                        {service.name}
+                                    </Typography>
+
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        )
+                    ))}
+
+                    </Grid>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Typography variant='h5' sx={{marginBottom: '10px'}}>Place images</Typography>
+
+                    <Grid container spacing={3}>
+                        {state.order?.place_images.map((placeImage) => (
+                            <Grid item xs={12} md={6}>
+                                <img
+                                    src={`/storage/${placeImage.path}`}
+                                    srcSet={`/storage/${placeImage.path}`}
+                                    loading="lazy"
+                                    style={{width: '100%', height: '350px', objectFit: 'cover'}}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
                 </Grid>
 
                 <Grid item xs={12}>

@@ -43,7 +43,7 @@ class OrderController extends Controller
         $user = auth()->user();
         $order = $user->orders()->with(['user' => function ($query) {
             $query->select('avatar', 'email', 'id', 'name', 'phone');
-        }])->select('id', 'uuid', 'status', 'address', 'notes', 'installer_notes', 'user_id', 'date')->find($orderId);
+        }, 'placeImages'])->select('id', 'uuid', 'status', 'address', 'notes', 'installer_notes', 'user_id', 'date', 'details', 'custom')->find($orderId);
 
         return $order;
     }
