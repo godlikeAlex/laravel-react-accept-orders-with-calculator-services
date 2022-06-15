@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_URL = 'http://easyway/api/installer/dashboard';
+export const API_URL = '/api/installer/dashboard';
 
 const api = axios.create({
   withCredentials: true,

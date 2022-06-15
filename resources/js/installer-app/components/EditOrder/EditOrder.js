@@ -139,7 +139,7 @@ const EditOrder = () => {
                     />
 
                     {['done', 'completed'].includes(state.order.status.value) && (
-                        <UploadImages orderId={state.order.id} disableEditing={state.order.status.value === 'completed'} />
+                        <UploadImages orderId={state.order.id} disableEditing={state.order.status.value === 'completed'} installer={true} />
                     )}
                 </Grid>
 
