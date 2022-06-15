@@ -95,19 +95,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/dashboard/installer/delete/{id}', [InstallerManagmentController::class, 'deleteInstaller'])->name('installer.delete');
 });
 
-Route::prefix('installer/dashboard')->group(function () {
-    Route::get('/', [InstallerController::class, 'index'])->name('dashboard.installer.index');
-    Route::get('login', [InstallerLoginController::class, 'showLoginForm'])->name('login.installer');
-    Route::post('login', [InstallerLoginController::class, 'login'])->name('installer.login.submit');
-    Route::get('logout', [InstallerLoginController::class, 'logout'])->name('installer.logout');
-    Route::get('/orders', [InstallerController::class, 'ordersIndex'])->name('installer.orders.index');
-
-
-    Route::get('order/{id}', [InstallerController::class, 'editOrder'])->name('inst.show.order');
-    Route::put('/edit/order/{order}', [InstallerController::class, 'updateOrder']);
-});
-
-// Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes([
     'register' => false, // Registration Routes...
