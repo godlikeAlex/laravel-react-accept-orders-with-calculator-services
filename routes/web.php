@@ -105,11 +105,6 @@ Route::prefix('installer/dashboard')->group(function () {
 
     Route::get('order/{id}', [InstallerController::class, 'editOrder'])->name('inst.show.order');
     Route::put('/edit/order/{order}', [InstallerController::class, 'updateOrder']);
-
-    
-    Route::get('/update/profile', [InstallerUserController::class, 'updateView'])->name('updateProfileInstaller');
-    Route::post('/update/profile/', [InstallerUserController::class, 'update']);
-    Route::post('/update/profile/password/change', [InstallerUserController::class, 'updatePassword']);
 });
 
 // Route::get('/home', 'HomeController@index')->name('home');
@@ -291,7 +286,7 @@ Route::get('/test-pdf', function() {
 });
 
 
-Route::get('/installer-new/{path?}', function () {
+Route::get('/app/installer/{path?}', function () {
     return view('app-installer');
 })->where('path', '.*');
 

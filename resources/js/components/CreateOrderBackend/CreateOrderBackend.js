@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import { orderStatusList } from '../UpdateOrderBackend/UpdateOrderBackend';
 import { MIN_PRICE } from '../Calculator/Calculator';
 import GooglePlaces from '../GooglePlaces';
+import dayjs from 'dayjs';
 
 const Calculator = loadable(() => import('../Calculator/Calculator'))
 
@@ -72,7 +73,7 @@ function CreateOrderBackend() {
         formData.append('installer_notes', values.installer_notes);
         formData.append('address', address.label);
         formData.append('notify', Number(values.sendNotification));
-        formData.append('date', (new Date(values.date)).toUTCString());
+        formData.append('date', dayjs(values.date).format('YYYY/MM/DD HH:mm'));
 
         if (values.images) {
             Array.from(values.images).forEach(img => {
@@ -131,19 +132,7 @@ function CreateOrderBackend() {
                             )}
 
                         </div>
-                        <div className="col-md-6">
-                            <div className="form-group">
-                                <label>Order Status *:</label>
-                                <Select
-                                    styles={customStyles}
-                                    options={orderStatusList}
-                                    onChange={status => {
-                                        setFieldValue('status', status)
-                                    }}
-                                    value={values.status}
-                                />
-                            </div>
-                        </div>
+
                         <div className="col-md-6">
                             <div className="form-group">
                                 <label>User *:</label>
@@ -265,7 +254,6 @@ function CreateOrderBackend() {
                     title="Order Created"
                     onConfirm={() => {
                         setSucess(false);
-                        setFieldValue('calculatedData', initialValues.calculatedData)
                     }}
                     onCancel={() => window.location.href = '/admin/orders'}
                 >

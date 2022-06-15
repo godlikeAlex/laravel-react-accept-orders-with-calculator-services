@@ -20,8 +20,8 @@
                         <td>@if($order->urgencyInstsllstion) ⚡ @endif {{$order->uuid}} @if(isset(json_decode($order->details)->delivery) && json_decode($order->details)->delivery) 📦 @endif </td>
                         <td style="text-transform:capitalize">{{$order->status}} {{$order->delivery == 1 ? '| Delivery need' : ''}}</td>
                         <td>{{$order->amount}} $</td>
-                        <td class="date" data-date="{{$order->date->toW3cString()}}"></span>
-                            {{date('d-m-Y', strtotime($order->date))}}
+                        <td ></span>
+                            {{$order->date->timezone('America/New_York')->format('Y/m/d H:i')}}
                         </td>
 
                         <td>

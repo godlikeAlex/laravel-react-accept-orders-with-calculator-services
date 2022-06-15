@@ -65,10 +65,16 @@ Route::prefix('wish')->group(function () {
 
 Route::prefix('installer/dashboard')->group(function () {
     Route::post('/login', [AuthInstallerController::class, 'login']);
+    Route::post('/refresh', [AuthInstallerController::class, 'refresh']);
     Route::get('/logout', [AuthInstallerController::class, 'logout']);
 
     Route::get('/orders', [InstallerOrderController::class, 'orders']);
+    Route::get('/orders/last', [InstallerOrderController::class, 'lastOrders']);
+
+    Route::get('/orders/{orderId}', [InstallerOrderController::class, 'getOrder']);
     Route::post('/orders/edit/{order}', [InstallerOrderController::class, 'updateOrder']);
     
+
     Route::post('/user/edit', [InstallerUserController::class, 'update']);
+    Route::post('/user/password', [InstallerUserController::class, 'updatePassword']);
 });

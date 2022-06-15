@@ -19,8 +19,33 @@ class OrderController extends Controller
 
     public function orders() {
         $user = auth()->user();
+        // return $user->orders()->first();
+        $orders = $user->orders()->where('status', '!=', 'completed')->with(['user' => function ($query) {
+            $query->select('avatar', 'email', 'id', 'name', 'phone');
+        }])->select('id', 'uuid', 'status', 'created_at', 'user_id', 'date')->get();
 
-        return $user->orders()->select('id', 'uuid', 'status', 'created_at')->get();
+        $groupedOrdersByDates = collect($orders)->mapToGroups(function ($item, $key) {
+            return [$item['date']->todatestring() => $item];
+        });
+
+        return $groupedOrdersByDates;
+    }
+
+    public function lastOrders() {
+        $user = auth()->user();
+        
+        return $user->orders()->with(['user' => function ($query) {
+            $query->select('avatar', 'email', 'id', 'name', 'phone');
+        }])->select('id', 'uuid', 'status', 'created_at', 'user_id', 'date')->latest()->limit(6)->get();
+    }
+
+    public function getOrder($orderId) {
+        $user = auth()->user();
+        $order = $user->orders()->with(['user' => function ($query) {
+            $query->select('avatar', 'email', 'id', 'name', 'phone');
+        }])->select('id', 'uuid', 'status', 'address', 'notes', 'installer_notes', 'user_id', 'date')->find($orderId);
+
+        return $order;
     }
 
     public function updateOrder(EditOrderRequest $request, $orderId)

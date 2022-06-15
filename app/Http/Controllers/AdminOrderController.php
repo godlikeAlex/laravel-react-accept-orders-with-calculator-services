@@ -107,10 +107,14 @@ class AdminOrderController extends Controller
         ];
 
         $tax = $request->input('total') * 0.0875;
+        
+        // dd(Carbon::createFromFormat('Y/m/d H:i', '2022/06/30 23:00')->format('Y/m/d H:i'));
+
+        // dd(Carbon::createFromFormat('Y/m/d H:i', '2022/06/30 15:30')->format('Y/m/d H:i'));
 
         try {
             $order = new Order();
-            $order->date = Carbon::parse($request->input('date'));
+            $order->date =Carbon::createFromFormat('Y/m/d H:i', $request->input('date'))->timezone('America/New_York');
             $order->status = $request->input('status');
             $order->details = $request->input('details');
             $order->amount = $request->input('total') + $tax;
@@ -205,7 +209,7 @@ class AdminOrderController extends Controller
             $calculatedServices = new Cart($request->input('details'));
 
             $order = new Order();
-            $order->date = Carbon::parse($request->input('date'));
+            $order->date = Carbon::createFromFormat('Y/m/d H:i', $request->input('date'))->timezone('America/New_York');
             $order->status = $request->status;
             $order->user_id = $request->user_id;
             $order->installer_id = $request->installer_id;
@@ -347,7 +351,7 @@ class AdminOrderController extends Controller
             'uuid' => $request->uuid,
             'installer_notes' => $request->installer_notes,
             'urgencyInstsllstion' => $calculatedServices->additional->urgencyInstsllstion > 0,
-            'date' => Carbon::parse($request->input('date')),
+            'date' => Carbon::createFromFormat('Y/m/d H:i', $request->input('date'))->timezone('America/New_York'),
         ];
 
         if ($request->has('images')) {
@@ -425,7 +429,7 @@ class AdminOrderController extends Controller
             'amount' => $request->input('total') + $tax,
             'recive_notifaction' => $request->input('notify'),
             'taxPrice' => $tax,
-            'date' => Carbon::parse($request->input('date')),
+            'date' => Carbon::createFromFormat('Y/m/d H:i', $request->input('date'))->timezone('America/New_York'),
             'installer_id' => $request->input('installer_id'),
             'phone' => $request->input('phone'),
             'notes' => $request->input('notes'),

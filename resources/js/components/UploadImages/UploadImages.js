@@ -129,8 +129,8 @@ const UploadImages = ({orderId, disableEditing}) => {
                 <button 
                   disabled={isUploading} 
                   onClick={(e) => uploadImages(e)} 
-                  className='btn btn-primary'
-                >Save and upload</button> <label style={{ marginRight: '15px' }} htmlFor="file"><span className='btn btn-primary'>Add new images</span></label>
+                  className='btn btn-primary custom-installer-upload'
+                >Save and upload</button> <label style={{ marginRight: '15px' }} htmlFor="file"><span className='btn btn-primary custom-installer-btn'>Add new images</span></label>
             </div>
           )}
       </div>

@@ -33,13 +33,20 @@ class StuffManagmentController extends Controller
             'email' => 'required',
         ]);
 
-        Admin::create([
-            'name' => $request->input('name'),
-            'password' => Hash::make($request->input('password')),
-            'email' => $request->input('email'),
-        ]);
+        try {
+            Admin::create([
+                'name' => $request->input('name'),
+                'password' => Hash::make($request->input('password')),
+                'email' => $request->input('email'),
+            ]);
+            return redirect('/admin/dashboard/stuff');
 
-        return redirect('/admin/dashboard/stuff');
+        } catch (\Exception $e) {
+            return redirect('/admin/dashboard/stuff');
+        }
+
+
+
     }
 
     public function deleteAdmin($id)

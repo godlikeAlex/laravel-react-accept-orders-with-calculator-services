@@ -11,6 +11,7 @@ import { customStyles } from '../Calculator/CalculatorTabScreen';
 import { format } from 'date-fns';
 import UploadImages from '../UploadImages';
 import GooglePlaces from '../GooglePlaces';
+import dayjs, {dayjsInstance, dayJsMain} from '../../installer-app/utilities/dayjs';
 const Calculator = loadable(() => import('../Calculator/Calculator'))
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
@@ -37,12 +38,11 @@ function UpdateOrderBackend({ order, installers }) {
     const currentOrder = JSON.parse(order);
     const [listInstallers, setListInstallers] = useState([]);
     const [address, setAddress] = useState({label: currentOrder.address});
-
     const { values, setFieldValue, handleSubmit, handleChange } = useFormik({
         initialValues: {
             calculatedData: JSON.parse(currentOrder.details),
             status: orderStatusList.find(status => currentOrder.status === status.value),
-            date: new Date(currentOrder.date),
+            date: new Date(dayjs(currentOrder.date).format('MM DD YYYY HH:mm')),
             notes: currentOrder.notes,
             address: currentOrder.address,
             installers: [],
@@ -71,7 +71,7 @@ function UpdateOrderBackend({ order, installers }) {
             formData.append('uuid', values.uuid);
             formData.append('address', address.label);
             formData.append('notify', Number(values.sendNotification));
-            formData.append('date', (new Date(values.date)).toUTCString());
+            formData.append('date', dayJsMain(values.date).format('YYYY/MM/DD HH:mm'));
             formData.append('_method', 'put');
 
             if (values.installers.length > 0) {

@@ -37,9 +37,19 @@ class AuthInstallerController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        auth('installer')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+    */
+    public function refresh()
+    {
+        return $this->respondWithToken(auth('installer')->refresh());
     }
 
     /**
@@ -54,7 +64,8 @@ class AuthInstallerController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('installer')->factory()->getTTL() * 60
+            'expires_in' => auth('installer')->factory()->getTTL() * 60, // In minutes, but in config hours
+            'user' => auth('installer')->user()->only(['id', 'name', 'email', 'avatar']),
         ]);
     }
 }
