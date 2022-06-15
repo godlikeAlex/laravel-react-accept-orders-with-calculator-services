@@ -27,7 +27,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import { Link} from "react-router-dom";
 import { ROUTE_PREFIX } from '../App/App';
 
-export const drawerWidth = 240;
+const screenWidth = window.innerWidth;
+const isMobile = screenWidth < 699;
+
+export const drawerWidth = isMobile ? screenWidth : 240;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -61,6 +64,7 @@ export const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       }),
+      display: open && isMobile ? 'none': 'block',
       marginLeft: 0,
     }),
   }),
@@ -83,6 +87,12 @@ export default function Header({handleDrawerOpen, handleDrawerClose, open}) {
   const logoutUserHandle = () => {
     dispatch(logoutUser());
   };
+
+  const handleLinkClick = () => {
+    if (isMobile) {
+      handleDrawerClose();
+    }
+  }
 
   return (
     <>
@@ -140,7 +150,7 @@ export default function Header({handleDrawerOpen, handleDrawerClose, open}) {
         <Divider />
 
         <List>
-        <ListItem key={'Home'} disablePadding  component={Link} to={`${ROUTE_PREFIX}/dashboard`}>
+        <ListItem key={'Home'} disablePadding  component={Link} onClick={handleLinkClick} to={`${ROUTE_PREFIX}/dashboard`}>
             <ListItemButton>
               <ListItemIcon>
                 <HomeIcon />
@@ -149,7 +159,7 @@ export default function Header({handleDrawerOpen, handleDrawerClose, open}) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem key={'Orders'} disablePadding component={Link} to={`${ROUTE_PREFIX}/orders`}>
+          <ListItem key={'Orders'} disablePadding component={Link} onClick={handleLinkClick} to={`${ROUTE_PREFIX}/orders`}>
             <ListItemButton>
               <ListItemIcon>
                 <InboxIcon />
@@ -157,7 +167,7 @@ export default function Header({handleDrawerOpen, handleDrawerClose, open}) {
               <ListItemText primary={'Orders'} />
             </ListItemButton>
           </ListItem>
-
+{/* 
           <ListItem key={'Completed Orders'} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -165,9 +175,9 @@ export default function Header({handleDrawerOpen, handleDrawerClose, open}) {
               </ListItemIcon>
               <ListItemText primary={'Completed Orders'} />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
-          <ListItem key={'Settings'} disablePadding component={Link} to={`${ROUTE_PREFIX}/settings`}>
+          <ListItem key={'Settings'} disablePadding component={Link} onClick={handleLinkClick} to={`${ROUTE_PREFIX}/settings`}>
             <ListItemButton>
               <ListItemIcon>
                 <SettingsIcon />
