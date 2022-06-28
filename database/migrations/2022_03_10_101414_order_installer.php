@@ -14,11 +14,11 @@ class OrderInstaller extends Migration
     public function up()
     {
         Schema::create('order_installer', function(Blueprint $table) {
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('installer_id');
+            $table->unsignedBigInteger('order_id')->nullable();
+            $table->unsignedBigInteger('installer_id')->nullable();
 
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->foreign('installer_id')->references('id')->on('installers');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('set null');
+            $table->foreign('installer_id')->references('id')->on('installers')->onDelete('set null');
         });
     }
 

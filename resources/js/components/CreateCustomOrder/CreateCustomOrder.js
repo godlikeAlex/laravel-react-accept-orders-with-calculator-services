@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import CustomFormBackend from '../CustomFormBackend';
 import { format } from 'date-fns';
+import dayjs from 'dayjs';
 
 const CreateCustomOrder = () => {
     const handleSubmit = async function ({ user, installers, uuid, sendNotification, images_location, status, services, total, date, notes, installer_notes, address, installer, images }) {
@@ -16,7 +17,7 @@ const CreateCustomOrder = () => {
             formData.append('user_id', user.value);
             formData.append('details', JSON.stringify({ services: services }));
             formData.append('total', total);
-            formData.append('date', (new Date(date)).toUTCString());
+            formData.append('date', dayjs(date).format('YYYY/MM/DD HH:mm'));
             formData.append('installer_notes', installer_notes);
             formData.append('notes', notes);
             formData.append('address', address);

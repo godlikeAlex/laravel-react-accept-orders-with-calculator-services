@@ -31,7 +31,7 @@ class InstallerManagmentController extends Controller
         $request->validate([
             'name' => 'required',
             'password' => 'required',
-            'email' => 'required',
+            'email' => 'required|unique:installers',
         ]);
 
         Installer::create([
@@ -41,6 +41,7 @@ class InstallerManagmentController extends Controller
         ]);
 
         return redirect('/admin/dashboard/installer');
+
     }
 
     public function editInstaller(Installer $installer)

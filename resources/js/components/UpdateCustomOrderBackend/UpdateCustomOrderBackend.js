@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { orderStatusList } from "../UpdateOrderBackend/UpdateOrderBackend";
 import axios from 'axios';
-import { format } from 'date-fns';
 import CustomFormBackend from '../CustomFormBackend';
+import dayjs, { dayJsMain } from '../../installer-app/utilities/dayjs';
 const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
 function CustomOrderBackend({ order, installers }) {
@@ -25,7 +25,8 @@ function CustomOrderBackend({ order, installers }) {
             formData.append('total', total);
             formData.append('notes', notes);
             formData.append('address', address);
-            formData.append('date', (new Date(date)).toUTCString());
+            formData.append('date', dayJsMain(date).format('YYYY/MM/DD HH:mm'));
+
 
             if (installers && installers.length > 0) {
                 const formatedInstallers = installers.map(installer => {
@@ -69,7 +70,7 @@ function CustomOrderBackend({ order, installers }) {
                 orderId: currentOrder.id,
                 total: currentOrder.amount,
                 user_id: currentOrder.user_id,
-                date: new Date(currentOrder.date),
+                date: new Date(dayjs(currentOrder.date).format('MM DD YYYY HH:mm')),
                 address: currentOrder.address,
                 notes: currentOrder.notes,
                 installers: currentOrder.installers,

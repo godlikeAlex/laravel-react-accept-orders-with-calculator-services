@@ -95,24 +95,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/dashboard/installer/delete/{id}', [InstallerManagmentController::class, 'deleteInstaller'])->name('installer.delete');
 });
 
-Route::prefix('installer/dashboard')->group(function () {
-    Route::get('/', [InstallerController::class, 'index'])->name('dashboard.installer.index');
-    Route::get('login', [InstallerLoginController::class, 'showLoginForm'])->name('login.installer');
-    Route::post('login', [InstallerLoginController::class, 'login'])->name('installer.login.submit');
-    Route::get('logout', [InstallerLoginController::class, 'logout'])->name('installer.logout');
-    Route::get('/orders', [InstallerController::class, 'ordersIndex'])->name('installer.orders.index');
-
-
-    Route::get('order/{id}', [InstallerController::class, 'editOrder'])->name('inst.show.order');
-    Route::put('/edit/order/{order}', [InstallerController::class, 'updateOrder']);
-
-    
-    Route::get('/update/profile', [InstallerUserController::class, 'updateView'])->name('updateProfileInstaller');
-    Route::post('/update/profile/', [InstallerUserController::class, 'update']);
-    Route::post('/update/profile/password/change', [InstallerUserController::class, 'updatePassword']);
-});
-
-// Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes([
     'register' => false, // Registration Routes...
@@ -291,7 +273,7 @@ Route::get('/test-pdf', function() {
 });
 
 
-Route::get('/installer-new/{path?}', function () {
+Route::get('/app/installer/{path?}', function () {
     return view('app-installer');
 })->where('path', '.*');
 

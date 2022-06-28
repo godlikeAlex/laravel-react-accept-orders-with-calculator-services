@@ -16,7 +16,7 @@ const getUrlExtension = (url) => {
     .trim();
 }
 
-const UploadImages = ({orderId, disableEditing}) => {
+const UploadImages = ({orderId, disableEditing, installer}) => {
   const [images, setImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [state, setState] = useState({
@@ -26,7 +26,12 @@ const UploadImages = ({orderId, disableEditing}) => {
 
   useEffect(async () => {
     try {
-      const result = await axios.get(`/orders/images/${orderId}`,);
+      const result = await axios.get(`/orders/images/${orderId}`, {
+        headers: {
+          "Authorization": installer ? `Bearer ${localStorage.getItem('installer-token')}` : null
+        }
+      });
+
       const generateObjectFileFromSrc = await Promise.all(result.data.map(async (image) => {
         const fetchedImage = await fetch('/storage/'+image.path);
         const blobImage = await fetchedImage.blob();
@@ -59,7 +64,11 @@ const UploadImages = ({orderId, disableEditing}) => {
       })
 
 
-      const response = await axios.post(`/orders/images/${orderId}`, formData); 
+      const response = await axios.post(`/orders/images/${orderId}`, formData, {
+        headers: {
+          "Authorization": installer ? `Bearer ${localStorage.getItem('installer-token')}` : null
+        }
+      }); 
 
       if (response.status === 200) {
         toast('Images successfully updated', {
@@ -129,8 +138,8 @@ const UploadImages = ({orderId, disableEditing}) => {
                 <button 
                   disabled={isUploading} 
                   onClick={(e) => uploadImages(e)} 
-                  className='btn btn-primary'
-                >Save and upload</button> <label style={{ marginRight: '15px' }} htmlFor="file"><span className='btn btn-primary'>Add new images</span></label>
+                  className='btn btn-primary custom-installer-upload'
+                >Save and upload</button> <label style={{ marginRight: '15px' }} htmlFor="file"><span className='btn btn-primary custom-installer-btn'>Add new images</span></label>
             </div>
           )}
       </div>

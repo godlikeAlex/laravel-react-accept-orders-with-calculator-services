@@ -1,6 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
     "/js/calculator.js": "/js/calculator.js",
+    "/js/installer-app.js": "/js/installer-app.js",
     "/css/app.css": "/css/app.css",
     "/frontend/css/app.css": "/frontend/css/app.css",
     "/frontend/css/app.min.css": "/frontend/css/app.min.css",

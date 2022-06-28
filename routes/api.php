@@ -1,17 +1,20 @@
 <?php
 
-use App\Http\Controllers\AdminOrderController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\Installer\InstallerUserController;
-use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\PaymentController;
-use App\Http\Controllers\Api\SendRequestController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\WishListController;
-use App\Http\Controllers\ForgotController;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ForgotController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\WishListController;
+use App\Http\Controllers\Api\SendRequestController;
+use App\Http\Controllers\Api\Installer\InstallerUserController;
+use App\Http\Controllers\Api\Installer\AuthInstallerController;
+
+use App\Http\Controllers\Api\Installer\OrderController as InstallerOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,4 +61,20 @@ Route::prefix('wish')->group(function () {
     Route::get('list', [WishListController::class, 'list']);
     Route::get('remove/{id}', [WishListController::class, 'remove']);
     Route::post('store', [WishListController::class, 'store'])->middleware('auth:api');
+});
+
+Route::prefix('installer/dashboard')->group(function () {
+    Route::post('/login', [AuthInstallerController::class, 'login']);
+    Route::post('/refresh', [AuthInstallerController::class, 'refresh']);
+    Route::get('/logout', [AuthInstallerController::class, 'logout']);
+
+    Route::get('/orders', [InstallerOrderController::class, 'orders']);
+    Route::get('/orders/last', [InstallerOrderController::class, 'lastOrders']);
+
+    Route::get('/orders/{orderId}', [InstallerOrderController::class, 'getOrder']);
+    Route::post('/orders/edit/{order}', [InstallerOrderController::class, 'updateOrder']);
+    
+
+    Route::post('/user/edit', [InstallerUserController::class, 'update']);
+    Route::post('/user/password', [InstallerUserController::class, 'updatePassword']);
 });
