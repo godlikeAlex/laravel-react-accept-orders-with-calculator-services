@@ -76,7 +76,7 @@
                 </a>
 
                 <a class="col-md-2" href="http://m.me/viktor.gnativ" target="_blank" style="padding-left: 10px" rel="noopener noreferrer">
-                    <img src="/frontend/messanger.svg" style="width: 50px" alt="" srcset=""> Messanger
+                    <img src="/frontend/messanger.svg" style="width: 50px" alt="" srcset=""> Messenger
                 </a>
             </div>
         </div>
