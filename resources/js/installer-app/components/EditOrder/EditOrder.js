@@ -1,4 +1,4 @@
-import { Box, Button, Grid, ImageList, ImageListItem, TextareaAutosize, TextField, Typography } from '@mui/material';
+import { Box, Button, Fab, Grid, ImageList, ImageListItem, TextareaAutosize, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AuthLayout from '../Layouts/AuthLayout';
@@ -12,9 +12,12 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import ChatIcon from '@mui/icons-material/Chat';
 import './style.css'
 
+
 import { toast } from 'react-toastify';
+import ChatWindow from './ChatWindow';
 
 export const orderStatusList = [
     { value: 'pending', label: 'Pending ⏳' },
@@ -40,6 +43,7 @@ const EditOrder = () => {
         status: null,
         order: null,
         loading: true,
+        chatOpenned: false
     });
 
     useEffect(async () => {
@@ -73,156 +77,169 @@ const EditOrder = () => {
     }
 
     return (
-        <AuthLayout>
-            <Grid container spacing={5}>
-                <Grid item xs={12}>
-                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                        <TagIcon /> <Typography variant='h6' sx={{fontSize: '20px'}}>UUID: {state.order.uuid}</Typography>
-                    </Box>
-                </Grid>
+        <>
+            <Fab 
+                sx={{position: 'fixed', bottom: '25px', right: '25px'}} 
+                color="primary" 
+                aria-label="Start chating with client"
+                onClick={() => setState(state => {return {...state, chatOpenned: true}}) }
+            >
+                <ChatIcon />
+            </Fab>
+            <ChatWindow isOpen={state.chatOpenned} closeChat={() => setState(state => {return {...state, chatOpenned: true}})} />
+            {!state.chatOpenned && (
+                <AuthLayout>
+                    <Grid container spacing={5}>
+                        <Grid item xs={12}>
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                <TagIcon /> <Typography variant='h6' sx={{fontSize: '20px'}}>UUID: {state.order.uuid}</Typography>
+                            </Box>
+                        </Grid>
 
-                <Grid item md={6} xs={12}>
-                    <Box >
-                        <Box sx={{display: 'flex', alignItems: 'center'}}>
-                            <Typography sx={{fontWeight: 'bold'}}>Address:</Typography>
-                        </Box>
-                        <Typography variant='body2'>{state.order.address}</Typography>
-                    </Box>
-                </Grid>
+                        <Grid item md={6} xs={12}>
+                            <Box >
+                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                    <Typography sx={{fontWeight: 'bold'}}>Address:</Typography>
+                                </Box>
+                                <Typography variant='body2'>{state.order.address}</Typography>
+                            </Box>
+                        </Grid>
 
-                <Grid item md={6} xs={12} >
-                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                        <TagIcon /> <a target="_blank" href={`tel:${state.order.user.phone}`}>{state.order.user.phone} - {state.order.user.name}</a>
-                    </Box>
+                        <Grid item md={6} xs={12} >
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                <TagIcon /> <a target="_blank" href={`tel:${state.order.user.phone}`}>{state.order.user.phone} - {state.order.user.name}</a>
+                            </Box>
 
-                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                        <LocationOnIcon /> <a target="_blank" href={`https://www.google.com/maps/search/${state.order.address}`}>Directions</a>
-                    </Box>
-                </Grid>
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                <LocationOnIcon /> <a target="_blank" href={`https://www.google.com/maps/search/${state.order.address}`}>Directions</a>
+                            </Box>
+                        </Grid>
 
-                <Grid item md={6} xs={12}>
-                    <Box >
-                        <Box sx={{display: 'flex', alignItems: 'center'}}>
-                            <Typography sx={{fontWeight: 'bold'}}>Order notes:</Typography>
-                        </Box>
-                        <Typography variant='body2'>{state.order.notes}</Typography>
-                    </Box>
-                </Grid>
+                        <Grid item md={6} xs={12}>
+                            <Box >
+                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                    <Typography sx={{fontWeight: 'bold'}}>Order notes:</Typography>
+                                </Box>
+                                <Typography variant='body2'>{state.order.notes}</Typography>
+                            </Box>
+                        </Grid>
 
-                <Grid item md={6} xs={12}>
-                    <Box >
-                        <Box sx={{display: 'flex', alignItems: 'center'}}>
-                            <Typography sx={{fontWeight: 'bold'}}>Installer notes:</Typography>
-                        </Box>
-                        <Typography variant='body2'>{state.order?.installer_notes}</Typography>
-                    </Box>
-                </Grid>
+                        <Grid item md={6} xs={12}>
+                            <Box >
+                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                    <Typography sx={{fontWeight: 'bold'}}>Installer notes:</Typography>
+                                </Box>
+                                <Typography variant='body2'>{state.order?.installer_notes}</Typography>
+                            </Box>
+                        </Grid>
 
-                <Grid item md={6} xs={12} >
-                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                        <Typography sx={{fontWeight: 'bold'}}>Order status:</Typography>
-                    </Box>
-                    <Select
-                        isSearchable={false}
-                        // disabled
-                        options={orderStatusList}
-                        onChange={status => {
-                            setState({
-                                ...state,
-                                order: {
-                                    ...state.order,
-                                    status
-                                }
-                            })
-                        }}
-                        value={state.order.status}
-                    />
+                        <Grid item md={6} xs={12} >
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                <Typography sx={{fontWeight: 'bold'}}>Order status:</Typography>
+                            </Box>
+                            <Select
+                                isSearchable={false}
+                                // disabled
+                                options={orderStatusList}
+                                onChange={status => {
+                                    setState({
+                                        ...state,
+                                        order: {
+                                            ...state.order,
+                                            status
+                                        }
+                                    })
+                                }}
+                                value={state.order.status}
+                            />
 
-                    {['done', 'completed'].includes(state.order.status.value) && (
-                        <UploadImages orderId={state.order.id} disableEditing={state.order.status.value === 'completed'} installer={true} />
-                    )}
-                </Grid>
+                            {['done', 'completed'].includes(state.order.status.value) && (
+                                <UploadImages orderId={state.order.id} disableEditing={state.order.status.value === 'completed'} installer={true} />
+                            )}
+                        </Grid>
 
-                <Grid item md={6} xs={12}>
-                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                        <Typography sx={{fontWeight: 'bold'}}>Note from installer:</Typography>
-                    </Box>
-                    <TextField  
-                        sx={{width: '100%'}}
-                        multiline
-                        rows={5}
-                        maxRows={6}
-                    />
-                </Grid>
+                        <Grid item md={6} xs={12}>
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                <Typography sx={{fontWeight: 'bold'}}>Note from installer:</Typography>
+                            </Box>
+                            <TextField  
+                                sx={{width: '100%'}}
+                                multiline
+                                rows={5}
+                                maxRows={6}
+                            />
+                        </Grid>
 
-                <Grid item xs={12}> 
-                    <Typography variant='h5' sx={{marginBottom: '10px'}}>Order Details</Typography>
+                        <Grid item xs={12}> 
+                            <Typography variant='h5' sx={{marginBottom: '10px'}}>Order Details</Typography>
 
-                    <Grid container spacing={3}>
+                            <Grid container spacing={3}>
 
-                    {JSON.parse(state.order.details).services.map((service, i) => (
-                        state.order.custom === 0 ? (
-                            <Grid item xs={12} md={4} key={i}>
-                                <Card>
-                                    <CardContent>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Order detail
-                                    </Typography>
-                                    <Typography variant="h6" component="div">
-                                        {service.currentService.label} X {service.quantity}
-                                    </Typography>
-                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        Width: {service.width}; Height: {service.height}; Foot Height: {service.ftHeight.title};
-                                    </Typography>
+                            {JSON.parse(state.order.details).services.map((service, i) => (
+                                state.order.custom === 0 ? (
+                                    <Grid item xs={12} md={4} key={i}>
+                                        <Card>
+                                            <CardContent>
+                                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                Order detail
+                                            </Typography>
+                                            <Typography variant="h6" component="div">
+                                                {service.currentService.label} X {service.quantity}
+                                            </Typography>
+                                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                                Width: {service.width}; Height: {service.height}; Foot Height: {service.ftHeight.title};
+                                            </Typography>
 
-                                    </CardContent>
-                                </Card>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ) : (
+                                    <Grid item xs={12} md={4} key={i}>
+                                        <Card>
+                                            <CardContent>
+                                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                                Order detail
+                                            </Typography>
+
+                                            <Typography variant="h6" component="div">
+                                                {service.name}
+                                            </Typography>
+
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                )
+                            ))}
+
                             </Grid>
-                        ) : (
-                            <Grid item xs={12} md={4} key={i}>
-                                <Card>
-                                    <CardContent>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Order detail
-                                    </Typography>
+                        </Grid>
 
-                                    <Typography variant="h6" component="div">
-                                        {service.name}
-                                    </Typography>
+                        <Grid item xs={12}>
+                            <Typography variant='h5' sx={{marginBottom: '10px'}}>Place images</Typography>
 
-                                    </CardContent>
-                                </Card>
+                            <Grid container spacing={3}>
+                                {state.order?.place_images.map((placeImage) => (
+                                    <Grid item xs={12} md={6}>
+                                        <img
+                                            src={`/storage/${placeImage.path}`}
+                                            srcSet={`/storage/${placeImage.path}`}
+                                            loading="lazy"
+                                            style={{width: '100%', height: '350px', objectFit: 'cover'}}
+                                        />
+                                    </Grid>
+                                ))}
                             </Grid>
-                        )
-                    ))}
+                        </Grid>
 
+                        <Grid item xs={12}>
+                            <Button variant="contained" color="primary" endIcon={<SendRoundedIcon />} size="medium" onClick={handleUpdateOrder}>
+                                Update order
+                            </Button>
+                        </Grid>
                     </Grid>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Typography variant='h5' sx={{marginBottom: '10px'}}>Place images</Typography>
-
-                    <Grid container spacing={3}>
-                        {state.order?.place_images.map((placeImage) => (
-                            <Grid item xs={12} md={6}>
-                                <img
-                                    src={`/storage/${placeImage.path}`}
-                                    srcSet={`/storage/${placeImage.path}`}
-                                    loading="lazy"
-                                    style={{width: '100%', height: '350px', objectFit: 'cover'}}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Button variant="contained" color="primary" endIcon={<SendRoundedIcon />} size="medium" onClick={handleUpdateOrder}>
-                        Update order
-                    </Button>
-                </Grid>
-            </Grid>
-        </AuthLayout>
+                </AuthLayout>
+            )}
+        </>
     )
 
 }
