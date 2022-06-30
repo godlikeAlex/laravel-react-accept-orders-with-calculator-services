@@ -193,6 +193,10 @@ h2.section-header-calc {
   /* flex: 0 0 calc(20% - 10px); */
 }
 
+.welcome-screen-calculator-item {
+  margin-bottom: 50px;
+}
+
 @media (max-width: 480px) {
   .left-arrow-calc, .swing-right {
     /* display: none; */
