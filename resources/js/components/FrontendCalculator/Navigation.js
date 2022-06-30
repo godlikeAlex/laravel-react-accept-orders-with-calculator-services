@@ -53,6 +53,10 @@ function Navigation({goBackCallBack, addToCartCallBack, resetCalculator}) {
               service
           ];
 
+          if (data.survey) {
+            parsedShopingCart.additional.survey = 250;
+          }
+
           const countedCart = countAllCart(parsedShopingCart);
           
 
@@ -63,7 +67,7 @@ function Navigation({goBackCallBack, addToCartCallBack, resetCalculator}) {
 
       const countedCart = countAllCart({
         services: [service],
-        additional: {survey: 0, urgencyInstsllstion: 0},
+        additional: {survey: data.survey ? 250 : 0, urgencyInstsllstion: 0},
         total: data.total,
       });
 

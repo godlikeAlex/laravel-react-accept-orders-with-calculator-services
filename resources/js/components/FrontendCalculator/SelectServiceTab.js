@@ -33,7 +33,7 @@ function SelectServiceTab({ selectService, selectedService }) {
                         key={`selected-service-${id}`}
                     >
                         <img src={image} className="rounded-image-calc" />
-                        <h6 style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <h6 className='d-flex justify-content-center align-items-center'>
                             {title}  <ion-icon name="chevron-forward-outline" style={{marginLeft: '5px'}}></ion-icon>
                         </h6>
                     </div>

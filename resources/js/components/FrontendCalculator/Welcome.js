@@ -1,46 +1,65 @@
 import React from 'react';
-import img from './image.svg';
-import installation from './installation.svg';
+import { useHistory } from 'react-router-dom';
+import InstallationImage from './installation.png';
+import RemovalImage from './removal.png';
+import SurveyImage from './survey.png';
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({selectAddtionalService, selectedServiceType}) => {
+  const history = useHistory();
+
+  const handleClick = service => {
+    selectAddtionalService(service);
+    history.push('/select-service');
+  }
+
   return (
-    <div className="row tab-row">
-      <div className="col-md-6">
-        <h2>What do you want?</h2>
+    <div className="row">
+      <div className="col-md-12">
+          <h3 className="section_header text-center" style={{marginBottom: '40px'}}>Choose a service</h3>
       </div>
 
-      <div className="col-md-6">
-        <div  style={{
-          display: 'flex',
-          flexDirection: 'column', 
-          boxShadow: 'rgba(0, 0, 0, 0.24)  0px 3px 8px',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '20px 0px',
-          background: '#fafafa'
-        }}>
-            <img src={installation} style={{width: '50%', height: ''}} />
-            <div style={{fontSize: '22px', marginTop: '20px'}}>
-              Installation
-            </div>
-        </div>
+      <div
+        className={`col-md-4 text-center 
+          welcome-screen-calculator-item 
+          ${selectedServiceType === 'installation' ? 'active' : null}`
+        }
+        onClick={() => handleClick('installation')}
+      >
+        <img src={InstallationImage} />
 
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column', 
-          boxShadow: 'rgba(0, 0, 0, 0.24)  0px 3px 8px',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '20px 0px',
-          background: '#fafafa',
-          marginTop: '25px'
-        }}>
-            <img src={img} style={{width: '50%', height: ''}} />
-            <div style={{fontSize: '22px', marginTop: '20px'}}>
-              Removal
-            </div>
-        </div>
+        <h5 className='d-flex justify-content-center align-items-center'>
+          Installation <ion-icon name="chevron-forward-outline" style={{marginLeft: '5px'}}></ion-icon>
+        </h5>
       </div>
+
+      <div
+        className={`col-md-4 text-center 
+          welcome-screen-calculator-item 
+          ${selectedServiceType === 'removal' ? 'active' : null}`
+        }
+        onClick={() => handleClick('removal')}
+      >
+        <img src={RemovalImage} />
+
+        <h5 className='d-flex justify-content-center align-items-center'>
+          Removal <ion-icon name="chevron-forward-outline" style={{marginLeft: '5px'}}></ion-icon>
+        </h5>
+      </div>
+
+      <div
+        className={`col-md-4 text-center 
+          welcome-screen-calculator-item 
+          ${selectedServiceType === 'survey' ? 'active' : null}`
+        }
+        onClick={() => handleClick('survey')}
+      >
+        <img src={SurveyImage} />
+
+        <h5 className='d-flex justify-content-center align-items-center'>
+          Survey <ion-icon name="chevron-forward-outline" style={{marginLeft: '5px'}}></ion-icon>
+        </h5>
+      </div>
+
     </div>
   )
 }

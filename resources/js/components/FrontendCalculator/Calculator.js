@@ -20,6 +20,7 @@ function Calculator() {
   const [values, setValues] = useState({
     selectedService: null,
     selectedMaterial: null,
+    selectedServiceType: null,
     calculator: {
       ...generateTemplate(),
       currentService: null,
@@ -27,12 +28,15 @@ function Calculator() {
         installation: 0,
         removal: 0,
       },
-      removal: false,
+      removal: true,
       installation: true,
+      survey: false,
       urgencyInstsllstion: false,
       total: 0
     }
   });
+
+  console.log(values);
 
   useEffect(() => {
     setMaterials(
@@ -70,6 +74,21 @@ function Calculator() {
 
   const addToCartCallBack = (cb) => {
     cb(values.calculator);
+  }
+
+  const selectAddtionalService = service => {
+    setValues(values => {
+      return {
+        ...values,
+        selectedServiceType: service,
+        calculator: {
+          ...values.calculator,
+          removal: false,
+          installation: service != 'installation' && service == 'survey' && true,
+          [service]: true
+        }
+      }
+    });
   }
 
   const resetCalculator = () => {
@@ -120,15 +139,16 @@ function Calculator() {
 
   const routes = [
     // Welcome
-    // { path: '/', name: 'Welcome', Component: WelcomeScreen, props: {selectService, selectedService: values.selectedService} },
-    { path: '/', name: 'Main', Component: SelectServiceTab, props: {selectService, selectedService: values.selectedService} },
+    { path: '/', name: 'Welcome', Component: WelcomeScreen, props: {selectedServiceType: values.selectedServiceType, selectAddtionalService} },
+    { path: '/select-service', name: 'Main', Component: SelectServiceTab, props: {selectService, selectedService: values.selectedService} },
     // { path: '/', name: 'Main', Component: SelectServiceTab, props: {selectService, selectedService: values.selectedService} },
     { path: '/select-material', name: 'Select material', Component: SelectMaterialTab, props: {selectMaterial, selectedMaterial: values.selectedMaterial, materials} },
     { 
       path: '/form-tab', 
       name: 'Check out', 
       Component: FormTab, 
-      props: {values: values.calculator, resetCalculator, setValues: setValuesCalculator, setFieldValue} },
+      props: {values: values.calculator, resetCalculator, setValues: setValuesCalculator, setFieldValue} 
+    },
   ]
  
   return (
