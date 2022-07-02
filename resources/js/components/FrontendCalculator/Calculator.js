@@ -201,7 +201,9 @@ function CalculatorTitle() {
         }}
         onClick={() => history.goBack()}
       ></ion-icon>)}
-      Calculate Your &nbsp;<span style={{color: '#ED0598'}}> <Typewriter
+
+      Calculate your price
+      {/* Calculate Your &nbsp;<span style={{color: '#ED0598'}}> <Typewriter
         options={{
           loop: true
         }}
@@ -214,7 +216,7 @@ function CalculatorTitle() {
             .pauseFor(4500)
             .start()
         }}
-        /> </span> Services
+        /> </span> Services */}
     </h2>
   )
 }
