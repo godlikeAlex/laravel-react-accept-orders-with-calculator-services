@@ -220,7 +220,7 @@ function CalculatorScreen({ index, service, setFieldValueNested, setFieldValue, 
 
 
                 <h6>Total Per Item - ${service.totalPerItem || 0}</h6>
-                <h6>Total Per SqFt - ${service.totalPerSqFt || 0}</h6>
+                <h6>Total Per SQ/FT - ${service.totalPerSqFt || 0}</h6>
                 <h6>Price for current service - $ {service.total.toLocaleString()}</h6>
             </div>
         </React.Fragment>

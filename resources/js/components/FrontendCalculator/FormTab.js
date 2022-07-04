@@ -162,7 +162,7 @@ function FormTab({values, setValues, setFieldValue, resetCalculator}) {
             <div className='col-md-4'>
             <h2>Your price</h2>
             <p>Total Per Item - $ {values.totalPerItem || 0}</p>
-            <p>Total Per SqFt - $ {values.totalPerSqFt || 0}</p>
+            <p>Total Per SQ/FT - $ {values.totalPerSqFt || 0}</p>
             <h3>Subtotal: {values.total.toLocaleString()} $</h3>
             </div>
         </div>

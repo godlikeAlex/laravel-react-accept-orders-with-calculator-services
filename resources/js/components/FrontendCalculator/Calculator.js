@@ -191,7 +191,7 @@ function CalculatorTitle() {
   const location = useLocation();
 
   return (
-    <h2 className="section_header text-center section-header-calc" style={{display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <h2 className="section_header text-center section-header-calc" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#ed0598' }}>
       {location.pathname !== '/' && (<ion-icon name="chevron-back-outline"
         style={{
           cursor: 'pointer',
